@@ -10,6 +10,7 @@ Participants will maintain system of spreadsheet templates that can be maintaine
 * Google Sheets (with View link enabled)
 * Dropbox (with View link enabled)
 * Box (with View link enabled)
+* A simple http(s) file server
 
 
 ### 2. SensorThings Server
