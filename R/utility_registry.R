@@ -19,3 +19,5 @@ utility_registry <- utilities %>%
          title,
          phone,
          email)
+
+write_csv(utility_registry,"utility_registry.csv")
