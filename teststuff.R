@@ -1,6 +1,6 @@
 # API - define nedpoint
-#api <- "https://twsd.internetofwater.dev/api/v1.0/"
-api <- "http://localhost:8080/FROST-Server/v1.0/"
+api <- "https://twsd.internetofwater.dev/api/v1.0/"
+#api <- "http://localhost:8080/FROST-Server/v1.0/"
 user <- "iow"
 password <- "nieps"
 
@@ -65,28 +65,28 @@ for (i in list){
                                    properties = list(PWSID=x$PWSID)), 
                               auto_unbox=TRUE)
 
-     p <- POST(url = "http://localhost:8080/FROST-Server/v1.0/Things",
+     p <- POST(url = paste0(api,"Things"),
           encode="raw",
-         # authenticate("iow", "nieps", type ="basic"),
+          authenticate("iow", "nieps", type ="basic"),
           body = thing)
-     
+
 
      
 
-     loc <- jsonlite::toJSON(list(`@iot.id`= x$PWSID,
-                                  name = paste0("Service area of ",x$PWSID),
-                                  description = paste0("Service area of ",x$NAME),
-                                  encodingType = "application/vnd.geo+json",
-                                  location = y), auto_unbox = TRUE)
+     # loc <- jsonlite::toJSON(list(`@iot.id`= x$PWSID,
+     #                              name = paste0("Service area of ",x$PWSID),
+     #                              description = paste0("Service area of ",x$NAME),
+     #                              encodingType = "application/vnd.geo+json",
+     #                              location = y), auto_unbox = TRUE)
 
      loc <- paste0('{"@iot.id":"',x$PWSID,'","name":"',paste0("Service area of ",x$PWSID),'", ','"description":"',paste0("Service area of ", x$NAME),'", ','"encodingType":"application/vnd.geo+json", "location":',
                    y,'}')
      loc <- fromJSON(loc)
      loc <- toJSON(loc,auto_unbox = TRUE) 
 
-     p2 <- POST(url = paste0("http://localhost:8080/FROST-Server/v1.0/Things('",x$PWSID,"')","/Locations"),
-                encode="json",
-              # authenticate("iow", "nieps", type ="basic"),
+     p2 <- POST(url = paste0(api,"Things('",x$PWSID,"')","/Locations"),
+                encode="raw",
+                authenticate("iow", "nieps", type ="basic"),
                 body = loc)
      
      d1 <- PostDataStream(paste0(api,"Datastreams"),user,password,
