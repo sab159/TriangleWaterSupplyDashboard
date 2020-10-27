@@ -25,11 +25,13 @@ PostThingLocation <- function(api, user, password,
 }
 
 PostObservedProperty <- function(api, user, password,
+                                 id,
                                  name,
                                  definition,
                                  description){
   
-  op <- jsonlite::toJSON(list(name = name,
+  op <- jsonlite::toJSON(list(`@iot.id`= id,
+                              name = name,
                               definition = definition,
                               description = description), auto_unbox=TRUE)
   
@@ -38,16 +40,44 @@ PostObservedProperty <- function(api, user, password,
   
 }
 
+PostDataStream <- function(api, user, password,
+                           id,
+                           name,
+                           description,
+                           observationType= c("http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
+                                              "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_CategoryObservation"),
+                           unit,
+                           Thing_id,
+                           ObservedProperty_id,
+                           Sensor_id){
+  ds <- jsonlite::toJSON(list(`@iot.id`= id,
+                              name = name,
+                              description = description,
+                              observationType = observationType,
+                              unitOfMeasurement = unit,
+                              Thing = list(`@iot.id` = Thing_id),
+                              ObservedProperty=list(`@iot.id`=ObservedProperty_id),
+                              Sensor = list(`@iot.id`=Sensor_id)
+                              ), auto_unbox=TRUE)
+  
+  POST(url = api, encode="json", authenticate(user, password, type ="basic"),
+       body = ds)
+  
+  #return(ds)
+}
+
 PostSensor <- function(api, user, password,
+                       id,
                        name,
                        description,
                        encodingType,
                        metadata){
   
-  s <- jsonlite::toJSON(list(name = name,
+  s <- jsonlite::toJSON(list(`@iot.id` = id,
+                             name = name,
                              description = description,
                              encodingType = "application/pdf",
-                             metadata = metadata))
+                             metadata = metadata), auto_unbox=TRUE)
   POST(url = api, encode="json", authenticate(user, password, type ="basic"),
        body = s)
 }
