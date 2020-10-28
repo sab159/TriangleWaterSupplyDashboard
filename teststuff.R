@@ -149,7 +149,7 @@ m$Datastream = paste0(m$PWSID,"-WaterDistributed")
 m<-filter(m,year>2008)
 m$result = m$avg_daily
 
-model <- lm(result ~ as.factor(month) + year + I(year^2) + as.factor(Datastream),data=m)
+model <- lm(result ~ as.factor(month) + year + year*as.factor(Datastream) + as.factor(Datastream),data=m)
 nd <- expand.grid(c(2018:2020),c(1:12),unique(m$Datastream))
 nd <- nd %>% rename(year=Var1, month=Var2, Datastream=Var3) %>% filter(!(year==2020 & month>10))
 nd$result <- predict(model, nd)
@@ -170,6 +170,21 @@ for(i in 1:length(o$Datastream)){
     )
 }
 
+# for(i in 1:length(o$Datastream)){
+#   try(
+#     PatchObs(api,user, password,
+#             ds = o$Datastream[i],
+#             result = o$result[i],
+#             resultTime = o$resultTime[i],
+#             days = o$days[i])
+#   )
+# }
+# 
+# for(i in 1:length(o$Datastream)){
+#   try(
+#     DELETE(paste0(api,"Observations('",o$Datastream[i],"-",o$resultTime[i],"')"),authenticate(user,password,type="basic"))
+#   )
+# }
 
 
 obs <- toJSON(o)

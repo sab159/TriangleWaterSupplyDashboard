@@ -103,3 +103,23 @@ PostObs <- function(api, user, password,
   
   #return(o)
 }
+
+PatchObs <- function(api, user, password,
+                    ds,
+                    result,
+                    resultTime,
+                    days){
+  o <- jsonlite::toJSON(list(
+    result = result,
+    resultTime = resultTime,
+    phenomenonTime = resultTime,
+    parameters = list(
+      `days in observed period` = days
+    )
+  ), auto_unbox=TRUE)
+  
+  PATCH(url = paste0(api,"Observations('",paste0(ds,"-",resultTime),"')"), encode="json", authenticate(user, password, type ="basic"),
+       body = o)
+  
+  #return(o)
+}
