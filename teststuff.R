@@ -4,6 +4,13 @@ api <- "https://twsd.internetofwater.dev/api/v1.0/"
 user <- "iow"
 password <- "nieps"
 
+source("sta-post.R")
+library(jsonlite)
+library(httr)
+library(readxl)
+library(dplyr)
+library(lubridate)
+
 # Define Observed Properties
 op <- PostObservedProperty(api=paste0(api,"ObservedProperties"), user, password,
                            id = "WaterDistributed",
@@ -130,8 +137,41 @@ for (i in list){
 
 
 
+## Add data.
+monthly_withdrawal <- read_excel("data/lwsp/monthly_withdrawal.xlsx")
+monthly_withdrawal$PWSID <- paste0("NC",gsub("-","",monthly_withdrawal$pwsid,))
+m <- monthly_withdrawal%>%
+    filter(PWSID %in% gsub("https://geoconnex.us/ref/pws/","",list))
+
+m$resultTime <- ISOdatetime(m$year,m$month,day=1,hour=0,min=0,sec=1,tz="America/New_York")
+m$days <- days_in_month(m$resultTime)
+m$Datastream = paste0(m$PWSID,"-WaterDistributed")
+m<-filter(m,year>2008)
+m$result = m$avg_daily
+
+model <- lm(result ~ as.factor(month) + year + I(year^2) + as.factor(Datastream),data=m)
+nd <- expand.grid(c(2018:2020),c(1:12),unique(m$Datastream))
+nd <- nd %>% rename(year=Var1, month=Var2, Datastream=Var3) %>% filter(!(year==2020 & month>10))
+nd$result <- predict(model, nd)
+nd$resultTime <- ISOdatetime(nd$year,nd$month,day=1,hour=0,min=0,sec=1,tz="America/New_York")
+
+o <- select(m,Datastream,resultTime,result,year,month)
+o <- bind_rows(o,nd)
+o$days <- days_in_month(o$resultTime)
+o$resultTime <- paste0(gsub(" ","T",as.character(o$resultTime)),".000Z")
+
+for(i in 1:length(o$Datastream)){
+    try(
+    PostObs(api,user, password,
+             ds = o$Datastream[i],
+             result = o$result[i],
+             resultTime = o$resultTime[i],
+             days = o$days[i])
+    )
+}
 
 
 
+obs <- toJSON(o)
 
 deleteEntity(api,user,password,entity="Things",iot.id=5)

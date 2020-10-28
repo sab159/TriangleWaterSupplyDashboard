@@ -81,3 +81,25 @@ PostSensor <- function(api, user, password,
   POST(url = api, encode="json", authenticate(user, password, type ="basic"),
        body = s)
 }
+
+PostObs <- function(api, user, password,
+                    ds,
+                    result,
+                    resultTime,
+                    days){
+  o <- jsonlite::toJSON(list(
+    `@iot.id` = paste0(ds,"-",resultTime),
+    result = result,
+    resultTime = resultTime,
+    phenomenonTime = resultTime,
+    parameters = list(
+      `days in observed period` = days
+    ),
+    Datastream = list(`@iot.id` = ds)
+  ), auto_unbox=TRUE)
+  
+  POST(url = paste0(api,"Observations"), encode="json", authenticate(user, password, type ="basic"),
+       body = o)
+  
+  #return(o)
+}
