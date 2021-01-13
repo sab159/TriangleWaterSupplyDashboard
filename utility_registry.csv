@@ -1,6 +1,6 @@
-pwsid,data_url,name,basin,contact,title,phone,email
-03-26-010,Fville url,Fayetteville,Cape Fear River (02-3),M. J. Noland,Chief Operating Officer. WRD,910-223-4733,mick.noland@faypwc.com
-03-92-020,carywebsite.com/thing,Cary,Neuse River (10-1),"C. Jeff Adkins, PE",Water Resources Engineer,919-462-2066,jeff.adkins@townofcary.org
-03-68-010,googledriveurl,Orange Water and Sewer Authority,Haw River (02-1),Ruth Rouse,Planning &amp; Development Manager,919-537-4214,rrouse@owasa.org
-03-32-010,box-url,Durham,Neuse River (10-1),Sydney Miller,Water Resources Planning Manager,919-560-4381,sydney.miller@durhamnc.gov
-03-92-010,dropbox-url,Raleigh,Neuse River (10-1),Edward Buchan,Senior Utilities Analyst,919-996-3471,edward.Buchan@raleighnc.gov
+pwsid,data_url,name,contact,title,phone,email
+NC0326010,Fville url,Fayetteville,M. J. Noland,Chief Operating Officer. WRD,xxx-xxx-xxx3,xxx.xxx@faypwc.com
+NC0392020,carywebsite.com/thing,Cary,"C. Jeff Adkins, PE",Water Resources Engineer,919-xxx-xxxx,xxx.xxx@townofcary.org
+NC0368010,googledriveurl,Orange Water and Sewer Authority,Ruth Rouse,Planning &amp; Development Manager,xxx-xxx-xxxx,xxx.xxx@owasa.org
+NC0332010,box-url,Durham,Sydney Miller,Water Resources Planning Manager,xxx-xxx-xxxx,xxx.xxxr@durhamnc.gov
+NC0392010,dropbox-url,Raleigh,Edward Buchan,Senior Utilities Analyst,xxx-xxx-xxxx,xxx.xxx@raleighnc.gov
