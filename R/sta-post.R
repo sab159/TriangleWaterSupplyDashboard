@@ -86,7 +86,7 @@ PostObs <- function(api, user, password,
                     ds,
                     result,
                     resultTime,
-                    days){
+                    days=1){
   o <- jsonlite::toJSON(list(
     `@iot.id` = paste0(ds,"-",resultTime),
     result = result,
@@ -122,4 +122,9 @@ PatchObs <- function(api, user, password,
        body = o)
   
   #return(o)
+}
+
+
+deleteSTA <- function(api,entity,iot.id,user,password){
+  httr::DELETE(paste0(api,entity,"('",iot.id,"')"), authenticate(user, password, type="basic"))
 }
