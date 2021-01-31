@@ -1,4 +1,8 @@
 ###
+# httr
+# parsedate
+#jsonlite
+
 endpoint <- "https://sta-demo.internetofwater.dev/api/v1.1/Datastreams(119)/"
 user <- "iow"
 pw <- "nieps"

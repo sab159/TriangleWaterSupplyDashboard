@@ -1,0 +1,2 @@
+* * * * * /usr/local/bin/Rscript '/src/R-Docker-Post-test.R'
+# run job at elefenth minute every 12 hours. An empty line is required at the end of this file for a valid cron file.

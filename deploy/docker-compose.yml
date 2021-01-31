@@ -1,0 +1,13 @@
+version: "2.1"
+
+services:
+  r:
+    image: ksonda/r-sta-post-test:latest
+    restart: always
+
+  crontab:
+    image: willfarrell/crontab
+    restart: always
+    volumes:
+     - "/var/run/docker.sock:/var/run/docker.sock:ro"
+     - "./config.sample.mapping.json:/opt/crontab/config.json:rw"
