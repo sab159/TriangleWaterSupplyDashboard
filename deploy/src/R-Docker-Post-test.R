@@ -7,7 +7,7 @@ endpoint <- "https://sta-demo.internetofwater.dev/api/v1.1/Datastreams(119)/"
 user <- "iow"
 pw <- "nieps"
 
-
+setwd("/src")
 PostTestObs <- function(api, user, password,
                     result,
                     resultTime){
@@ -28,4 +28,7 @@ PostTestObs(endpoint,
             password=pw,
             result=runif(1),
             resultTime=parsedate::format_iso_8601(Sys.time()) )  
+
+x <- data.frame(c(endpoint, as.character(Sys.time())))
+write.csv(x,"x.csv")
   

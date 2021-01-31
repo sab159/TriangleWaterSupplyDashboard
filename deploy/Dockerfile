@@ -23,7 +23,7 @@ WORKDIR /src
 
 # make all app files readable, gives rwe permisssion (solves issue when dev in Windows, but building in Ubuntu)
 RUN chmod -R 755 /src
-RUN chmod 0744 /src/R-Docker-Post-test.R
+#RUN chmod 0744 /src/R-Docker-Post-test.R
 
 # Apply cron job
 RUN crontab /src/cronjob

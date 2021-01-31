@@ -1,13 +1,12 @@
-version: "2.1"
+version: "3.7"
 
 services:
   r:
-    image: ksonda/r-sta-post-test:latest
-    restart: always
-
-  crontab:
-    image: willfarrell/crontab
+    build: 
+        context: .
+        dockerfile: Dockerfile
     restart: always
     volumes:
-     - "/var/run/docker.sock:/var/run/docker.sock:ro"
-     - "./config.sample.mapping.json:/opt/crontab/config.json:rw"
+     - type: bind
+       source: ./src
+       target: /src
