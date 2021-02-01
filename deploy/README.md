@@ -1,6 +1,6 @@
 # Deployment
 
-This directory will house a complete docker-based orchestration for resources necessary to run the Triangle Water Supply Dashboard, including:
+This directory will house a complete docker-based orchestration (docker-compose.yml) for resources necessary to run the Triangle Water Supply Dashboard, including:
 
 1. A rocker (Ubuntu-based R image) container that
  - a. Includes all necessary packages with a fixed R version and package versions
