@@ -5,8 +5,10 @@ This directory will house a complete docker-based orchestration for resources ne
 1. A rocker (Ubuntu-based R image) container that
  - a. Includes all necessary packages with a fixed R version and package versions
  - b. Schedules runs of R scripts that:
-   -  i. Imports data from utility-submitted templates to the included SensorThings API
-   -  ii. Downloads data from the the included SensorThings API and publcly Available sources and produces the Water Supply Dashboard
+   -  i. Import data from utility-submitted templates to the included SensorThings API. 
+   -  ii. Download data from the the included SensorThings API and publicly Available sources and produces the Water Supply Dashboard
+   
+   Rscripts should be stored in [/src](/deploy/src) and their schedules specified in [src/cronjob](/deploy/src/cronjob). 
    
 2. A FROST implementation of SensorThings API
 
