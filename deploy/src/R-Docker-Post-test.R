@@ -2,10 +2,10 @@
 # httr
 # parsedate
 #jsonlite
-
-endpoint <- "https://example.com/v1.1/Datastreams(119)/"
-user <- "user"
-pw <- "pw"
+creds <- Sys.getenv(c("STA_ENDPOINT","STA_USER","STA_PW"))
+endpoint <- creds["STA_ENDPOINT"]
+user <- creds["STA_USER"]
+pw <- creds["STA_PW"]
 
 setwd("/src")
 PostTestObs <- function(api, user, password,
