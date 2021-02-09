@@ -9,6 +9,6 @@ services:
        source: ./src
        target: /src
      - type: bind
-       source: ./src/runner.R
-       target: /src/R-Docker-Post-test.R
+       source: ./test_post.R
+       target: /src/run.R
 
