@@ -31,9 +31,9 @@ ENV STA_PW=nieps
 
 # Apply cron job
 RUN touch /var/log/cron.log
-RUN (crontab -l ; echo "* * * * * /usr/local/bin/Rscript '/src/R-Docker-Post-test.R'  >> /var/log/cron.log") | crontab
+#RUN (crontab -l ; echo "* * * * * /usr/local/bin/Rscript '/src/R-Docker-Post-test.R'  >> /var/log/cron.log") | crontab
 
-#RUN crontab /src/cronjob
+RUN crontab /src/cronjob
 ENTRYPOINT ["cron", "-f"]
 #CMD cron && tail -f /var/log/cron.log
 #CMD /usr/local/bin/Rscript /src/R-Docker-Post-test.R
