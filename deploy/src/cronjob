@@ -2,5 +2,5 @@ STA_ENDPOINT=https://sta-demo.internetofwater.dev/api/v1.1/Datastreams(119)/
 STA_USER=iow
 STA_PW=nieps
 
-* * * * * /usr/local/bin/Rscript '/src/R-Docker-Post-test.R'
+* * * * * /usr/local/bin/Rscript '/src/R-Docker-Post-test.R' >> /src/cron.log
 # run job every minute. An empty line is required at the end of this file for a valid cron file. To function correctly, all lines must end in /n not /r/n.
