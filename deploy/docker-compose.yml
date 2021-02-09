@@ -2,9 +2,7 @@ version: "3.7"
 
 services:
   r:
-    build: 
-        context: .
-        dockerfile: Dockerfile
+    image: internetofwater/r-sta-post:latest
     restart: always
     volumes:
      - type: bind
