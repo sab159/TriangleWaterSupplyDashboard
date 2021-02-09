@@ -4,3 +4,4 @@
 .Ruserdata
 deploy/src/x.csv
 deploy/src/cron.log
+deploy/src/test_post.R
