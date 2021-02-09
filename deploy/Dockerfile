@@ -25,10 +25,6 @@ WORKDIR /src
 RUN chmod -R 755 /src
 #RUN chmod 0744 /src/R-Docker-Post-test.R
 
-ENV STA_ENDPOINT=https://sta-demo.internetofwater.dev/api/v1.1/Datastreams(119)/
-ENV STA_USER=iow
-ENV STA_PW=nieps
-
 # Apply cron job
 RUN touch /src/cron.log
 #RUN (crontab -l ; echo "* * * * * /usr/local/bin/Rscript '/src/R-Docker-Post-test.R'  >> /var/log/cron.log") | crontab
