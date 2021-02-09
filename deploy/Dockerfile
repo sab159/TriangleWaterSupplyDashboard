@@ -30,13 +30,13 @@ ENV STA_USER=iow
 ENV STA_PW=nieps
 
 # Apply cron job
-#RUN touch /var/log/cron.log
-#RUN (crontab -l ; echo "* * * * * /usr/local/bin/Rscript '/src/R-Docker-Post-test.R'  >> /var/log/cron.log") | crontab
+RUN touch /var/log/cron.log
+RUN (crontab -l ; echo "* * * * * /usr/local/bin/Rscript '/src/R-Docker-Post-test.R'  >> /var/log/cron.log") | crontab
 
 #RUN crontab /src/cronjob
-#ENTRYPOINT ["cron", "-f"]
+ENTRYPOINT ["cron", "-f"]
 #CMD cron && tail -f /var/log/cron.log
-CMD /usr/local/bin/Rscript /src/R-Docker-Post-test.R
+#CMD /usr/local/bin/Rscript /src/R-Docker-Post-test.R
 
 # Run the command on container startup with extra touch as https://stackoverflow.com/questions/43802109/output-of-tail-f-at-the-end-of-a-docker-cmd-is-not-showing/43807880#43807880. Otherwise if seperate RUN touch recipe layer the output does not get appenended.
 # CMD echo "cronjob gets started" && (cron) && echo "now touch n' tail" && touch /var/log/cron.log && tail -f /var/log/cron.log
