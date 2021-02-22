@@ -27,7 +27,7 @@ RUN chmod -R 755 /src
 
 # Apply cron job
 RUN touch /src/cron.log
-#RUN (crontab -l ; echo "* * * * * /usr/local/bin/Rscript '/src/R-Docker-Post-test.R'  >> /var/log/cron.log") | crontab
+#RUN (crontab -l ; echo "* * * * * /usr/local/bin/Rscript '/src/run.R'  >> /var/log/cron.log") | crontab
 
 RUN crontab /src/cronjob
 ENTRYPOINT ["cron", "-f"]

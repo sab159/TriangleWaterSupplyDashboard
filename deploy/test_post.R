@@ -2,7 +2,7 @@
 # httr
 # parsedate
 #jsonlite
-endpoint <- "https://sta-demo.internetofwater.dev/api/v1.1/Datastreams(119)/"
+endpoint <- "http://web:8080/FROST-Server/v1.1/Datastreams(1)/"
 user <- "iow"
 pw <- "nieps"
 
@@ -11,7 +11,7 @@ PostTestObs <- function(api, user, password,
                         result,
                         resultTime){
   o <- jsonlite::toJSON(list(
-    result = 200,
+    result = 300,
     resultTime = resultTime,
     phenomenonTime = resultTime
   ), auto_unbox=TRUE)
