@@ -14,6 +14,7 @@ services:
 
   web:
     image: fraunhoferiosb/frost-server:latest
+    restart: always
     environment:
       - serviceRootUrl=http://localhost:8080/FROST-Server
       - http_cors_enable=true
@@ -31,6 +32,7 @@ services:
 
   database:
     image: postgis/postgis:11-2.5-alpine
+    restart: always
     environment:
       - POSTGRES_DB=sensorthings
       - POSTGRES_USER=sensorthings
