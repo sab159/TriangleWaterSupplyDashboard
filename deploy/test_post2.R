@@ -2,31 +2,26 @@
 # httr
 # parsedate
 #jsonlite
-endpoint <- "http://web:8080/FROST-Server/v1.1/Datastreams(1)/"
+endpoint <- "http://web:8080/FROST-Server/v1.1/"
 user <- "iow"
 pw <- "nieps"
 
 setwd("/src")
-PostTestObs <- function(api, user, password,
-                        result,
-                        resultTime){
-  o <- jsonlite::toJSON(list(
-    result = 400,
-    resultTime = resultTime,
-    phenomenonTime = resultTime
-  ), auto_unbox=TRUE)
-  
-  httr::POST(url = paste0(api,"Observations"), encode="json", httr::authenticate(user, password, type ="basic"),
-             body = o)
-  
-  #return(o)
+
+PostThing <- function(api, user, password, name, description){
+	t <- jsonlite::toJSON(list(
+		name = name,
+		description = description), auto_unbox=TRUE)
+		
+	httr::POST(url = paste0(api,"Things"), encode="json", httr::authenticate(user, password, type = "basic"),
+			   body = t)
 }
 
-PostTestObs(endpoint, 
+PostThing(endpoint, 
             user=user,
             password=pw,
-            result=runif(1),
-            resultTime=parsedate::format_iso_8601(Sys.time()) )  
+            name="Test Thing",
+            description=as.character(parsedate::format_iso_8601(Sys.time())) )  
 
 x <- data.frame(c(endpoint, as.character(Sys.time())))
 write.csv(x,"x.csv")
