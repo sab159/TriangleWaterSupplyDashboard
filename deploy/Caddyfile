@@ -1,6 +1,6 @@
-localhost:8080
+twsd.internetofwater.app
 
-root * /root/TriangleWaterSupplyDashboard/nc-water-supply
+root * /root/TriangleWaterSupplyDashboard/src/nc-water-supply
 reverse_proxy /FROST-Server/* localhost:8080
 uri replace /api/ /FROST-Server/
 
