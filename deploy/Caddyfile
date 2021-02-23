@@ -1,4 +1,7 @@
-:443
+localhost:8080
 
-root * /srv
+root * /root/TriangleWaterSupplyDashboard/nc-water-supply
+reverse_proxy /FROST-Server/* localhost:8080
+uri replace /api/ /FROST-Server/
+
 file_server 

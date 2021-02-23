@@ -1,19 +1,6 @@
 version: "3.7"
 
 services:
-
-services:
-  caddy:
-    image: caddy:2.2.1-alpine
-    restart: unless-stopped
-    ports:
-      - 8090:80
-      - 8043:443
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./nc-water-supply:/srv
-      - caddy_data:/data
-      - caddy_config:/config
   r:
     image: internetofwater/r-sta-post:latest
     restart: always
