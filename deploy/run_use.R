@@ -4,7 +4,9 @@ endpoint <- "http://web:8080/FROST-Server/v1.1/"
 user <- "iow"
 pw <- "nieps"
 
-setwd("/src")
+source_path = rstudioapi::getActiveDocumentContext()$path 
+setwd(paste0(dirname(source_path),"/src"))
+
 
 PostThing <- function(api, user, password, name, description){
 	t <- jsonlite::toJSON(list(
@@ -25,6 +27,6 @@ x <- data.frame(c(endpoint, as.character(Sys.time())))
 write.csv(x,"x.csv")
 
 #run script with global endpoints
-source("./nc-water-supply/rcodes/global0_set_apis_libraries.R")
-source("./nc-water-supply/rcodes/use1_streamflow_data.R")
+source("..//nc-water-supply//rcodes//global0_set_apis_libraries.R")
+source("..//nc-water-supply//rcodes//use1_streamflow_data.R")
 
