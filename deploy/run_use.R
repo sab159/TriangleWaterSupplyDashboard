@@ -25,6 +25,6 @@ x <- data.frame(c(endpoint, as.character(Sys.time())))
 write.csv(x,"x.csv")
 
 #run script with global endpoints
-source("*global0_set_apis_libraries.R")
-source("*use1_streamflow_data.R")
+source("./nc-water-supply/rcodes/global0_set_apis_libraries.R")
+source("./nc-water-supply/rcodes/use1_streamflow_data.R")
 
