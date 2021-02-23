@@ -1,0 +1,166 @@
+pwsid,utility_name,activity,stage,stage_response
+NC0332010,Durham City,Spray Irrigation,year round,Three days per week
+NC0332010,Durham City,"Hand Watering, Drip Irrigation, Subsurface Irrigation",year round,Allowed
+NC0332010,Durham City,"New Landscape, Exception License",year round,Allowed
+NC0332010,Durham City,Vehicle Washing,year round,Allowed
+NC0332010,Durham City,Surface Washing,year round,Allowed
+NC0332010,Durham City,Spray Irrigation,stage 1,One day per week
+NC0332010,Durham City,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 1,Allowed
+NC0332010,Durham City,"New Landscape, Exception License",stage 1,No new licenses
+NC0332010,Durham City,Vehicle Washing,stage 1,Allowed
+NC0332010,Durham City,Surface Washing,stage 1,Allowed
+NC0332010,Durham City,Spray Irrigation,stage 2,Not Allowed
+NC0332010,Durham City,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 2,Allowed
+NC0332010,Durham City,"New Landscape, Exception License",stage 2,Not Allowed
+NC0332010,Durham City,Vehicle Washing,stage 2,Limited to efficient commercial facilities
+NC0332010,Durham City,Surface Washing,stage 2,Allowed prior to painting only
+NC0332010,Durham City,Spray Irrigation,stage 3,Not Allowed
+NC0332010,Durham City,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 3,Not Allowed
+NC0332010,Durham City,"New Landscape, Exception License",stage 3,Not Allowed
+NC0332010,Durham City,Vehicle Washing,stage 3,Limited to efficient commercial facilities
+NC0332010,Durham City,Surface Washing,stage 3,Not Allowed
+NC0332010,Durham City,Spray Irrigation,stage 4,Not Allowed
+NC0332010,Durham City,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 4,Not Allowed
+NC0332010,Durham City,"New Landscape, Exception License",stage 4,Not Allowed
+NC0332010,Durham City,Vehicle Washing,stage 4,Not Allowed
+NC0332010,Durham City,Surface Washing,stage 4,Not Allowed
+NC0392020,Cary Town,Outdoor Spray Irrigation,year round,Three days per week
+NC0392020,Cary Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",year round,Allowed
+NC0392020,Cary Town,"Pressure Washing, Car Washing, Swimming Pools, etc.",year round,Allowed
+NC0392020,Cary Town,New Turf Watering Exception Permits,year round,Allowed
+NC0392020,Cary Town,Indoor Water Use,year round,Allowed
+NC0392020,Cary Town,Outdoor Spray Irrigation,stage 1,One day per week
+NC0392020,Cary Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 1,Allowed
+NC0392020,Cary Town,"Pressure Washing, Car Washing, Swimming Pools, etc.",stage 1,Allowed
+NC0392020,Cary Town,New Turf Watering Exception Permits,stage 1,No new permits; permits beginning more than 2 weeks after stage 1 date rescinded
+NC0392020,Cary Town,Indoor Water Use,stage 1,Allowed
+NC0392020,Cary Town,Outdoor Spray Irrigation,stage 2,Not Allowed
+NC0392020,Cary Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 2,Allowed
+NC0392020,Cary Town,"Pressure Washing, Car Washing, Swimming Pools, etc.",stage 2,Allowed
+NC0392020,Cary Town,New Turf Watering Exception Permits,stage 2,Not Allowed
+NC0392020,Cary Town,Indoor Water Use,stage 2,Allowed
+NC0392020,Cary Town,Outdoor Spray Irrigation,stage 3,Not Allowed
+NC0392020,Cary Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 3,Not Allowed
+NC0392020,Cary Town,"Pressure Washing, Car Washing, Swimming Pools, etc.",stage 3,Not Allowed
+NC0392020,Cary Town,New Turf Watering Exception Permits,stage 3,Not Allowed
+NC0392020,Cary Town,Indoor Water Use,stage 3,Limited to normal indoor winter use
+NC0392020,Cary Town,Outdoor Spray Irrigation,stage 4,Not Allowed
+NC0392020,Cary Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 4,Not Allowed
+NC0392020,Cary Town,"Pressure Washing, Car Washing, Swimming Pools, etc.",stage 4,Not Allowed
+NC0392020,Cary Town,New Turf Watering Exception Permits,stage 4,Not Allowed
+NC0392020,Cary Town,Indoor Water Use,stage 4,Reduce normal indoor winter use by 15%
+NC0368010,Orange Water and Sewer Authority,Sray Irrigation on Turf and Grass (designated days),year round,"3 days per week, up to 1 inch per week, 6 pm - 10 am only"
+NC0368010,Orange Water and Sewer Authority,Spray Irrigation of Non-Turf Plant Material (designated days),year round,"3 days per week, up to 1 inch per week, 6 pm - 10 am only"
+NC0368010,Orange Water and Sewer Authority,"Hand Watering, Drip Irrigation, Subsurface Irrigation",year round,Allowed
+NC0368010,Orange Water and Sewer Authority,Surface Washing,year round,Allowed
+NC0368010,Orange Water and Sewer Authority,"Filling, Refilling, or Topping off Ornamental Ponds, Fountains, etc.",year round,Allowed
+NC0368010,Orange Water and Sewer Authority,"Filling, Refilling, or Topping off Swimming Pools and Backyard Scale Facilities to Support Wildlife",year round,Allowed
+NC0368010,Orange Water and Sewer Authority,Vehicle Washing,year round,Allowed
+NC0368010,Orange Water and Sewer Authority,Flushing or Pressure Testing New Water Lines,year round,Allowed
+NC0368010,Orange Water and Sewer Authority,Sray Irrigation on Turf and Grass (designated days),stage 1,"1 day per week, up to 0.5 inch per week, 6 pm - 10 am only"
+NC0368010,Orange Water and Sewer Authority,Spray Irrigation of Non-Turf Plant Material (designated days),stage 1,"3 days per week, up to 1 inch per week, 6 pm - 10 am only"
+NC0368010,Orange Water and Sewer Authority,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 1,Allowed
+NC0368010,Orange Water and Sewer Authority,Surface Washing,stage 1,Allowed
+NC0368010,Orange Water and Sewer Authority,"Filling, Refilling, or Topping off Ornamental Ponds, Fountains, etc.",stage 1,Allowed
+NC0368010,Orange Water and Sewer Authority,"Filling, Refilling, or Topping off Swimming Pools and Backyard Scale Facilities to Support Wildlife",stage 1,Allowed
+NC0368010,Orange Water and Sewer Authority,Vehicle Washing,stage 1,Allowed
+NC0368010,Orange Water and Sewer Authority,Flushing or Pressure Testing New Water Lines,stage 1,Allowed
+NC0368010,Orange Water and Sewer Authority,Sray Irrigation on Turf and Grass (designated days),stage 2,"Not Allowed, some excemptions"
+NC0368010,Orange Water and Sewer Authority,Spray Irrigation of Non-Turf Plant Material (designated days),stage 2,"1 days per week, up to 0.5 inch per week, 6 pm - 10 am only"
+NC0368010,Orange Water and Sewer Authority,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 2,Allowed
+NC0368010,Orange Water and Sewer Authority,Surface Washing,stage 2,Allowed prior to painting only
+NC0368010,Orange Water and Sewer Authority,"Filling, Refilling, or Topping off Ornamental Ponds, Fountains, etc.",stage 2,Not Allowed
+NC0368010,Orange Water and Sewer Authority,"Filling, Refilling, or Topping off Swimming Pools and Backyard Scale Facilities to Support Wildlife",stage 2,Allowed
+NC0368010,Orange Water and Sewer Authority,Vehicle Washing,stage 2,"Limited to commericial or institutional facilities where 50% or more of water is being recylced, from a non-potable source, or from a well"
+NC0368010,Orange Water and Sewer Authority,Flushing or Pressure Testing New Water Lines,stage 2,Allowed
+NC0368010,Orange Water and Sewer Authority,Sray Irrigation on Turf and Grass (designated days),stage 3,"Not Allowed, some excemptions"
+NC0368010,Orange Water and Sewer Authority,Spray Irrigation of Non-Turf Plant Material (designated days),stage 3,"Not Allowed, some excemptions"
+NC0368010,Orange Water and Sewer Authority,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 3,Allowed
+NC0368010,Orange Water and Sewer Authority,Surface Washing,stage 3,Not Allowed
+NC0368010,Orange Water and Sewer Authority,"Filling, Refilling, or Topping off Ornamental Ponds, Fountains, etc.",stage 3,Not Allowed
+NC0368010,Orange Water and Sewer Authority,"Filling, Refilling, or Topping off Swimming Pools and Backyard Scale Facilities to Support Wildlife",stage 3,Allowed
+NC0368010,Orange Water and Sewer Authority,Vehicle Washing,stage 3,Not Allowed
+NC0368010,Orange Water and Sewer Authority,Flushing or Pressure Testing New Water Lines,stage 3,Allowed
+NC0368010,Orange Water and Sewer Authority,Sray Irrigation on Turf and Grass (designated days),stage 4,Not Allowed
+NC0368010,Orange Water and Sewer Authority,Spray Irrigation of Non-Turf Plant Material (designated days),stage 4,Not Allowed
+NC0368010,Orange Water and Sewer Authority,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 4,Not Allowed
+NC0368010,Orange Water and Sewer Authority,Surface Washing,stage 4,Not Allowed
+NC0368010,Orange Water and Sewer Authority,"Filling, Refilling, or Topping off Ornamental Ponds, Fountains, etc.",stage 4,Not Allowed
+NC0368010,Orange Water and Sewer Authority,"Filling, Refilling, or Topping off Swimming Pools and Backyard Scale Facilities to Support Wildlife",stage 4,Not Allowed
+NC0368010,Orange Water and Sewer Authority,Vehicle Washing,stage 4,Not Allowed
+NC0368010,Orange Water and Sewer Authority,Flushing or Pressure Testing New Water Lines,stage 4,Only if recycled to system
+NC0392010,Raleigh City,Spray Irrigation,year round,Allowed
+NC0392010,Raleigh City,Hose-end Sprinklers,year round,Allowed
+NC0392010,Raleigh City,Hand Watering,year round,Allowed
+NC0392010,Raleigh City,"Bucket Watering, Drip Irrigation, Subsurface Irrigation, Athletic Field Irrigation",year round,Allowed
+NC0392010,Raleigh City,Swimming Pools,year round,Allowed
+NC0392010,Raleigh City,Spray Irrigation,stage 1,"1 day per week, 12 am - 10 am only"
+NC0392010,Raleigh City,Hose-end Sprinklers,stage 1,"1 day per week, 6 am - 10 am and 6 pm to 10 pm"
+NC0392010,Raleigh City,Hand Watering,stage 1,"2 days per week, 6 am - 10 am and 6 pm to 10 pm"
+NC0392010,Raleigh City,"Bucket Watering, Drip Irrigation, Subsurface Irrigation, Athletic Field Irrigation",stage 1,Allowed
+NC0392010,Raleigh City,Swimming Pools,stage 1,Allowed
+NC0392010,Raleigh City,Spray Irrigation,stage 2,Not Allowed
+NC0392010,Raleigh City,Hose-end Sprinklers,stage 2,Not Allowed
+NC0392010,Raleigh City,Hand Watering,stage 2,"2 days per week, 6 am - 10 am and 6 pm to 10 pm"
+NC0392010,Raleigh City,"Bucket Watering, Drip Irrigation, Subsurface Irrigation, Athletic Field Irrigation",stage 2,Allowed
+NC0392010,Raleigh City,Swimming Pools,stage 2,Allowed
+NC0392010,Raleigh City,Spray Irrigation,stage 3,Not Allowed
+NC0392010,Raleigh City,Hose-end Sprinklers,stage 3,Not Allowed
+NC0392010,Raleigh City,Hand Watering,stage 3,Not Allowed
+NC0392010,Raleigh City,"Bucket Watering, Drip Irrigation, Subsurface Irrigation, Athletic Field Irrigation",stage 3,Not Allowed
+NC0392010,Raleigh City,Swimming Pools,stage 3,Top off for sanitary purposes only
+NC0326010,Fayetteville Public Works,Spray Irrigation,year round,3 days per week on designated days
+NC0326010,Fayetteville Public Works,Watering new lawns,year round,Allowed
+NC0326010,Fayetteville Public Works,"Hand Watering, Drip Irrigation, Subsurface Irrigation",year round,Allowed
+NC0326010,Fayetteville Public Works,Vehicle Washing,year round,Allowed
+NC0326010,Fayetteville Public Works,Surface Washing,year round,Allowed
+NC0326010,Fayetteville Public Works,"Filling, Refilling, or Topping off Ornamental Ponds, Fountains, etc.",year round,Allowed
+NC0326010,Fayetteville Public Works,Indoor Water Use,year round,Allowed
+NC0326010,Fayetteville Public Works,Spray Irrigation,stage 1,Voluntary Restrictions
+NC0326010,Fayetteville Public Works,Watering new lawns,stage 1,Voluntary Restrictions
+NC0326010,Fayetteville Public Works,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 1,Voluntary Restrictions
+NC0326010,Fayetteville Public Works,Vehicle Washing,stage 1,Voluntary Restrictions
+NC0326010,Fayetteville Public Works,Surface Washing,stage 1,Voluntary Restrictions
+NC0326010,Fayetteville Public Works,"Filling, Refilling, or Topping off Ornamental Ponds, Fountains, etc.",stage 1,Voluntary Restrictions
+NC0326010,Fayetteville Public Works,Indoor Water Use,stage 1,Voluntary Restrictions
+NC0326010,Fayetteville Public Works,Spray Irrigation,stage 2,2 days per week
+NC0326010,Fayetteville Public Works,Watering new lawns,stage 2,Reduce by 10%
+NC0326010,Fayetteville Public Works,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 2,Allowed
+NC0326010,Fayetteville Public Works,Vehicle Washing,stage 2,Reduce by 10%
+NC0326010,Fayetteville Public Works,Surface Washing,stage 2,Reduce by 10%
+NC0326010,Fayetteville Public Works,"Filling, Refilling, or Topping off Ornamental Ponds, Fountains, etc.",stage 2,Reduce by 10%
+NC0326010,Fayetteville Public Works,Indoor Water Use,stage 2,Reduce by 10%
+NC0326010,Fayetteville Public Works,Spray Irrigation,stage 3,Not Allowed
+NC0326010,Fayetteville Public Works,Watering new lawns,stage 3,Allowed
+NC0326010,Fayetteville Public Works,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 3,Allowed
+NC0326010,Fayetteville Public Works,Vehicle Washing,stage 3,Reduce by 20%
+NC0326010,Fayetteville Public Works,Surface Washing,stage 3,Not Allowed
+NC0326010,Fayetteville Public Works,"Filling, Refilling, or Topping off Ornamental Ponds, Fountains, etc.",stage 3,Reduce by 20%
+NC0326010,Fayetteville Public Works,Indoor Water Use,stage 3,Reduce by 20%
+NC0326010,Fayetteville Public Works,Spray Irrigation,stage 4,Not Allowed
+NC0326010,Fayetteville Public Works,Watering new lawns,stage 4,Not Allowed
+NC0326010,Fayetteville Public Works,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 4,Not Allowed
+NC0326010,Fayetteville Public Works,Vehicle Washing,stage 4,Not Allowed; Commercial may if reduce by 30%
+NC0326010,Fayetteville Public Works,Surface Washing,stage 4,Not Allowed
+NC0326010,Fayetteville Public Works,"Filling, Refilling, or Topping off Ornamental Ponds, Fountains, etc.",stage 4,Not Allowed
+NC0326010,Fayetteville Public Works,Indoor Water Use,stage 4,Reduce by 30%
+NC0392045,Apex Town,Outdoor Spray Irrigation,year round,3 days per week
+NC0392045,Apex Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",year round,Allowed
+NC0392045,Apex Town,"Other outdoor watering, such as pressure washing, car washing, filling pools",year round,Allowed
+NC0392045,Apex Town,New Turf Watering Exception Permits,year round,Allowed
+NC0392045,Apex Town,Outdoor Spray Irrigation,stage 1,1 day per week
+NC0392045,Apex Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 1,Allowed
+NC0392045,Apex Town,"Other outdoor watering, such as pressure washing, car washing, filling pools",stage 1,Allowed
+NC0392045,Apex Town,New Turf Watering Exception Permits,stage 1,Now new permits; Rescind permits less than 2 weeks old
+NC0392045,Apex Town,Outdoor Spray Irrigation,stage 2,Not Allowed
+NC0392045,Apex Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 2,Allowed
+NC0392045,Apex Town,"Other outdoor watering, such as pressure washing, car washing, filling pools",stage 2,Allowed
+NC0392045,Apex Town,New Turf Watering Exception Permits,stage 2,Not Allowed
+NC0392045,Apex Town,Outdoor Spray Irrigation,stage 3,Not Allowed
+NC0392045,Apex Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 3,Not Allowed
+NC0392045,Apex Town,"Other outdoor watering, such as pressure washing, car washing, filling pools",stage 3,Not Allowed
+NC0392045,Apex Town,New Turf Watering Exception Permits,stage 3,Not Allowed
+NC0392045,Apex Town,Outdoor Spray Irrigation,stage 4,Not Allowed
+NC0392045,Apex Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 4,Not Allowed
+NC0392045,Apex Town,"Other outdoor watering, such as pressure washing, car washing, filling pools",stage 4,Not Allowed
+NC0392045,Apex Town,New Turf Watering Exception Permits,stage 4,Not Allowed

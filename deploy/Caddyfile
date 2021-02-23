@@ -1,0 +1,4 @@
+:443
+
+root * /srv
+file_server 

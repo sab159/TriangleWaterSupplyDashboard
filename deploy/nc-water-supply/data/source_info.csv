@@ -1,0 +1,16 @@
+pwsid,utility_name,HUC8,HUC8_name,source,stream_name,source_type,source_name,type,notes
+NC0332010,Durham City,03020201,Upper Neuse,surface,Eno River,stream,Eno River,emergency,
+NC0332010,Durham City,03020201,Upper Neuse,surface,Eno River,quarry,Teer/Hanson,emergency,
+NC0332010,Durham City,03020201,Upper Neuse,surface,Flat River,reservoir,Lake Michie,regular,
+NC0332010,Durham City,03020201,Upper Neuse,surface,Little River,reservoir,Little River,regular,
+NC0332010,Durham City,03030002,Haw,surface,Haw River,reservoir,Jordan Lake,regular,changed stream name to match others
+NC0392010,Raleigh City,03020201,Upper Neuse,surface,Neuse River,reservoir,Falls Lake,regular,
+NC0392010,Raleigh City,03020203,Contentnea,surface,Swift Creek,reservoir,Lake Benson,regular,
+NC0368010,Orange Water and Sewer Authority,03030002,Haw,surface,Cane Creek,reservoir,Cane Creek,regular,
+NC0368010,Orange Water and Sewer Authority,03030002,Haw,surface,Haw River,reservoir,Jordan Lake,emergency,
+NC0368010,Orange Water and Sewer Authority,03030002,Haw,surface,Morgan Creek,reservoir,University Lake,regular,
+NC0392020,Cary Town,03020201,Upper Neuse,surface,none,none,none,none,
+NC0392020,Cary Town,03030002,Haw,surface,Haw River,reservoir,Jordan Lake,regular,
+NC0326010,Fayetteville Public Works,03030004,Upper Cape Fear,surface,Big Boss Creek,stream,Big Boss Creek,emergency,
+NC0326010,Fayetteville Public Works,03030004,Upper Cape Fear,surface,Cape Fear River,stream,Cape Fear River,regular,
+NC0326010,Fayetteville Public Works,03030004,Upper Cape Fear,surface,Little Cross Creek,reservoir,Glenville Lake,regular,
