@@ -13,7 +13,7 @@ RUN cron start
 
 
 # install R packages
-RUN R -e "install.packages(c('httr', 'parsedate', 'jsonlite', 'cronR', 'rstudioapi', 'readxl', 'sf', 'rgdal', 'spData', 'raster', 'tidycensus', 'tidyverse', 'lubridate', 'rmapshaper', 'geojsonio', 'rvest', 'purrr', 'stringr','dataRetrieval', 'leaflet', 'EGRET'), dependencies = TRUE)"
+RUN R -e "install.packages(c('readxl','httr', 'parsedate', 'jsonlite', 'cronR', 'rstudioapi', 'readxl', 'sf', 'rgdal', 'spData', 'raster', 'tidycensus', 'tidyverse', 'lubridate', 'rmapshaper', 'geojsonio', 'rvest', 'purrr', 'stringr','dataRetrieval', 'leaflet', 'EGRET'), dependencies = TRUE)"
 	
 
 # copy folder which contains cronfile, RScript 
