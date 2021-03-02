@@ -47,7 +47,7 @@ outdir = swd_html; #set to a download folder
 download_wbd(outdir, url = paste0("https://prd-tnm.s3.amazonaws.com/StagedProducts/", "Hydrography/WBD/National/GDB/WBD_National_GDB.zip"))  
 
 #read in geodatabase
-gdb <- path.expand("C:\\Users\\lap19\\Documents\\GIS\\HUCs\\WBD_National_GDB.gdb")    
+gdb <- path.expand(paste0(outdir, "WBD_National_GDB.gdb")    )
 ogrListLayers(gdb)
 huc8 <- readOGR(gdb, "WBDHU8")
 
@@ -74,7 +74,7 @@ geojson_write(nc, file = paste0(swd_html, "huc6.geojson"))
 ######################################################################################################################################################################
 #Read in major streams from NC DEQ API
 rivers <- read_sf("https://opendata.arcgis.com/datasets/2a5324f732bb44d9a1ca29f1c17370ee_0.geojson")
-rivers <- st_transform(rivers, CRS("+init=epsg:4326"))
+rivers <- st_transform(rivers, CRS("+init=epsg:4326")) %>% select(StrmName, geometry)
 rivers <- ms_simplify(rivers, keep = 0.1, keep_shapes=TRUE); #can decide how much to simplify... has big impact on file size
 geojson_write(rivers, file =  paste0(swd_html, "rivers.geojson"))
 
@@ -83,8 +83,9 @@ geojson_write(rivers, file =  paste0(swd_html, "rivers.geojson"))
 ws <- read_sf("https://opendata.arcgis.com/datasets/fb32d3871a5640a986b72087c4121125_0.geojson") %>% st_transform(ws, crs="+init=epsg:4326")
 #merge together polygons and count how many watersheds are included
 ws <- ws %>%  ms_simplify(keep=0.08, keep_shapes=TRUE) %>% select(STREAM_NAM, geometry) %>% group_by(STREAM_NAM) %>% summarize(nSheds = n(), .groups="drop") %>% mutate(drawFile = "none")
+
 #link to pwsid based on a manually created spreadsheet
-link.df <- read.csv("M:\\public_html\\www\\nc-water-supply\\data\\link_pwsid_watershed.csv")
+link.df <- read.csv(paste0(swd_html, "link_pwsid_watershed.csv"))
 link.ws <- merge(ws, link.df[,c("pwsid", "ws_watershed")], by.x="STREAM_NAM", by.y="ws_watershed") %>% mutate(drawFile = pwsid) %>% select(-pwsid) %>% group_by(STREAM_NAM, nSheds, drawFile, geometry) %>% distinct()
 ws <- rbind(ws, link.ws)
 #note that this creates duplicates of watersheds shared by utilities. This is necessary in order to draw individual watersheds based on utility selection. There may be better ways to do this. Just my solution.

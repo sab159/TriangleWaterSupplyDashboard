@@ -29,4 +29,5 @@ write.csv(x,"x.csv")
 #run script with global endpoints
 source("..//nc-water-supply//rcodes//global0_set_apis_libraries.R")
 source("..//nc-water-supply//rcodes//use1_streamflow_data.R")
+#add remainder when ready
 
