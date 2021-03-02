@@ -9,7 +9,7 @@ services:
        source: ./src
        target: /src
      - type: bind
-       source: ./test_post2.R
+       source: ./run_use.R
        target: /src/run.R
 
   web:
