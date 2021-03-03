@@ -23,7 +23,7 @@ today = substr(Sys.time(),1,10); today;
 ################################################################################################################################################
 #download spatial data
 drought <- file_to_geojson(input="https://droughtmonitor.unl.edu/data/kmz/usdm_current.kmz", method='web', output=paste0(swd_html, 'drought\\current_drought'))
-#drought <- read_sf(paste0(swd_html, 'drought\\current_drought.geojson')) %>%  st_transform(drought, crs = 4326); #already in correct projection
+drought <- read_sf(paste0(swd_html, 'drought\\current_drought.geojson')) %>%  st_transform(drought, crs = 4326) %>% select(Name, geometry); #already in correct projection
 
 #download tables for HUCS of interest 
 huc8 <- read_sf(paste0(swd_html, "huc8.geojson"))
@@ -334,7 +334,7 @@ foo.month <- foo.month %>% mutate(pcp_in = ifelse((month == current.month & year
 
 #save file --- since only plotting recent years will only save out 2000 onward
 #foo.month <- foo.month %>% filter(year>=1997)
-write.csv(foo.month, paste0(swd_html, "pcp\\pcp_months_total.csv"))
+write.csv(foo.month, paste0(swd_html, "pcp\\pcp_months_total.csv"), row.names=FALSE)
 
 
 ###################################################################################################################################
@@ -365,7 +365,7 @@ foo.cum2 <- merge(foo.cum2, julian[,c("julian","month.day365","month.day366")], 
 foo.cum2$date = ifelse(foo.cum2$ndays==366, foo.cum2$month.day366, foo.cum2$month.day365) 
 foo.cum2 <- foo.cum2 %>% dplyr::select(id, year, julian, pcp_in, date)
 
-write.csv(foo.cum2, paste0(swd_html, "pcp\\pcp_cum_total.csv"))
+write.csv(foo.cum2, paste0(swd_html, "pcp\\pcp_cum_total.csv"), row.names=FALSE)
 
 
 
