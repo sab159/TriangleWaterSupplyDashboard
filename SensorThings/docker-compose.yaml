@@ -4,7 +4,7 @@ services:
   web:
     image: fraunhoferiosb/frost-server:latest
     environment:
-      - serviceRootUrl=http://sta.ondawater.org:8080/FROST-Server
+      - serviceRootUrl=http://localhost:8080/FROST-Server
       - http_cors_enable=true
       - http_cors_allowed.origins=*
       - persistence_db_driver=org.postgresql.Driver
