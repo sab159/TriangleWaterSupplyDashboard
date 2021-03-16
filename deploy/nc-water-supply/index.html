@@ -1,11 +1,11 @@
 <!doctype html>
 <!-- (c) Copyright protected by Duke University -->
-<html class="no-js" lang="">
+<html class="no-js" lang="en-US" dir="ltr">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Water Supply Status</title>
-    <meta name="description" content="">
+    <title>NC Water Supply</title>
+    <meta name="description" content="North Carolina water supply status">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="favicon.png">
 
@@ -13,9 +13,9 @@
     <link rel="apple-touch-icon" href="icon.png">
     <!-- Place favicon.ico in the root directory -->
 
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/styleInfo.css">
-
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Quicksand:wght@400;600&display=swap" rel=  "stylesheet">
+     
     <script  src="https://code.jquery.com/jquery-3.5.0.min.js"  integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
     crossorigin="anonymous"></script>
     
@@ -31,215 +31,80 @@
         type="text/css"/>
 
     <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
-      <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
     
     <script src="https://d3js.org/d3.v5.min.js"></script>           
     <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script> <!-- create mapbox vector tiles-->
+    <link rel="stylesheet" href="css/main_content.css">
 
     <style type="text/css">
-      .nav-pills { 
-        font-size: 16px; 
-        text-align: center; 
-      }
-      .nav-pills > li {
-        border-radius: 4px 4px 0 0;
-        display: inline-block;
-        float: none;
-        min-width: 110px;
-        zoom: 1;
-      }
-    
-      .nav-pills > li.active > a,
-      .nav-pills > li.active > a:hover,
-      .nav-pills > li.active > a:focus{
-          background-color: #5D6D7E;  
-          color: #AED6F1;
-          }
-  
-      .btn {
-            background: rgb(200,200,200);
-            border: 1px solid rgba(0, 0, 0, 0.4);
-            border-radius: 3px;
-            font-size: 13px;
-            height: 40px;
-            line-height: 90%;
-            /*min-width: 100px;*/
-            margin-top: 2px;
-            padding: 3px;
-            text-align: center;
-            vertical-align: middle;
-            width: 90px;
-            white-space: normal; /*breaks text to wrap*/
-        }
 
-        .forecast{
-          background: repeating-linear-gradient(
-            45deg, 
-            rgb(230,230,230),
-            rgb(230,230,230) 10px,
-            rgb(200,200,200) 10px,
-            rgb(200,200,200) 20px
-            );
-        }
-
-        p { font-family: verdana;
-            font-size: 14px; 
-          }
-      
-      .geocoder {
-        position: absolute;
-        z-index: 1;
-        width: 50%;
-        left: 50%;
-      }
-      .mapboxgl-ctrl-geocoder {
-        min-width: 90%;
-      }
-
-      .mapboxgl-popup{
-        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        max-width: 400px;
-      }
-
-        .legend {
-          background-color: rgba(255,255,255,0.8);
-          border-radius: 3px;
-          bottom: 5px;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-          font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-          padding: 5px;
-          position: absolute;
-          right: 10px;
-          z-index: 100;
-        }
-        .legend h4 { margin: 0 0 10px; }
- 
-        .legend div span {
-          border-radius: 50%;
-          display: inline-block;
-          height: 10px;
-          margin-right: 5px;
-          /*width: 10px;*/
-         }
-
-         .table > tbody > tr > td { vertical-align: middle;}
-
-         .my-custom-scrollbar {
-            position: relative;
-            height: 350px;
-            overflow: auto;
-           }
-          .my-custom-scrollbar thead th {background: white; position: sticky; top: 0; }
-         .table-wrapper-scroll-y{ display: block; }
-
-         ul{ padding-left: 12px; }
-
-   
-       select {text-align-last:center; }
-       body {overflow-x: hidden;}  /*gets rid of the horizontal scroll bar at the bottom
     </style>
 </head>
 
 <body>
-<div class="row" style="text-align: left; margin-top: 0px; margin-bottom: 0px; padding-bottom: -10px;">
+<div class = "row header">
     <div class="col-sm-9">    
-        <h1 style="padding-left: 1em; color: #02145C">Triangle Water Supply</h1>    
-        <hr style="background-color: #02145C; height: 5px;">
+        <h1 style="padding-left: 1em;">Triangle Water Supply</h1>    
+        <hr style="background-color: #02145C; height: 5px; margin-top: 1px;">
     </div>
-    <div class="col-sm-3" id="footer">
-        <a href = "https://internetofwater.org/"> <img src="img/iow_logo.png" style="width: 200px; height: 78px; display: inline-block"> </a> 
-    </div> 
+    <div class="col-sm-3">
+        <a href = "https://internetofwater.org/"> <img src="img/iow_logo.png" style="width: 200px; height: 78px; padding-top: 10px; display: inline-block;"> </a> 
+    </div>
 </div>
 
 <!-- EXPLANATION TAB #################################################################################################
 
 ####################################################################################################################-->
-<div class="row" style="text-align: left, margin-top: -10px; margin-left: 10px; margin-bottom: 0px; margin-right: 10px;">
-    <p style="color: rgb(43,28,88);"><em><strong>Disclaimer:</strong> This tool is best viewed in Chrome, Firefox, Microsoft Edge, and Safari.</em></p>
-    <br>
-    
-    <!--h4 style= "color: black;"><b>Introductory Text:</b></h4-->
-    <form name="selectSystem" style="font-size: 18px; font-family: Arial; color: rgb(26,131,130);"> 
-        <span style="color: #cc0000; font-size: 18px; margin-left: 10px;"><strong>Select a utility on the map, in the drop down menu, or by typing in an address:  </strong></span> &nbsp;
+<div class = "row header" style="margin-left: 20px;">
+  <p style=" font-size: 14px;"><i><b>Disclaimer:</b> This tool is best viewed in Chrome, Firefox, Microsoft Edge, and Safari.</i></p>
+   <!--h4 style= "color: black;"><b>Introductory Text:</b></h4-->
+    <form name="selectSystem"> 
+        <h4 style="display: inline-block">Select a utility on the map, in the drop down menu, or by typing in an address:</h4>&nbsp;
       <select style="width: 320px;" name="setSystem" id="setSystem" onchange="setSystemThis(this);">
               <option selected = "selected" value="none"> Select a Utility </option>
       </select>  
   </form>
-
+  <br>
 </div>
 
 
 <!--#######################################################################################################
                                     TAB SET UP
     ######################################################################################################-->
-<div class="container" style="padding-top: 20px; margin-left: 5px; margin-right: 5px; display: flex; width: 100%;" >
-  <div class="col-sm-6" style = "text-align: center;">   
-  <div class="row" id = "map-layers-row" style = "text-align: center; background-color: rgba(240,240,240); border: thin solid rgb(26,131,130); margin-right: 4px;">
-      <div class="row">  <h4 style="color: rgb(26,131,130); text-align: center;"><strong>Turn Map Layers On and Off</strong></h4> </div>
-        <div class="row" style="text-align: center; margin-bottom: 2px; display: inline;"> 
-          <div style="display: inline-block;">
-            <button class = "btn" value = "menuUtility" id = "menuUtility" style= "background-color: #3f97a8; color: white;"><strong>Utility</strong></button>
-          </div>
-          <div style="display: inline-block;">
-            <button class = "btn" value = "menuCounty" id = "menuCounty"><strong>County</strong></button>
-          </div>
-          <div style="display: inline-block;"> 
-            <button class="btn" value="menuBasins" id="menuBasins"><strong>River Basin</strong></button>
-          </div>
-          <div style="display: inline-block;">
-             <button class="btn" value="menuWatershed" id="menuWatershed"><strong>Sub-Basin</strong></button>
-          </div>
-          <div style="display: inline-block;"> 
-            <button class = "btn" value = "menuSource" id = "menuSource"><strong>Water Source</strong></button>
-          </div>
-          <div style="display: inline-block;"> 
-            <button class = "btn" value = "menuRivers" id = "menuRivers"><strong>Rivers</strong></button>
-          </div>
-          
-          <div style="display: inline-block;"> 
-            <button class = "btn" value = "menuStreamGages" id = "menuStreamGages"><strong>Stream Gages</strong></button>
-          </div>
-          <div style="display: inline-block;"> 
-            <button class = "btn" value = "menuReservoirs" id = "menuReservoirs"><strong>Reservoirs</strong></button>
-          </div>
-          <div style="display: inline-block;"> 
-             <button class = "btn" value = "menuGroundwater" id = "menuGroundwater"><strong>Wells</strong></button>
-          </div>
-
-          <div style="display: inline-block;"> 
-            <button class = "btn" value = "menuPrecipitation" id = "menuPrecipitation"><strong>Weather Stations</strong></button>
-          </div>
-          <div style="display: inline-block;"> 
-              <button class = "btn" value = "menuDrought" id = "menuDrought"><strong>Drought</strong></button>
-          </div>
-          <div style="display: inline-block;"> 
-            <button class = "btn" value = "menuPCP7DayObsv" id = "menuPCP7DayObsv"><strong>Precip 7-day Observ</strong></button>
-          </div>
-          <div style="display: inline-block;"> 
-            <button class = "btn" value = "menuPCP7DayNorm" id = "menuPCP7DayNorm"><strong>Precip 7-day %Normal</strong></button>
-          </div>
-          <div style="display: inline-block;">
-            <button class = "btn forecast" value = "menuQPF7day" id = "menuQPF7day"><strong>QPF 7-day Forecast</strong></button>
-          </div>
-          <div style="display: inline-block;">
-            <button class = "btn forecast" value = "menuForecastPCP6" id = "menuForecastPCP6"><strong>Precip 6-10 Day Forecast</strong></button>
-          </div> 
-          <div style="display: inline-block;"> 
-            <button class = "btn forecast" value = "menuForecastTEMP6" id = "menuForecastTEMP6"><strong>Temp 6-10 Day Forecast</strong></button>
-        </div>
+<div class="container">
+  <div class="col-sm-5 map-layers-row">   
+        <h3 class="chartTitles">Turn Map Layers On and Off</h3> 
+        <div class="row" style="text-align: center; display: inline;"> 
+            <button class = "btn" value = "menuUtility" id = "menuUtility" style= "background-color: #3f97a8; color: white;">Utility</button>
+            <button class="btn" value= "menuCounty" id= "menuCounty">County</button>
+            <button class="btn" value="menuBasins" id="menuBasins">River Basin</button>
+            <button class="btn" value="menuWatershed" id="menuWatershed">Sub-Basin</button>
+            <button class="btn" value= "menuSource" id= "menuSource">Water Source</button>
+            <button class="btn" value= "menuRivers" id= "menuRivers">Rivers</button>
+            <button class="btn" value= "menuStreamGages" id= "menuStreamGages">Stream Gages</button>
+            <button class="btn" value= "menuReservoirs" id= "menuReservoirs">Reservoirs</button>
+            <button class="btn" value= "menuGroundwater" id= "menuGroundwater">Wells</button>
+            <button class="btn" value= "menuPrecipitation" id= "menuPrecipitation">Weather Stations</button>
+            <button class="btn" value= "menuDrought" id= "menuDrought">Drought</button>
+            <button class="btn" value= "menuPCP7DayObsv" id= "menuPCP7DayObsv">Precip 7-day Observ</button>
+            <button class="btn" value= "menuPCP7DayNorm" id= "menuPCP7DayNorm">Precip 7-day %Normal</button>
+            <button class="btn forecast" value= "menuQPF7day" id= "menuQPF7day">QPF 7-day Forecast</button>
+            <button class="btn forecast" value= "menuForecastPCP6" id= "menuForecastPCP6">Precip 6-10 Day Forecast</button>
+            <button class="btn forecast" value= "menuForecastTEMP6" id= "menuForecastTEMP6">Temp 6-10 Day Forecast</button>
     </div><!--end top row-->
+
     <!--ADD DIV TO TURN ON WHEN QPF 7-day forecast selected-->
       <div id="moreForecastInfo" style="text-align: center; color: rgb(26,131,130); display: none;">
-          <p>For additional forecasts, please visit the <a style="color: rgb(252,67,57)" href="https://www.wpc.ncep.noaa.gov/#page=ovw" target="_blank">Weather Precition Center</a>.</p>
+          <p>For additional forecasts, please visit the <a href="https://www.wpc.ncep.noaa.gov/#page=ovw" target="_blank">Weather Precition Center</a>.</p>
       </div>
-  </div><!-- end row for map layers-->
-  </div> <!--creates space for map-->
+ </div> <!--creates space for map; map-layer-row-->
 
-  <div class="col-sm-6" style = "padding-bottom: 2px; border-bottom: 2px solid #5D6D7E;">
-    <div class="row" style="text-align: center; color: rgb(26,131,130)"><h4 id="dataUpdateNotice"></h4></div>
-
+  <div class="col-sm-7" style = "padding-bottom: 2px; border-bottom: 2px solid #5D6D7E;">
+    <h3 class = "chartTitles" id="dataUpdateNotice" style="padding-top: 20px;"></h3>
+  
  <script>//LOAD DROP DOWN LIST
   document.getElementById("setSystem").options.length = 1;
   opts = document.getElementById('setSystem');
@@ -285,7 +150,7 @@ function setSystemThis(target){
 
 
     <div class="row">
-    <ul id="tabs" class="nav nav-pills" data-tabs="tabs" style="position: absolute; bottom: 0;">
+    <ul id="tabs" class="nav nav-pills" data-tabs="tabs">
         <li class = "active"><a href="#about" data-toggle="tab">My <br> Utility</a></li>
         <li><a href="#demand" data-toggle="tab">Demand <br> Data</a></li>
         <li><a href="#waterSupplyStatus" data-toggle="tab">Surface <br> Water</a></li>
@@ -300,10 +165,10 @@ function setSystemThis(target){
 <!--#######################################################################################################
                                     MAP DIV
     ######################################################################################################-->
-<div class="row" id = "main-one" style="margin-left: 5px; margin-right: 5px; margin-bottom: 20px;">
-  <div class="col-sm-6" id = "map-column" style="z-index: 1px;"> 
-   <div class = "row" style="margin-left: 4px; margin-right: 0px; border: thin solid rgb(26,131,130); z-index: 2px;">
-      <div id="map" style="height: 600px;"> <!--border: thin solid black;"--> 
+<div class="row container" id = "main-one">
+  <div class="col-sm-5" id = "map-column" style="z-index: 1px;"> 
+   <div class = "row" style="border: thin solid rgb(26,131,130);">
+      <div id="map" style="height: 600px; z-index: 10;"> <!--border: thin solid black;"--> 
       <div class="infoMap" id="map_hover_box"><p><strong>Hover over utilities</strong></p></div>
       <div class="legend" id="stream-legend" style="display: none;"></div>    
       <div class="legend" id="drought-legend" style="display: none;"></div>    
@@ -315,37 +180,35 @@ function setSystemThis(target){
 
   <!--#####################################################################################################-->
 
-  <div class = "col-sm-6" > <!--style= "border: thin solid red;"-->
+  <div class = "col-sm-7" > <!--style= "border: thin solid red;"-->
       <div id="my-tab-content" class="tab-content clearfix;">
   <!--#######################################################################################################
                                       My Utility Tab
-      ######################################################################################################-->
+  ######################################################################################################-->
     <div class="tab-pane active" id="about">
-      <div id="intro-bkgd" style="background-color: rgb(245,245,245); padding-top: 20px; margin-left: -30px; margin-right: -25px; z-index: 0px;">
-        <img id="utilityHelp" src="img/info_icon.png" style="width: 24px; height: 24px; position: absolute; right: 15px; top: 10px; z-index: 10px; cursor: pointer;">
-      <div class="row" id="utility_tab_info" style="margin: 5px; display: none; z-index: 8;">
-            <img src="img/main-page.png" style="width: 100%; display: inline-block;">
+      <div class="intro-bkgd">
+        <img class="help-icon" id="utilityHelp" src="img/info_icon.png">
+          <div class="row" id="utility_tab_info" style="margin: 5px; display: none; z-index: 8;">
+              <img src="img/main-page.png" style="width: 100%; display: inline-block;">
+          </div>
+      
+        <h4> <strong>To learn more about your utility please:</strong></h4>
+            <ul>
+              <li>(1) Select your utility from the dropdown menu above the map <em>or</em></li>
+              <li>(2) Click on your utility in the map <em>or</em></li>
+              <li>(3) Enter your address above to find your water service provider </li>
+            </ul>
+          <br>
+          <!-- place mapbox geocoder here instead of inside the map-->
+          <div class = "geocoder" id="geocoder"> </div> <!-- end geocoder div-->
       </div>
       
-          <h4 style="margin-left: 25px;"> <strong>To learn more about your utility please:</strong></h4>
-              <ul style="margin-left: 25px;">
-                <li style="font-size: 14px;">(1) Select your utility from the dropdown menu above the map <em>or</em></li>
-                <li style="font-size: 14px;">(2) Click on your utility in the map <em>or</em></li>
-                <li style="font-size: 14px;">(3) Enter your address above to find your water service provider </li>
-              </ul>
-            <br>
-            
-            <!-- place mapbox geocoder here instead of inside the map-->
-            <div class = "row" id="geocoder" style = "top: 10px; margin-left: 25px; padding-bottom: 2px;"> </div> <!-- end geocoder div-->
-            <hr style="background-color: rgb(26,131,130); height: 2px; margin-left: -2px;">
+      <div id="utilityResult">
+        <h3 class = "chartTitles">Select a utility</h3>
       </div>
-      
-        
-        <div id = "utilityResult" style="margin-top: 40px; margin-bottom: 20px;">
-          <h4 style="color: rgb(26,131,130); text-align: center;"><strong>Select a utility</strong></h4>
-         </div>
-        <div id = "utilityTableHeader" style="text-align: center;"></div>
-        <div id = "utilityTable" class = "table-wrapper-scroll-y my-custom-scrollbar" style="text-align: left;"></div>
+       
+      <h4 class="chartTitles" id = "utilityTableHeader"></h4>
+      <div id = "utilityTable" class = "table table-wrapper-scroll-y my-custom-scrollbar"></div>
     </div> <!-- end about pane-->
   
   <!--#######################################################################################################
@@ -353,30 +216,27 @@ function setSystemThis(target){
       ######################################################################################################-->
     <div class="tab-pane" id="waterSupplyStatus">
       <!--Info Tab-->
-       <img id="surfaceHelp" src="img/info_icon.png" style="width: 24px; height: 24px; position: absolute; right: 15px; top: 10px; z-index: 10px; cursor: pointer;">
+       <img class="help-icon" id="surfaceHelp" src="img/info_icon.png">
       <div class="row" id="surface_tab_info" style="margin: 5px; display: none; z-index: 8;">
             <img src="img/surface-tab.png" style="width: 510px; height: 670px; display: inline-block;">
       </div>
       
      <!-- PLOTS -->
-      <div class="row" id="selectDataName" style="text-align: center; padding-top: 5px; color: rgb(26,131,130);">
-        <h4>Select a stream gauge or reservoir to see plot</h4>
-      </div>
+      <h4 class = "chartTitles" id = "selectDataName">Select a stream gauge or reservoir to see plot</h4>
       <div class="row" id="selectMetadata" style="text-align: center; color: darkgray">  </div>
-
+      
       <div class="row" id = "switchStatsDiv" style= "margin-left: 20px; display: none;">
         <br>
-        <input type="checkbox" id="switchStats" onclick="toggleStats(this.value)">Turn stats layer on
+        <input type="checkbox" id="switchStats" onclick="toggleStats(this.value)">&nbsp;&nbsp;Turn stats layer on
       </div>
             
       <div class="row" id = "streamPlot" style= "margin-left: 10px;">
-        <img src="img/stream_chart_icon.png" style="width: 350px; height: 350px; display: block; margin-left: auto; margin-right: auto;">
+        <img class = "chart-holder-icon" src="img/stream_chart_icon.png">
       </div>
 
             <!-- TABLES -->
-      <div class = "row" id = "summaryTitle" style="margin: 5px; text-align: center; color: rgb(26,131,130);">
-          <h4>Recent Streamflow Conditions for Selected Utility Watersheds</h4> 
-      </div>
+      <h4 id = "summaryTitle" class = "chartTitles">Recent Streamflow Conditions for Selected Utility Watersheds</h4> 
+      
       <div class="row" id="summaryTableDiv" style="margin-top: 0px; margin-left: 10px; margin-right: 10px; text-align: center;">
       </div>
 
@@ -385,19 +245,17 @@ function setSystemThis(target){
     <!--#######################################################################################################
                                       DEMAND Tab
       ######################################################################################################-->
-    <div class="tab-pane" id="demand">
+   <div class="tab-pane" id="demand">
       <!--Info Tab-->
-       <img id="demandHelp" src="img/info_icon.png" style="width: 24px; height: 24px; position: absolute; right: 15px; top: 10px; z-index: 10px; cursor: pointer;">
+       <img class="help-icon" id="demandHelp" src="img/info_icon.png">
       <div class="row" id="demand_tab_info" style="margin: 5px; display: none; z-index: 8;">
             <img src="img/demand-tab.png" style="width: 95%; display: inline-block;">
       </div>
       
-      <div class = "row" id = "demandTitle" style="margin: 5px; text-align: center; color: rgb(26,131,130);">
-          <h4>Select a utility to see water demand</h4> 
-      </div>
+      <h4 class="chartTitles" id = "demandTitle">Select a utility to see water demand</h4> 
      <!-- PLOTS -->
-       <div class="row" id="selectDemandMetadata" style="text-align: center; font-size: 12px; color: darkgray">  </div>
-       <div class="row" style="margin-left: 10px;">
+      <div class="metadata" id="selectDemandMetadata">  </div>
+      <div class="row">
         <div class = "col-sm-2" style="padding-top: 20px;">Select to Highlight
         <form style="color: black; font-size: 14px;">
             <input onclick="createTraceDemand(this.value)" name="checkDemandYear" value="2002" type="checkbox"> 2002<br>  
@@ -414,11 +272,12 @@ function setSystemThis(target){
             <input onclick="createTraceDemand(this.value)" name="checkDemandYear" value="2019" type="checkbox"> 2019<br><input onclick="createTraceDemand(this.value)" name="checkDemandYear" value="2020" type="checkbox" checked> 2020<br>  
         </form>
       </div>
-      <div class="col-sm-8" id = "demandPlot">
-        <img src="img/demand_chart_icon.png" style="width: 350px; height: 350px; display: block; margin-left: auto; margin-right: auto;">
+      
+      <div class="col-sm-10" id="demandPlot">
+        <img class="chart-holder-icon" src="img/demand_chart_icon.png">
       </div>
     </div>
-    </div> <!-- end demand pane-->
+  </div> <!-- end demand pane-->
 
 
 <!--#######################################################################################################
@@ -426,28 +285,27 @@ function setSystemThis(target){
       ######################################################################################################-->
     <div class="tab-pane" id="groundwater">
       <!--Info Tab-->
-       <img id="gwHelp" src="img/info_icon.png" style="width: 24px; height: 24px; position: absolute; right: 15px; top: 10px; z-index: 10px; cursor: pointer;">
+       <img class="help-icon" id="gwHelp" src="img/info_icon.png">
       <div class="row" id="gw_tab_info" style="margin: 5px; display: none; z-index: 8;">
             <img src="img/gw-tab.png" style="width: 95%; display: inline-block;">
       </div>
       <!-- TABLES -->
-      <div class = "row" id = "groundwaterTitle" style="margin: 5px; text-align: center; color: rgb(26,131,130);">
-          <h4>Select a well from the map for more information</h4> 
-      </div>
+      <h4 class="chartTitles" id = "groundwaterTitle">Select a well from the map for more information</h4> 
+      <div class="metadata" id="selectGWMetadata">  </div>
      <!-- PLOTS -->
-       <div class="row" id="selectGWMetadata" style="text-align: center; font-size: 12px; color: darkgray">  </div>
 
        <div class="row" id = "switchGWStatsDiv" style= "margin-left: 20px; display: none;">
           <br>
-          <input type="checkbox" id="switchGWStats" onclick="toggleGWStats(this.value)">Turn stats layer on
+          <input type="checkbox" id="switchGWStats" onclick="toggleGWStats(this.value)">&nbsp;&nbsp;Turn stats layer on
       </div>
-      <div class="row" id = "relGWTitle" style="text-align: center; margin-top: 20px;"></div>
+
+      <h5 class = "chartTitles" id = "relGWTitle"></h5>
        <div class="row" id = "gwPlot2">
-            <img src="img/gw_chart_icon.png" style="width: 350px; display: block; margin-left: auto; margin-right: auto;">
+            <img class="chart-holder-icon" src="img/gw_chart_icon.png">
        </div>
  
-       <div class="row" id = "longGWTitle" style="text-align: center; margin-top: 20px;"></div>
-       <div class="row" id = "gwPlot3" style="margin-left: 2px;"></div>
+       <h5 class = "chartTitles" id = "longGWTitle"></h5>
+       <div class="row" id = "gwPlot3"></div>
     
     </div> <!-- endGroundwater pane-->
 
@@ -457,14 +315,13 @@ function setSystemThis(target){
       ######################################################################################################-->
     <div class="tab-pane" id="pcpDrought">
       <!--Info Tab-->
-       <img id="pcpHelp" src="img/info_icon.png" style="width: 24px; height: 24px; position: absolute; right: 15px; top: 10px; z-index: 10px; cursor: pointer;">
+       <img class="help-icon" id="pcpHelp" src="img/info_icon.png">
        <div class="row" id="pcp_tab_info" style="margin: 5px; display: none; z-index: 8;">
             <img src="img/pcp-tab.png" style="width: 95%; display: inline-block;">
       </div>
       <!-- TABLES -->
-      <div class = "row" style="margin: 5px; text-align: center;">
-          <h4 style="color: rgb(26,131,130);">Select a watershed to see how drought has changed over time.</h4> 
-          <form name="selectSize" style="font-size: 14px; font-family: Arial; color: black;"> 
+      <h4 class = "chartTitles" style="width: 90%">Select a watershed to see how drought over time</h4> 
+          <form name="selectSize" style="margin: 20px 0 5px 20px;"> 
               <span><strong>Select Watershed:  </strong></span> &nbsp;
               <select style="width: 280px;" name="setHUC" id="setHUC" onchange="setHUCThis(this);">
                   <option selected = "selected" value="none"> Select from dropdown </option>
@@ -485,58 +342,54 @@ function setSystemThis(target){
               </select>  
          </form>
          <br>
-      </div>
 
-      <div class = "row" id = "hucDroughtTitle" style="text-align: center;"><br><br></div>
-      <div class = "row" id = "curDBlocks" style="border: thin solid black; margin-left: 25px; margin-right: 25px; text-align: center; display: none;">
-         <div class = "col-sm-2" id = "dnonediv" style="height: 50px; font-size: 14px; padding-top: 10px;"></div>
-         <div class = "col-sm-2" id = "d0div" style="padding-top: 10px; height: 50px; background-color: #FFFF00;"></div>
-         <div class = "col-sm-2" id = "d1div" style="padding-top: 10px; height: 50px; background-color: #FCD37F;"></div>
-         <div class = "col-sm-2" id = "d2div" style="padding-top: 10px; height: 50px; background-color: #FFAA00;"></div>
-         <div class = "col-sm-2" id = "d3div" style="padding-top: 10px; height: 50px; background-color: #E60000; color: white;"></div>
-         <div class = "col-sm-2" id = "d4div" style="padding-top: 10px; height: 50px; background-color: #730000; color: white;"></div>
+      <h4 class = "chartTitles" id = "hucDroughtTitle"><br></h4>
+      <div class="row curDBlocksStyle" id = "curDBlocks" style="display: none;">
+         <div class="col-sm-2 dstat" id = "dnonediv"></div>
+         <div class="col-sm-2 dstat" id = "d0div" style="background-color: #FFFF00;"></div>
+         <div class = "col-sm-2 dstat" id = "d1div" style="background-color: #FCD37F;"></div>
+         <div class = "col-sm-2 dstat" id = "d2div" style="background-color: #FFAA00;"></div>
+         <div class = "col-sm-2 dstat" id = "d3div" style="background-color: #E60000; color: white;"></div>
+         <div class = "col-sm-2 dstat" id = "d4div" style="background-color: #730000; color: white;"></div>
       </div>
           <!-- PLOTS -->
-      <div class="row" id = "droughtPlot" style="margin-left: 10px;">
-        <img src="img/drought_chart_icon.png" style="width: 350px; display: block; margin-left: auto; margin-right: auto;">
+      <div class="row" id = "droughtPlot" style="margin-left: 10px">
+        <img class = "chart-holder-icon" src="img/drought_chart_icon.png" style= "height: 200px; width: 200px;">
       </div>
-       <div class = "row" style="margin: 20px;">
-        <p> To learn more about current drought conditions, visit the <a href="https://www.ncdrought.org/" target="_blank" style="color: rgb(252,67,57)"><u>US Drought Monitor of North Carolina</u></a>.</p>
+       <div class = "row" style="margin-left: 10px;">
+        <p><br> To learn more about current drought conditions, visit the <a href="https://www.ncdrought.org/" target="_blank">US Drought Monitor of North Carolina</a>.<br></p>
       </div>
+
     <!-- ###################################### PCP INFORMATION -->
-
-    <div class = "row" id = "pcpTitle" style="margin: 5px; text-align: center; color: rgb(26,131,130);">
-          <h4>Select a precipitation gauge from the map for more information</h4> 
-     </div>
-
-     <div class="row" style="margin-left: 10px;">
-        <div class = "col-sm-2" style="padding-top: 20px;">Select to Highlight
-        <form style="color: black; font-size: 14px;">
-            <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2002" type="checkbox"> 2002<br>  
-            <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2003" type="checkbox"> 2003<br>  
-            <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2007" type="checkbox"> 2007<br>  
-            <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2008" type="checkbox"> 2008<br>  
-            <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2011" type="checkbox"> 2011<br>
-            <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2012" type="checkbox"> 2012<br>
-            <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2013" type="checkbox"> 2013<br>
-            <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2014" type="checkbox"> 2014<br>
-            <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2015" type="checkbox"> 2015<br>
-            <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2016" type="checkbox"> 2016<br>  
-            <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2017" type="checkbox"> 2017<br>  
-            <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2018" type="checkbox"> 2018<br>  
-            <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2019" type="checkbox"> 2019<br>  
-            <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2020" type="checkbox" checked> 2020<br>  
+    <h4 class="chartTitles" id="pcpTitle">Select a precipitation gauge from the map for more information</h4> 
+    <p class = "metadata" id = "pcpMetadata"></p>
+     <div class="row">
+        <div class = "col-sm-2">Select to Highlight
+        <form>
+          <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2002" type="checkbox"> 2002<br>  
+          <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2003" type="checkbox"> 2003<br>  
+          <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2007" type="checkbox"> 2007<br>  
+          <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2008" type="checkbox"> 2008<br>  
+          <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2011" type="checkbox"> 2011<br>
+          <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2012" type="checkbox"> 2012<br>
+          <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2013" type="checkbox"> 2013<br>
+          <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2014" type="checkbox"> 2014<br>
+          <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2015" type="checkbox"> 2015<br>
+          <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2016" type="checkbox"> 2016<br>  
+          <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2017" type="checkbox"> 2017<br>  
+          <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2018" type="checkbox"> 2018<br>  
+          <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2019" type="checkbox"> 2019<br>  
+          <input onclick="createTracePCP(this.value)" name="checkPCPYear" value="2020" type="checkbox" checked> 2020<br>  
         </form>
       </div>
         <div class = "row">
-          <div class = "col-sm-8" id = "pcpMonthPlot">
-            <img src="img/pcp_chart_icon.png" style="width: 350px; height: 350px; display: block; margin-left: auto; margin-right: auto;">
+          <div class = "col-sm-9" id = "pcpMonthPlot" style="padding: 0;">
+            <img class = "chart-holder-icon" src="img/pcp_chart_icon.png">
           </div>
-          <div class = "col-sm-8" id = "pcpCumPlot" ></div>
+          <div class = "col-sm-9" id = "pcpCumPlot" ></div>
         </div>
     </div>
-
- </div> <!-- end PCP And DROUGHT pane-->
+  </div> <!-- end PCP And DROUGHT pane-->
 
    
 <!--#######################################################################################################
@@ -559,29 +412,28 @@ function setSystemThis(target){
 <!--#######################################################################################################
                                      ADD FOOTER
       ######################################################################################################-->
-<div class="row" style="color: black; font-size: 14px; background-color: rgb(230,230,230)">
-  <h4 style="margin-top: 30px; margin-left: 50px; margin-right: 50px; color: rgb(26, 131, 130)">Credits  </h4>
-  <p style="margin-left: 50px;"> This tool is a product of the  <a href="https://internetofwater.org/" target = "_blank" style="color: rgb(252, 67, 57);"><u>Internet of Water</u></a> and was developed in partnership with the <a herf = "http://www.trianglewaterpartnership.org/" target = "_blank" style="color: rgb(252,67,57);"><u>Triangle Water Suppy Partnership</u></a> and <a href="https://deq.nc.gov/about/divisions/water-resources/planning/water-supply-planning" target = ")blank" style="color: rgb(252, 67, 57);"><u>North Carolina Department of Environmental Quality</u></a>.</p>
+<footer>
+    <h4 style="color: rgb(26,131,130);">Credits</h4>
+  <p> This tool is a product of the  <a href="https://internetofwater.org/" target = "_blank">Internet of Water</a> and was developed in partnership with the <a herf = "http://www.trianglewaterpartnership.org/" target = "_blank"> Triangle Water Suppy Partnership</a> and <a href="https://deq.nc.gov/about/divisions/water-resources/planning/water-supply-planning" target = ")blank"> the North Carolina Department of Environmental Quality</a>.
+  <br>
+  The code used to access and create the files for the dashoard can be found here <span style="background-color: yellow;">Github location with document explaining.</span>
+</p>
 
-  <p style="margin-left: 50px; margin-right: 50px;"> The code used to access and create the files for the dashoard can be found here <span style="background-color: yellow;">Github location with document explaining.</span></p>
-
-    <div class="col-sm-6" id="internal_footer" style= "margin-top: 20px; text-align: right; border-right: 2px solid rgb(26,131,130);">
-        <p style="padding-right: 3px;"> 
-          <strong>Data Architect Developed by<br>
-          Analysis Developed by<br>
-          Dashboard Developed by</strong>
+<div style="display: flex">
+  <section class="left-footer">
+        <p style="padding-right: 8px;"> 
+          <strong>Data Architect developed by<br>
+          Dashboard developed by</strong>
         <br></p>
-    </div>
-    <div class="col-sm-6" id="internal_footer" style= "margin-top: 20px; text-align: left; border-right: 2px solid rgb(26,131,130);">
-      <p style="padding-left: 5px;"> 
+    </section>
+    <section class="right-footer">
+      <p style="padding-left: 8px;"> 
           Kyle Onda <br>
           Lauren Patterson <br>
-          Lauren Patterson <br>
-      <br></p>
-  </div>
-
-</div> <!--internal footer div-->  
-
+      </p>
+  </section>
+</div>
+</footer> <!--internal footer div-->  
 
 
 <!--#######################################################################################################
@@ -629,16 +481,16 @@ function setSystemThis(target){
    });
   document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
 
+//draw initial map... set delay to ensure utilities loaded first
   var utilities;
   function getSystemData() { 
     return $.getJSON("data/nc_utilities.geojson", function(siteData){
            utilities = siteData; 
-           
-           drawMap();
+           setTimeout(drawMap(), 5000);
     });
   }
-  getSystemData();    
-
+  getSystemData();
+  
 
   //Get the most recent stream gauge data to show map updates
   $.getJSON("data/streamflow/stream_gauge_sites.geojson", function(lastData){
@@ -647,307 +499,6 @@ function setSystemThis(target){
         //console.log(lastDate);
         document.getElementById("dataUpdateNotice").innerHTML = "Data Last Updated: " + lastDate;
     });
-
-/*-------------------------------------------------------------------------------------------------------
-  ////////////    CREATE HOVER OVER MAP FUNCTIONS                                             ///////////
---------------------------------------------------------------------------------------------------------*/
- // UTILITY HOVER ----------#############################################################################
- var utilityID = null;
-  map.on('mousemove', 'utilities-layer', function(e) {
-      map.getCanvas().style.cursor = 'pointer';
-      //check if feature exist
-      if (e.features.length > 0){
-        document.getElementById('map_hover_box').innerHTML = '<p><strong>Utility Information <br><br></strong>' + e.features[0].properties.utility_name + ' ('+e.features[0].properties.PWSID + ')<br>Data Available</p>';
-      }// end if hover over map
-
-      utilityID = e.features[0].id;
-      if(utilityID){
-        //console.log(utilityID);
-        map.setFeatureState(
-          {source: 'utilities', sourceLayer: 'utilities', id: utilityID}, 
-          {hover: true }
-        ); //end setFeatureState
-      }//end if UtiltiydID
-    }); //end map.on
-
-  map.on('mouseleave', 'utilities-layer', function() {
-    if (utilityID){
-      map.setFeatureState({
-      source: 'utilities',  id: utilityID }, 
-      { hover: false   }
-      );
-    }
-     
-    utilityID = null;
-    document.getElementById('map_hover_box').innerHTML = '<p>Hover over a utility</p>';
-    map.getCanvas().style.cursor = ''; //resent point
-   });
-
-
-  map.on('mousemove', 'no-utilities-layer', function(e) {
-      map.getCanvas().style.cursor = 'pointer';
-      //check if feature exist
-      if (e.features.length > 0){
-        document.getElementById('map_hover_box').innerHTML = '<p><strong>Utility Information <br><br></strong>' + e.features[0].properties.utility_name + ' ('+e.features[0].properties.PWSID + ')<br>No Data Available</p>';
-      }// end if hover over map
-
-      utilityID = e.features[0].id;
-      if(utilityID){
-        map.setFeatureState(
-          {source: 'utilities', sourceLayer: 'utilities', id: utilityID}, 
-          {hover: true }
-        ); //end setFeatureState
-      }//end if UtiltiydID
-    }); //end map.on
-
-  map.on('mouseleave', 'utilities-layer', function() {
-    if (utilityID){
-      map.setFeatureState({
-      source: 'utilities',  id: utilityID }, 
-      { hover: false   }
-      );
-    }
-     
-    utilityID = null;
-    document.getElementById('map_hover_box').innerHTML = '<p>Hover over a utility</p>';
-    map.getCanvas().style.cursor = ''; //resent point
-   });
-
-
-
-// STREAM GAUGE HOVER ----------#############################################################################
-  map.on('mousemove', 'streamgauge-layer', function(e) {
-    // Change the cursor style as a UI indicator.
-    map.getCanvas().style.cursor = 'pointer';
-      var coordinates = e.features[0].geometry.coordinates.slice();
-      var description = "<br>" + e.features[0].properties.name + " on " + e.features[0].properties.date;
-     
-    // Ensure that if the map is zoomed out such that multiple copies of the feature are visible, the popup appears over the copy being pointed to.
-    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-    }
-    // Populate the popup and set its coordinates based on the feature found.
-    popup.setLngLat(coordinates).setHTML(description).addTo(map);
-  });//end map on for stream gauges
-    
-  map.on('mouseleave', 'streamgauge-layer', function () {
-    map.getCanvas().style.cursor = '';
-    popup.remove();
-  });
-
-// RESERVOIR GAUGE HOVER ----------#############################################################################
-  map.on('mousemove', 'reservoirs', function(e) {
-    // Change the cursor style as a UI indicator.
-    map.getCanvas().style.cursor = 'pointer';
-      var coordinates = e.features[0].geometry.coordinates.slice();
-      var description = e.features[0].properties.Name;
-     
-    // Ensure that if the map is zoomed out such that multiple copies of the feature are visible, the popup appears over the copy being pointed to.
-    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-    }
-    // Populate the popup and set its coordinates based on the feature found.
-    popup.setLngLat(coordinates).setHTML(description).addTo(map);
-  });//end map on for stream gauges
-    
-  map.on('mouseleave', 'reservoirs', function () {
-    map.getCanvas().style.cursor = '';
-    popup.remove();
-  });
-
-
-// Groundwater HOVER ----------#############################################################################
-  map.on('mousemove', 'groundwater', function(e) {
-    // Change the cursor style as a UI indicator.
-    map.getCanvas().style.cursor = 'pointer';
-      var coordinates = e.features[0].geometry.coordinates.slice();
-      var site_name = e.features[0].properties.SiteName;
-      var now_date = e.features[0].properties.date;
-      var aquifer = e.features[0].properties.NatAqfrDesc + " (" + e.features[0].properties.AquiferType + ")";
-      var depth = e.features[0].properties.WellDepth + " feet";
-      var description = site_name + ": last measured (" + now_date + ")<br>Aquifer: " + aquifer + "<br>Well Depth: " + depth;
-     
-    // Ensure that if the map is zoomed out such that multiple copies of the feature are visible, the popup appears over the copy being pointed to.
-    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-    }
-    // Populate the popup and set its coordinates based on the feature found.
-    popup.setLngLat(coordinates).setHTML(description).addTo(map);
-  });//end map on for stream gauges
-    
-  map.on('mouseleave', 'groundwater', function () {
-    map.getCanvas().style.cursor = '';
-    popup.remove();
-  });
-
-
-
-// RESERVOIR GAUGE HOVER ----------#############################################################################
-  map.on('mousemove', 'precipitation', function(e) {
-    // Change the cursor style as a UI indicator.
-    map.getCanvas().style.cursor = 'pointer';
-      var coordinates = e.features[0].geometry.coordinates.slice();
-      var now_date = e.features[0].properties.date;
-      var description = e.features[0].properties.name + "<br>last measured (" + now_date + ")" + 
-          "<br>Network: " + e.features[0].properties.network;
-      
-    // Ensure that if the map is zoomed out such that multiple copies of the feature are visible, the popup appears over the copy being pointed to.
-    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-    }
-    // Populate the popup and set its coordinates based on the feature found.
-    popup.setLngLat(coordinates).setHTML(description).addTo(map);
-  });//end map on for stream gauges
-    
-  map.on('mouseleave', 'precipitation', function () {
-    map.getCanvas().style.cursor = '';
-    popup.remove();
-  });
-
-
-
-//########################################################################################################
- /*-------------------------------------------------------------------------------------------------------
-  ////////////    CREATE CLICK ON MAP FUNCTIONS                                             ///////////
---------------------------------------------------------------------------------------------------------*/
-//########################################################################################################
-// set up if utilities-layer is clicked
-map.on('click', 'utilities-layer', function (e){
-  //since multiple overlapping layers, need to set up so that utiliteis don't get clicked when clicking on point
-  var f = map.queryRenderedFeatures(e.point, {layers: ['utilities-layer','streamgauge-layer', 'reservoirs', 'groundwater', 'precipitation'] });
-  //console.log(f);   console.log(f.length);
-  if (f.length > 1) {return; }
-
-  geocoder.clear();
-  myUtilityID = e.features[0].properties.ncpwsid;
-  myUtility = e.features[0].properties.utility_name;
-  //console.log(utilityID + ": " + myUtility);
-
-  //filter water supply watersheds?? Not sure how to do
-  map.setFilter('water_supply', ['in', 'drawFile', myUtilityID]);
-  map.setFilter('water_supply_name', ['in', 'drawFile', myUtilityID]);
-  
-  //run functions
-  myUtilityInfo(myUtility);
-  createCurrentSummary(myUtility);
-  createDemandInfo(myUtilityID, checkedDemand);
-  return myUtilityID;
-});
-
-
-
-map.on('click', 'streamgauge-layer', function (e){
-  document.getElementById("switchStatsDiv").style.display = "block";
-  
-  var streamGaugeName = e.features[0].properties.name;
-  streamID = e.features[0].properties.site;
-  recentDate = e.features[0].properties.julian;
-  var urlLink = e.features[0].properties.url_link; //console.log(e.features);
-  
-  //highlight in map
-  if (typeof map.getLayer("streamgauge-selected") !== 'undefined') {
-      map.removeLayer('streamgauge-selected');  
-  }
-  map.addLayer({
-    'id': 'streamgauge-selected',
-    'type': 'circle',
-    'source': 'streamgauges',
-    'filter': ['in', 'site', streamID],
-    'paint': {
-       'circle-radius': 20,
-       'circle-color': 'yellow',
-       'circle-opacity': 0.50,
-    }//end paint
-  });//end add layer
-  
-  document.getElementById("selectDataName").innerHTML = "<br><h4>" + streamID + ": <u><a style='color: rgb(26,131,130);' href=" + urlLink + " target='_blank'>" + streamGaugeName +"</a></u><h4>";
-  fileName = "data/streamflow/stream_stats.csv";
-
-  createDailyStatistics(streamID, streamPlotType);
-});
-
-
-
-map.on('click', 'reservoirs', function (e){
-  document.getElementById("switchStatsDiv").style.display = "block";
-  var reservoirName = e.features[0].properties.Name;
-  streamID = e.features[0].properties.NIDID;
-  recentDate = e.features[0].properties.julian;
-  var urlLink = e.features[0].properties.url_link; //console.log(e.features);
-
-  //highlight in map
-  if (typeof map.getLayer("reservoir-selected") !== 'undefined') {
-      map.removeLayer('reservoir-selected');  
-  }
-  map.addLayer({
-    'id': 'reservoir-selected',
-    'type': 'circle',
-    'source': 'reservoirs',
-    'filter': ['in', 'NIDID', streamID],
-    'paint': {
-       'circle-radius': 20,
-       'circle-color': 'yellow',
-       'circle-opacity': 0.50,
-    }//end paint
-  });//end add layer
-
-  document.getElementById("selectDataName").innerHTML = "<br><h4>" + streamID + ": <u><a style='color: rgb(26,131,130);' href=" + urlLink + " target='_blank'>" + reservoirName +"</a></u><h4>";
-  fileName = "data/reservoirs/reservoir_stats.csv";
-  createDailyStatistics(streamID, streamPlotType);
-});
-
-
-
-map.on('click', 'groundwater', function (e){
-  document.getElementById("switchGWStatsDiv").style.display = "block";
-  var gwName = e.features[0].properties.SiteName;
-  gwID = e.features[0].properties.site;
-  recentDate = e.features[0].properties.julian;
-
-  //highlight in map
-  if (typeof map.getLayer("gw-selected") !== 'undefined') {
-      map.removeLayer('gw-selected');  
-  }
-  map.addLayer({
-    'id': 'gw-selected',
-    'type': 'circle',
-    'source': 'groundwater',
-    'filter': ['in', 'site', gwID],
-    'paint': {
-       'circle-radius': 20,
-       'circle-color': 'yellow',
-       'circle-opacity': 0.50,
-    }//end paint
-  });//end add layer
-  //var urlLink = e.features[0].properties.link; console.log(e.features);
-  document.getElementById("groundwaterTitle").innerHTML = "<h4>" + e.features[0].properties.AgencyCd + " " + gwID +  gwName + "</h4>";
-  createGWTab(gwID, recentDate, gwPlotType);
-});
-
-
-map.on('click', 'precipitation', function (e){
-  var precipName = e.features[0].properties.name;
-  pcpID = e.features[0].properties.id;
-  //highlight in map
-  if (typeof map.getLayer("precipitation-selected") !== 'undefined') {
-      map.removeLayer('precipitation-selected');  
-  }
-  map.addLayer({
-    'id': 'precipitation-selected',
-    'type': 'circle',
-    'source': 'precipitation',
-    'filter': ['in', 'id', pcpID],
-    'paint': {
-       'circle-radius': 20,
-       'circle-color': 'yellow',
-       'circle-opacity': 0.50,
-    }//end paint
-  });//end add layer
-  var pcpRef = "https://climate.ncsu.edu/cronos/?station=" + pcpID + "&temporal=D target='_blank'>";
-  document.getElementById("pcpTitle").innerHTML = "<h4><strong>" + pcpID +": <u><a style = 'color: rgb(252, 67, 57);' href=" + pcpRef +  precipName + "</a></u><strong><br><style='color: darkgray;'>(Last reading: " +  e.features[0].properties.date + ")</span>";
-  plotPrecipitation(pcpID, checked);
-});
-
 
 
 /*-------------------------------------------------------------------------------------------------------
@@ -984,114 +535,6 @@ map.on('click', 'precipitation', function (e){
   }); //end geocoder on
 
 
-
-/*-------------------------------------------------------------------------------------------------------
-  ////////////    FUNCTIONS TO DO THINGS ON MAP                                             ///////////
---------------------------------------------------------------------------------------------------------*/
-//read in d3 with basic info
-function myUtilityInfo(myUtility){
-  //Fill in form
-    var utilityText = document.getElementById("utilityResult");
-    if (myUtility === "none"){ 
-      map.setLayoutProperty('utilities-selected', 'visibility', 'none');
-
-      utilityText.innerHTML = "<h4 style='color: rgb(26,131,130);'><strong>No utility service provider found.</strong></h4>"; 
-      document.getElementById("utilityTableHeader").innerHTML = "";
-      document.getElementById("utilityTable").innerHTML = "";
-    }
-    
-    if (myUtility !== "none"){
-      map.setFilter('utilities-selected', ['in', 'ncpwsid', myUtilityID]);
-      map.setLayoutProperty('utilities-selected', 'visibility', 'visible');
-
-      //try to set zoom for selected drop down
-      var myFeatures = map.querySourceFeatures('utilities-source', {
-        sourceLayer: 'utilities-source',
-        filter: ["in", "ncpwsid", myUtilityID]
-    });
-      //zoom to utility
-    var coordinates = myFeatures[0].geometry.coordinates[0];
-    var bounds = coordinates.reduce(function (bounds, coord) {
-                return bounds.extend(coord);
-                  }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
-                map.fitBounds(bounds, { padding: 200 });
-    
-      
-     //load data 
-     d3.csv("data/basic_info.csv").then(function(dataCSV){
-     var selectData = dataCSV.filter(function(d) {return d.utility_name === myUtility; });
-     //console.log(dataCSV); console.log(selectData);
-     var myUtilityWebsite = selectData[0].utility_website; 
-     //var myUtilityDrought = selectData[0].drought_status;
-     var myUtilityWaterPlan = selectData[0].water_shortage_plans;
-     var myUtilityUpdatePlan = selectData[0].last_update;
-     var myUtilityStage = selectData[0].stage;
-            
-     utilityText.innerHTML = "<h4 style = 'color:rgb(26,131,130); text-align: center;'><strong>You are located in the <u><a style='color:rgb(252,67,57);' href = " + myUtilityWebsite + " target='_blank'>" + myUtility + "</a></u> service area</h4></strong>" + 
-      "<p style='font-size:16px/'> My Water Conservation Status is: <span style='background-color: yellow;'>" + myUtilityStage + " (MADE UP NOW)</span><br>" + 
-      "To learn more about my utility's water conservation plan, click <a style='color:rgb(252,67,57);' href = " + myUtilityWaterPlan + " target='_blank'><u>here</u></a>. <br>This plan was last updated in " + myUtilityUpdatePlan + ".</p>";
-
-
-    //create table for utility conservation status
-    document.getElementById("utilityTableHeader").innerHTML = "<h4>"+ myUtility + " Water Conservation Activities</h4>";
-
-    //read in data
-    d3.csv("data/water_shortage_responses.csv").then(function(shortCSV){
-      shortSelect = shortCSV.filter(function(d){return d.utility_name === myUtility; });
-      
-     //create table --- scroll options on table height, etc are in the css portion
-    var myUtilityTable = "<table class='table table-bordered table-striped' style='font-size: 12px; text-align: left;'>";
-    
-    //create column header
-    myUtilityTable += "<thead><tr>";
-    myUtilityTable += "<th>Activity</th>";
-    var tableHeaders = shortSelect.map(function(d){ return d.stage; });
-    tableHeaders = Array.from(new Set(tableHeaders));
-    var columnNumber;
-   
-   //loop through and add headers based on number of stages
-    for (var i = 0, len = tableHeaders.length; i < len; i++) {
-      if (tableHeaders[i] === myUtilityStage){
-        myUtilityTable += "<th style = 'background-color: #edca6b; border thick solid #b98d16;'>" + tableHeaders[i] + "</th>";
-        columnNumber = i;
-      }
-      else {myUtilityTable += "<th>" + tableHeaders[i] + "</th>";}
-    }
-   
-   //end header and start body to loop through by activity
-    myUtilityTable += "</thead><tbody'>";
-    var activity = shortSelect.map(function(d) { return d.activity; });
-    activity = Array.from(new Set(activity)); //returns unique value
-
-    var activityResponse = [];
-  //loop through and add headers based on number of stages
-    for (i = 0, len = activity.length; i < len; i++) {
-      myUtilityTable += "<tr>";
-      myUtilityTable += "<td>" + activity[i] + "</td>";
-
-      //fill in response
-      activityResponse = shortSelect.filter(function(d) {return d.activity === activity[i]; }).map(function(m) { return m.stage_response; });
-
-      for (var j = 0, len2 = activityResponse.length; j < len2; j++){
-        if (j === columnNumber){
-            myUtilityTable += "<td style = 'background-color: #edca6b; border thick solid #b98d16;'>" + activityResponse[j] + "</td>";
-        }
-        else { myUtilityTable += "<td>" + activityResponse[j] + "</td>";}
-      }
-      myUtilityTable += "</tr>";
-    }
-
-    myUtilityTable += "</tbody></table><br><br>"; 
-
-  //load table
-  document.getElementById("utilityTable").innerHTML = myUtilityTable;
-
-        }); //end d3 water shortage
-      }); //end d3 basic info
-  }// end if a utility is selected
-    
-return myUtility;
-} //end myUtilityInfo function
 
 
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
@@ -1141,17 +584,15 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
  
   }
 });
-
-
-
 </script>
-
-<script type="text/javascript" src="scripts/drawMap.js"></script>
-<script type="text/javascript" src="scripts/stream_stats.js"></script>
-<script type="text/javascript" src="scripts/demandTab.js"></script>
-<script type="text/javascript" src="scripts/groundwaterTab.js"></script>
-<script type="text/javascript" src="scripts/droughtPlot.js"></script>
-<script type="text/javascript" src="scripts/precipPlots.js"></script>
+<script type="text/javascript" src="scripts/drawMap.js" async></script> <!--needs to be asyn-->
+<script type="text/javascript" src="scripts/utility_tab.js" defer></script>
+<script type="text/javascript" src="scripts/map_hover_click.js" defer></script> <!--needs to be asyn-->
+<script type="text/javascript" src="scripts/stream_stats.js" defer></script>
+<script type="text/javascript" src="scripts/demandTab.js" defer></script>
+<script type="text/javascript" src="scripts/groundwaterTab.js" defer></script>
+<script type="text/javascript" src="scripts/droughtPlot.js" defer></script>
+<script type="text/javascript" src="scripts/precipPlots.js" defer></script>
 
     </body>
 </html>
