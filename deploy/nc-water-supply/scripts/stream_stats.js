@@ -1,43 +1,44 @@
 //LOAD A PLACEHOLDER TABLE
 //create table
 function createBlankSummary(){
-   document.getElementById("summaryTitle").innerHTML = "<br><h4>Select a utility to see streamflow conditions in their water supply watersheds</h4>"; 
-  
-  var myTable = "<table class='table table-condensed' style='font-size: 11px; background-color: #f0f0f0; border: thin solid black'>";
-  //create column header
-  myTable += "<thead style='text-align: center;'><tr>";
-    myTable += "<th style= 'text-align: center; border: thin solid black'>Watershed</th>";
-    myTable += "<th style = 'color: darkred; text-align: center; border: thin solid black'>Extremely <br> Dry</th>";
-    myTable += "<th style = 'color: red; text-align: center; border: thin solid black'>Very <br> Dry</th>";
-    myTable += "<th style = 'color: orange; text-align: center; border: thin solid black'>Moderately <br> Dry</th>";
-    myTable += "<th style = 'color: cornflowerblue; text-align: center; border: thin solid black'>Moderately <br> Wet</th>";
-    myTable += "<th style = 'color: blue; text-align: center; border: thin solid black'>Very <br> Wet</th>";
-    myTable += "<th style = 'color: navy; text-align: center; border: thin solid black'>Extremely <br> Wet</th></thead>";
+document.getElementById("summaryTitle").innerHTML = "<br>Select a utility to see streamflow conditions in their water supply watersheds"; 
 
-  myTable += "<tbody style= 'font-weight: bold;'>";
-  myTable += "<tr>";
-    myTable += "<td>Watershed 1...</td>";  // watershed row
-    myTable += "<td style='color: darkred;'>NA</td>";
-    myTable += "<td style='color: red;'>NA</td>";
-    myTable += "<td style='color: orange;'>NA</td>";
-    myTable += "<td style='color: cornflowerblue;'>NA</td>";
-    myTable += "<td style='color: blue;'>NA</td>";
-    myTable += "<td style='color: navy;'>NA</td>";
-  myTable += "</tr>";
+ const initialTableContent = ` 
+   <table class='table-condensed sw-table'>
+    <thead><tr>
+      <th>Watershed</th>
+      <th class='ext-dry'>Extremely <br> Dry</th>
+      <th class='very-dry'>Very <br> Dry</th>
+      <th class='mod-dry'>Moderately <br> Dry</th>
+      <th class='mod-wet'>Moderately <br> Wet</th>
+      <th class='very-wet'>Very <br> Wet</th>
+      <th class='ext-wet'>Extremely <br> Wet</th>
+    </tr></thead>
+    
+    <tbody><tr>
+        <td>Watershed 1...</td>
+        <td class='ext-dry'>NA</td>
+        <td class='very-dry'>NA</td>
+        <td class='mod-dry'>NA</td>
+        <td class='mod-wet'>NA</td>
+        <td class='very-wet'>NA</td>
+        <td class='ext-wet'>NA</td>
+      </tr>
+      <tr>
+        <td>Watershed 2...</td>
+        <td class='ext-dry'>NA</td>
+        <td class='very-dry'>NA</td>
+        <td class='mod-dry'>NA</td>
+        <td class='mod-wet'>NA</td>
+        <td class='very-wet'>NA</td>
+        <td class='ext-wet'>NA</td>
+      </tr>
+    </tbody>
+  </table>
+`; //note back ticks
 
-  myTable += "<tr>";
-    myTable += "<td>Watershed 2...</td>";  // watershed row
-    myTable += "<td style='color: darkred;'>NA</td>";
-    myTable += "<td style='color: red;'>NA</td>";
-    myTable += "<td style='color: orange;'>NA</td>";
-    myTable += "<td style='color: cornflowerblue;'>NA</td>";
-    myTable += "<td style='color: blue;'>NA</td>";
-    myTable += "<td style='color: navy;'>NA</td>";
-  myTable += "</tr>";
+document.getElementById("summaryTableDiv").innerHTML = initialTableContent;
 
-  myTable += "</tbody></table>"; 
-  //load table
-  document.getElementById("summaryTableDiv").innerHTML = myTable;
 }
 createBlankSummary();
 
@@ -56,17 +57,16 @@ function createCurrentSummary(myUtility){
   });
   
   //create table
-  var myTable = "<table class='table table-condensed' style='font-size: 11px; background-color: #f0f0f0;'>";
+  var myTable = "<table class='sw-table table-condensed'>";
   //create column header
-  myTable += "<thead style='text-align: center;'><tr>";
-    myTable += "<th style= 'text-align: center;'>Watershed</th>";
-    myTable += "<th style = 'color: darkred; text-align: center;'>Extremely <br> Dry</th>";
-    myTable += "<th style = 'color: red; text-align: center;'>Very <br> Dry</th>";
-    myTable += "<th style = 'color: orange; text-align: center;'>Moderately <br> Dry</th>";
-    myTable += "<th style = 'color: cornflowerblue; text-align: center;'>Moderately <br> Wet</th>";
-    myTable += "<th style = 'color: blue; text-align: center;'>Very <br> Wet</th>";
-    myTable += "<th style = 'color: navy; text-align: center;'>Extremely <br> Wet</th></thead>";
-
+  myTable += "<thead><tr>";
+    myTable += "<th>Watershed</th>";
+    myTable += "<th class='ext-dry'>Extremely <br> Dry</th>";
+    myTable += "<th class='very-dry'>Very <br> Dry</th>";
+    myTable += "<th class='mod-dry'>Moderately <br> Dry</th>";
+    myTable += "<th class='mod-wet'>Moderately <br> Wet</th>";
+    myTable += "<th class='very-wet'>Very <br> Wet</th>";
+    myTable += "<th class='ext-wet'>Extremely <br> Wet</th></thead>";
   myTable += "<tbody style= 'font-weight: bold;'>";
 
   //var tbody = document.getElementById('tbody');
@@ -80,12 +80,12 @@ function createCurrentSummary(myUtility){
     myTable += "<tr>";
     myTable += "<td>" + filterHucName[i] + "</td>";  // watershed row
 
-    myTable += "<td style='color: darkred;'>" + fooHuc.filter(function(d){return d.status==="Extremely Dry"; }).length + "</td>";
-    myTable += "<td style='color: red;'>" + fooHuc.filter(function(d){return d.status==="Very Dry"; }).length + "</td>";
-    myTable += "<td style='color: orange;'>" + fooHuc.filter(function(d){return d.status==="Moderately Dry"; }).length + "</td>";
-    myTable += "<td style='color: cornflowerblue;'>" + fooHuc.filter(function(d){return d.status==="Moderately Wet"; }).length + "</td>";
-    myTable += "<td style='color: blue;'>" + fooHuc.filter(function(d){return d.status==="Very Wet"; }).length + "</td>";
-    myTable += "<td style='color: navy;'>" + fooHuc.filter(function(d){return d.status==="Extremely Wet"; }).length + "</td>";
+    myTable += "<td class='ext-dry'>" + fooHuc.filter(function(d){return d.status==="Extremely Dry"; }).length + "</td>";
+    myTable += "<td class='very-dry'>" + fooHuc.filter(function(d){return d.status==="Very Dry"; }).length + "</td>";
+    myTable += "<td class='mod-dry'>" + fooHuc.filter(function(d){return d.status==="Moderately Dry"; }).length + "</td>";
+    myTable += "<td class='mod-wet'>" + fooHuc.filter(function(d){return d.status==="Moderately Wet"; }).length + "</td>";
+    myTable += "<td class='very-wet'>" + fooHuc.filter(function(d){return d.status==="Very Wet"; }).length + "</td>";
+    myTable += "<td class='ext-wet'>" + fooHuc.filter(function(d){return d.status==="Extremely Wet"; }).length + "</td>";
     
   myTable += "</tr>";
 }
@@ -135,10 +135,10 @@ if(myUtility === "none"){
 
   if(myUtility !== "none"){ 
     if(maxValue > 0){
-      document.getElementById("summaryTitle").innerHTML = "<br><h4>Recent Streamflow Conditions for " + myUtility + "</h4>"  + 
-      "<p style='background-color: rgba(26,121,131,0.2)';><strong>" + maxValue + "%</strong> of sites with data were <strong>" + maxCategoryD + 
+      document.getElementById("summaryTitle").innerHTML = "<br>Recent Streamflow Conditions for " + myUtility +  
+      "<p style='background-color: rgba(26,121,131,0.2)'>" + maxValue + "%</strong> of sites with data were <strong>" + maxCategoryD + 
       "</strong> on " + filteredHuc[0].date + "</p>"; 
-    } else {document.getElementById("summaryTitle").innerHTML = "<br><h4>Recent Streamflow Conditions for " + myUtility + "</h4>"  + 
+    } else {document.getElementById("summaryTitle").innerHTML = "<br>Recent Streamflow Conditions for " + myUtility  + 
       "<p style='background-color: rgba(26,121,131,0.2)';><strong>No gauges found in defined water supply watersheds.";  }
   }
 

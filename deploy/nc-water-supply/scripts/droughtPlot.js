@@ -45,7 +45,7 @@ var currentDrought = selDrought[Object.keys(selDrought)[Object.keys(selDrought).
 console.log(currentDrought);
 
 //create a header and 
-document.getElementById("hucDroughtTitle").innerHTML = "<h4>Percent of " + currentDrought.name + 
+document.getElementById("hucDroughtTitle").innerHTML = "Percent of " + currentDrought.name + 
         " basin by drought status (" + currentDrought.date + ")<br>";
   document.getElementById("dnonediv").innerHTML = currentDrought.none + "%<br>none";  
   document.getElementById("d0div").innerHTML = currentDrought.d0x + "%<br>mild";
