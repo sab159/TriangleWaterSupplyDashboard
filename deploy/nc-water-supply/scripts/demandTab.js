@@ -32,7 +32,7 @@ var selDemand = demandData.filter(function(d){ return d.pwsid === myUtilityID.to
 if (selDemand.length <= 0) {
   console.log("no utility");
   //Plotly.purge('demandPlot');
-  document.getElementById("demandTitle").innerHTML = "<h4>Select a utility with data to see demand</h4>";
+  document.getElementById("demandTitle").innerHTML = "Select a utility with data to see demand";
   document.getElementById("demandPlot").innerHTML = '<img src="img/demand_chart_icon.png" style="width: 350px; height: 350px; display: block; margin-left: auto; margin-right: auto;">';
 }
 
@@ -68,7 +68,7 @@ if (selDemand.length > 0){
               hovertemplate: tempName,
               opacity: 0.4,
               line: {color: '#c5c5c5', width: 1}, //light coral
-              name: "past years",
+              name: "years",
               showlegend: showLegVal
             };
       
@@ -153,7 +153,7 @@ if (selDemand.length > 0){
 
     //load document names
       if(myUtility === "none"){ 
-        document.getElementById("demandTitle").innerHTML = "<h4>Select a utility on the map to learn more.</h4>";
+        document.getElementById("demandTitle").innerHTML = "Select a utility on the map to learn more";
       }
 
       if(myUtility !== "none"){ 
@@ -167,8 +167,8 @@ if (selDemand.length > 0){
         if(thisWeekDemand < lastWeekDemand) {demandTrajectory = "lower"; }
         if(thisWeekDemand.toFixed(1) === lastWeekDemand.toFixed(1) ) {demandTrajectory = "equal"; }
 
-        document.getElementById("demandTitle").innerHTML = "<h4>" + myUtility + " has " + demandTrajectory + 
-        " demand than last week.</h4>";
+        document.getElementById("demandTitle").innerHTML = myUtility + " has " + demandTrajectory + 
+        " demand than last week";
       }
   } //end if we have utility data for selectect utility
 

@@ -1,3 +1,8 @@
+//##############################################################################################
+//                   CREATE PLOTS IN RAIN & DROUGHT TAB
+//                   Function to create plots at bottom of page
+//##############################################################################################
+
 function createTracePCP(target){
   checked = [];
   $("input[name='checkPCPYear']:checked").each(function() {
@@ -46,7 +51,7 @@ d3.csv("data/pcp/pcp_months_total.csv").then(function(dfpcp){
             hovertemplate: tempName,
             opacity: 0.4,
             line: {color: '#c5c5c5', width: 1}, //light gray
-            name: "past years",
+            name: "years",
             showlegend: showLegVal
           };
     //push trace
