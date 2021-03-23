@@ -61,7 +61,7 @@ for (m in 1:length(huc.list)){
   }
   print(zt.name)
 }
-summary(drought.time)
+table(drought.time$huc8)
 
 #TAKES 25 SECONDS TO RUN FOR FULL YEAR... IN FUTURE WILL NEED TO SHORTEN
 drought2 <- drought.time %>% mutate(date = as.Date(date, "%Y-%m-%d"), none = as.numeric(none), d0 = as.numeric(d0), d1 = as.numeric(d1), d2 = as.numeric(d2), d3=as.numeric(d3), d4=as.numeric(d4)) %>% arrange(huc8, date)
