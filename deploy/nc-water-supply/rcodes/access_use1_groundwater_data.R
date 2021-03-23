@@ -236,4 +236,4 @@ write.csv(gw.annual, paste0(swd_html, "gw\\gw_annual_level.csv"), row.names=FALS
 
 
 #remove files
-rm(zt, gw.annual, recent.flow, current.stat, current.stat2, gw.stats, nc.sites2, nc.sites, usgs.sites, stats, year.flow, usgs.sites, dwr.sites)
+rm(zt, gw.annual, recent.flow, current.stat, current.stat2, gw.stats, nc.sites2, nc.sites, usgs.sites, stats, year.flow, usgs.sites, dwr.sites, stats2, test, url.sites, year.flow2, zt.stat, a.test, zt.stats)
