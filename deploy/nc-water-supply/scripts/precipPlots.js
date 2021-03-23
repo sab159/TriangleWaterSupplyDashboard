@@ -73,9 +73,10 @@ d3.csv("data/pcp/pcp_months_total.csv").then(function(dfpcp){
         
     selectTraces = {
             x: xMonth,   y: selectYears,
-            mode: 'lines', type: 'scatter',
+            mode: 'lines+markers', type: 'scatter',
             hovertemplate: "%{y:.1f} inches in %{x}, " + tempSelect,
             opacity: 1,
+            marker: {color: colorLine, size: 6},
             line: {color: colorLine, width: 2}, 
             name: tempSelect,
             showlegend: true
@@ -87,9 +88,10 @@ d3.csv("data/pcp/pcp_months_total.csv").then(function(dfpcp){
   var yCurrent = selpcp.filter(function(d) {return d.year === currentYear;}).map(function(d) { return d.pcp_in; });
   var trace2020 = {
             x: xMonth,   y: yCurrent,
-            mode: 'lines', type: 'scatter',
+            mode: 'lines+markers', type: 'scatter',
             hovertemplate: "%{y:.1f} inches in %{x}, " + currentYear,
             opacity: 1,
+            marker: {color: 'black', size: 6}, 
             line: {color: 'black', width: 3}, 
             name: currentYear,
             showlegend: true
