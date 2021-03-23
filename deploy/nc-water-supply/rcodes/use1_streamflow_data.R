@@ -131,6 +131,7 @@ stats2 <- stats2 %>% mutate(status = ifelse(flow <= flow10, "Extremely Dry", ife
 #stats2 <- stats2 %>% mutate(month = substr(date,0,3))
 stats2 <- stats2 %>% mutate(colorStatus = ifelse(status=="Extremely Dry", "darkred", ifelse(status=="Very Dry", "red", ifelse(status=="Moderately Dry", "orange", ifelse(status=="Moderately Wet", "cornflowerblue",
                                           ifelse(status=="Very Wet", "blue", ifelse(status=="Extremely Wet", "navy", "gray"))))))) %>% mutate(colorStatus = ifelse(is.na(colorStatus), "gray", colorStatus))
+stats2 <- stats2 %>% arrange(site, date2)
 table(stats2$status, useNA="ifany")
 table(stats2$colorStatus, useNA="ifany")
 
