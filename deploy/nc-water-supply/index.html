@@ -493,10 +493,11 @@ function setSystemThis(target){
   
 
   //Get the most recent stream gauge data to show map updates
-  $.getJSON("data/streamflow/stream_gauge_sites.geojson", function(lastData){
-    //console.log(lastData);
-        var lastDate = lastData.features[0].properties.date + "-" + lastData.features[0].properties.endYr;
-        //console.log(lastDate);
+  d3.csv("data/update_date.csv").then(function(today){
+  // $.getJSON("data/streamflow/stream_gauge_sites.geojson", function(lastData){
+        // var lastDate = lastData.features[0].properties.date + "-" + lastData.features[0].properties.endYr;
+        //console.log(today);
+        var lastDate = today[0].today_date;
         document.getElementById("dataUpdateNotice").innerHTML = "Data Last Updated: " + lastDate;
     });
 

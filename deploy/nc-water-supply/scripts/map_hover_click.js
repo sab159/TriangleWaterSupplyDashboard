@@ -191,14 +191,14 @@ map.on('click', 'utilities-layer', function (e){
 });
 
 
-
 map.on('click', 'streamgauge-layer', function (e){
   document.getElementById("switchStatsDiv").style.display = "block";
   
   var streamGaugeName = e.features[0].properties.name;
   streamID = e.features[0].properties.site;
   recentDate = e.features[0].properties.julian;
-  var urlLink = e.features[0].properties.url_link; //console.log(e.features);
+  //var urlLink = e.features[0].properties.url_link; //console.log(e.features);
+  var urlLink = "https://waterdata.usgs.gov/monitoring-location/" + streamID + "/#parameterCode=00060";
   
   //highlight in map
   if (typeof map.getLayer("streamgauge-selected") !== 'undefined') {

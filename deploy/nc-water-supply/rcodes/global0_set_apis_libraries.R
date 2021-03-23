@@ -61,8 +61,10 @@ end.year = year(Sys.time())
 
 mymonths <- c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"); #used below to convert numbers to abbrev
 
-
-
+#save out update date for dashboard
+update.date <- paste0(mymonths[month(today)]," ", day(today), ", ", end.year) %>% as.data.frame()
+colnames(update.date) <- "today_date"
+write.csv(update.date, paste0(swd_html, "update_date.csv"), row.names=FALSE)
 
 
 
