@@ -115,7 +115,7 @@ zt1.proj <- crop(zt1.proj, extent(huc8));    #zt1.proj <- mask(zt1.proj, huc); #
   mapview::mapview(zt1.proj)
 #NA value is -10000
 pol <- rasterToPolygons(zt1.proj); colnames(pol@data) <- c("obsv_in")
-pol <- pol %>% st_as_sf() %>% mutate(obsv_in = round(obsv_in,2)) %>% ms_simplify(keep = 0.05, keep_shapes=TRUE); #convert to a geojson and simplify to plot faster
+pol <- pol %>% st_as_sf() %>% mutate(obsv_in = round(obsv_in,2)) %>% ms_simplify(keep = 0.5, keep_shapes=TRUE); #convert to a geojson and simplify to plot faster
 
 #summarize and dissolve based on ranges
 pol2 <- pol %>% mutate(bands = ifelse(obsv_in == 0, 0, ifelse(obsv_in <=0.1 & obsv_in > 0, 0.1, ifelse(obsv_in <=0.25 & obsv_in > 0.1, 0.25, ifelse(obsv_in <=0.5 & obsv_in > 0.25, 0.50, ifelse(obsv_in <=1 & obsv_in > 0.5, 1,
@@ -137,7 +137,7 @@ zt4.proj <- projectRaster(zt4, crs="+proj=longlat +datum=WGS84")
 zt4.proj <- crop(zt4.proj, extent(huc8));     #zt4 proj <- mask(zt4.proj, huc)
 
 pol <- rasterToPolygons(zt4.proj); colnames(pol@data) <- c("percent_norm");
-pol <- pol %>% st_as_sf() %>% mutate(percent_norm = round(percent_norm,2)) %>% ms_simplify(keep = 0.05, keep_shapes=TRUE)
+pol <- pol %>% st_as_sf() %>% mutate(percent_norm = round(percent_norm,2)) %>% ms_simplify(keep = 0.5, keep_shapes=TRUE)
 
 #summarize and dissolve based on ranges
 pol2 <- pol %>% mutate(bands = ifelse(percent_norm == 0, 0, ifelse(percent_norm <=5 & percent_norm > 0, 5, ifelse(percent_norm <=10 & percent_norm > 5, 10, ifelse(percent_norm <=25 & percent_norm > 10, 25, 

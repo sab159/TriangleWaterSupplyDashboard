@@ -76,7 +76,7 @@
     // Change the cursor style as a UI indicator.
     map.getCanvas().style.cursor = 'pointer';
       var coordinates = e.features[0].geometry.coordinates.slice();
-      var description = "<br>" + e.features[0].properties.name + " on " + e.features[0].properties.date;
+      var description = e.features[0].properties.name + "<br> last measured (" + e.features[0].properties.date + ")";
      
     // Ensure that if the map is zoomed out such that multiple copies of the feature are visible, the popup appears over the copy being pointed to.
     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {

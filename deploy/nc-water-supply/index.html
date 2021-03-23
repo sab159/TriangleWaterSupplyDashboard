@@ -486,7 +486,7 @@ function setSystemThis(target){
   function getSystemData() { 
     return $.getJSON("data/nc_utilities.geojson", function(siteData){
            utilities = siteData; 
-           setTimeout(drawMap(), 5000);
+           setTimeout(drawMap(), 4000);
     });
   }
   getSystemData();
@@ -585,7 +585,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
   }
 });
 </script>
-<script type="text/javascript" src="scripts/drawMap.js" async></script> <!--needs to be asyn-->
+<script type="text/javascript" src="scripts/drawMap.js"></script> <!--needs to be asyn-->
 <script type="text/javascript" src="scripts/utility_tab.js" defer></script>
 <script type="text/javascript" src="scripts/map_hover_click.js" defer></script> <!--needs to be asyn-->
 <script type="text/javascript" src="scripts/stream_stats.js" defer></script>
