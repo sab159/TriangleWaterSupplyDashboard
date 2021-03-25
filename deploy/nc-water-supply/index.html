@@ -524,6 +524,7 @@ function setSystemThis(target){
     if (myUtilityData === "yes"){
       map.setFilter('water_supply', ['in', 'drawFile', myUtilityID]);
       map.setFilter('water_supply_name', ['in', 'drawFile', myUtilityID]);
+      createCurrentSummary(myUtility);
     }
 
     if (myUtilityData === "no" || myUtility === "none"){
