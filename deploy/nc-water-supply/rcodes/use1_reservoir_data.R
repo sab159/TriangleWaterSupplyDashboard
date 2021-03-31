@@ -9,15 +9,6 @@
 
 ######################################################################################################################################################################
 #
-#   LOAD Variables
-#
-######################################################################################################################################################################
-start.date = "1990-01-01"; #set for the start of the period that we want to assess
-end.year = year(Sys.time())
-end.date = paste0(end.year, "-12-31")
-
-######################################################################################################################################################################
-#
 #   LOAD Old Data - make sure parameters to update don't miss any data
 #
 ######################################################################################################################################################################
@@ -187,7 +178,7 @@ year.flow  <- as.data.frame(matrix(nrow=0, ncol=10));   colnames(year.flow) <- c
 
 #Loop through each site and calculate statistics
   for (i in 1:length(unique.sites)){
-    zt <- fx %>% filter(NIDID == unique.sites[i])
+    zt <- fx %>% filter(NIDID == unique.sites[i]) %>% filter(Year >= year(start.date))
     #summarize annual
     zt.stats <- zt %>% group_by(NIDID, julian) %>% summarize(Nobs = n(), min=round(min(percentStorage, na.rm=TRUE),4), flow10 = round(quantile(percentStorage, 0.10, na.rm=TRUE),4), flow25 = round(quantile(percentStorage, 0.25, na.rm=TRUE),4),
                                                       flow50 = round(quantile(percentStorage, 0.5, na.rm=TRUE),4), flow75 = round(quantile(percentStorage, 0.75, na.rm=TRUE),4), flow90 = round(quantile(percentStorage, 0.90, na.rm=TRUE),4), 
@@ -213,7 +204,7 @@ year.flow  <- as.data.frame(matrix(nrow=0, ncol=10));   colnames(year.flow) <- c
   
   
   #Now attach most recent value to stream stats for the map
-  recent.flow <- year.flow %>% group_by(nidid) %>% filter(date == max(date))
+  recent.flow <- year.flow %>% group_by(nidid) %>% filter(is.na(storage_af) == FALSE) %>% filter(date == max(date)); #do we want to do most recent date or most recent date with data?
   current.stat <- merge(recent.flow[,c("nidid", "julian", "date", "percent_storage")], stats, by.x=c("nidid","julian"), by.y=c("nidid", "julian"), all.x=TRUE) %>% select(-date.y, -date2) %>% rename(date = date.x)
   
   #if else for this year and last years flow

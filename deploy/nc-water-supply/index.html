@@ -486,17 +486,18 @@ function setSystemThis(target){
   function getSystemData() { 
     return $.getJSON("data/nc_utilities.geojson", function(siteData){
            utilities = siteData; 
-           setTimeout(drawMap(), 5000);
+           setTimeout(drawMap(), 4000);
     });
   }
   getSystemData();
   
 
   //Get the most recent stream gauge data to show map updates
-  $.getJSON("data/streamflow/stream_gauge_sites.geojson", function(lastData){
-    //console.log(lastData);
-        var lastDate = lastData.features[0].properties.date + "-" + lastData.features[0].properties.endYr;
-        //console.log(lastDate);
+  d3.csv("data/update_date.csv").then(function(today){
+  // $.getJSON("data/streamflow/stream_gauge_sites.geojson", function(lastData){
+        // var lastDate = lastData.features[0].properties.date + "-" + lastData.features[0].properties.endYr;
+        //console.log(today);
+        var lastDate = today[0].today_date;
         document.getElementById("dataUpdateNotice").innerHTML = "Data Last Updated: " + lastDate;
     });
 
@@ -523,6 +524,7 @@ function setSystemThis(target){
     if (myUtilityData === "yes"){
       map.setFilter('water_supply', ['in', 'drawFile', myUtilityID]);
       map.setFilter('water_supply_name', ['in', 'drawFile', myUtilityID]);
+      createCurrentSummary(myUtility);
     }
 
     if (myUtilityData === "no" || myUtility === "none"){
@@ -585,7 +587,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
   }
 });
 </script>
-<script type="text/javascript" src="scripts/drawMap.js" async></script> <!--needs to be asyn-->
+<script type="text/javascript" src="scripts/drawMap.js"></script> <!--needs to be asyn-->
 <script type="text/javascript" src="scripts/utility_tab.js" defer></script>
 <script type="text/javascript" src="scripts/map_hover_click.js" defer></script> <!--needs to be asyn-->
 <script type="text/javascript" src="scripts/stream_stats.js" defer></script>

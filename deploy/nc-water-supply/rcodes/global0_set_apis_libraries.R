@@ -51,9 +51,20 @@ ncsco.key <- "43977148bc44a20e61d3aaea3b95f161c1f56726"; #WHOEVER INHERITS WILL 
 #load data used throughout
 julian <- read.csv(paste0(swd_html, "julian-daymonth.csv"))
 
+#variables used to update data
+today = substr(Sys.time(),1,10); today;
+current.year <- year(current.date)
 
+start.date = "1990-01-01"; #set for the start of the period that we want to assess
+end.date = paste0(year(today), "-12-31")
+end.year = year(Sys.time())
 
+mymonths <- c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"); #used below to convert numbers to abbrev
 
+#save out update date for dashboard
+update.date <- paste0(mymonths[month(today)]," ", day(today), ", ", end.year) %>% as.data.frame()
+colnames(update.date) <- "today_date"
+write.csv(update.date, paste0(swd_html, "update_date.csv"), row.names=FALSE)
 
 
 

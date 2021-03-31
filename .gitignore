@@ -2,16 +2,13 @@
 .Rhistory
 .RData
 .Ruserdata
-<<<<<<< Updated upstream
 deploy/src/x.csv
 deploy/src/cron.log
 deploy/src/test_post.R
-=======
 .DS_Store
 .DS_Store
 deploy/src/.Rapp.history
->>>>>>> Stashed changes
 deploy/src/tmp/~$tmp.xlsx
-.DS_Store
-.DS_Store
 deploy/src/x.csv
+deploy/.DS_Store
+

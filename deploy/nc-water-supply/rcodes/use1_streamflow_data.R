@@ -18,14 +18,8 @@
 pcode = '00060' #discharge (cfs)
 #Identify statistic code for daily values: https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=%25&fmt=html
 scode = "00003"  #mean
-#Identify start and end dates
-start.date = "1990-01-01"; #set for the start of the period that we want to assess
-end.year = year(Sys.time())
-end.date = paste0(end.year, "-12-31")
-
 #pick service
 serv <- "dv"
-
 
 
 #################################################################################################################################
@@ -131,6 +125,7 @@ stats2 <- stats2 %>% mutate(status = ifelse(flow <= flow10, "Extremely Dry", ife
 #stats2 <- stats2 %>% mutate(month = substr(date,0,3))
 stats2 <- stats2 %>% mutate(colorStatus = ifelse(status=="Extremely Dry", "darkred", ifelse(status=="Very Dry", "red", ifelse(status=="Moderately Dry", "orange", ifelse(status=="Moderately Wet", "cornflowerblue",
                                           ifelse(status=="Very Wet", "blue", ifelse(status=="Extremely Wet", "navy", "gray"))))))) %>% mutate(colorStatus = ifelse(is.na(colorStatus), "gray", colorStatus))
+stats2 <- stats2 %>% arrange(site, date2)
 table(stats2$status, useNA="ifany")
 table(stats2$colorStatus, useNA="ifany")
 

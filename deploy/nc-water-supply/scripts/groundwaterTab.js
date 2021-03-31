@@ -21,8 +21,8 @@ function toggleGWStats(target){
 ##########################################################################################################3*/
 function createGWTab(gwID, recentDate, gwPlotType) {
   document.getElementById('gwPlot2').innerHTML = "";
-  document.getElementById('relGWTitle').innerHTML = "<h5>Groundwater Levels Relative to Historic Levels</h5>";
-  document.getElementById('longGWTitle').innerHTML = "<h5>Long-term Annual Trends</h5>";
+  document.getElementById('relGWTitle').innerHTML = "Groundwater Levels Relative to Historic Levels";
+  document.getElementById('longGWTitle').innerHTML = "Long-term Annual Trends";
 //parse date to scale axis
 parseDate = d3.timeParse("%Y-%m-%d");
 
@@ -123,7 +123,7 @@ trace90 = {
 traceThisYear = {
   type: 'scatter', mode: 'lines',
   x: XJulian,  y: Yflow,
-  name: 'Current Year',
+  name: 'Current Yr',
   line: { color: 'rgb(26,121,131)',   width: 3  }
 };
 
@@ -157,7 +157,7 @@ d3.csv("data/gw/gw_levels_time.csv").then(function(gwLevels){
     x: xDate,  y: yDepth,
     text: streamStatus,
     mode: 'lines+markers',
-    name: 'Well Levels',
+    name: 'water<br>level',
     marker: { color: colorPoints, size: 5, opacity: 0.8},
     line: { color: 'gray',  width: 1},
     hovertemplate:

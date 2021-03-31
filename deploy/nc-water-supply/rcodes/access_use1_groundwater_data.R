@@ -13,12 +13,6 @@
 #   Set variables
 #
 ######################################################################################################################################################################
-current.date = as.Date(substr(Sys.time(),0,10),"%Y-%m-%d")
-current.year <- year(current.date)
-mymonths <- c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"); #used below to convert numbers to abbrev
-start.date = "1990-01-01"; #set for the start of the period that we want to assess
-end.date = paste0(year(current.date), "-12-31")
-
 #create a list of counties where you want data (limit to triangle counties)
 county.list <- c("Alamance County", "Orange County", "Durham County", "Granville County", "Wake County", "Franklin County", "Chatham County",
                  "Lee County", "Harnett County", "Johnstown County", "Cumberland County", "Randolph County", "Moore County", "Hoke County", "Sampson County")
@@ -236,4 +230,4 @@ write.csv(gw.annual, paste0(swd_html, "gw\\gw_annual_level.csv"), row.names=FALS
 
 
 #remove files
-rm(zt, gw.annual, recent.flow, current.stat, current.stat2, gw.stats, nc.sites2, nc.sites, usgs.sites, stats, year.flow, usgs.sites, dwr.sites)
+rm(zt, gw.annual, recent.flow, current.stat, current.stat2, gw.stats, nc.sites2, nc.sites, usgs.sites, stats, year.flow, usgs.sites, dwr.sites, stats2, test, url.sites, year.flow2, zt.stat, a.test, zt.stats)
