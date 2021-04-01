@@ -17,17 +17,8 @@ PostThing <- function(api, user, password, name, description) {
   )
 }
 
-PostThing(
-  endpoint,
-  user = user,
-  password = pw,
-  name = "Test Thing",
-  description = as.character(parsedate::format_iso_8601(Sys.time()))
-)
-
-x <- data.frame(c(endpoint, as.character(Sys.time())))
-write.csv(x, "x.csv")
-
+path_list <- read.csv("https://raw.githubusercontent.com/internetofwater/TriangleWaterSupplyDashboard/master/utility_registry.csv")
+path_list$data_url <- 
 
 path <-
   "https://durhamcity-my.sharepoint.com/:x:/g/personal/james_lim_durhamnc_gov/EcCSiOcOVjBGvfne8FrFuE8BpTPH9uCVa-6WNM0sQUmqiw?download=1"
@@ -35,7 +26,7 @@ path <-
 readTemplate <- function(path) {
   httr::GET(path, httr::write_disk("tmp/tmp.xlsx", overwrite = TRUE))
   meta <-
-    readxl::read_excel("tmp/tmp.xlsx", sheet = "system_metadata") %>% tibble::column_to_rownames(var = "field") %>% t() %>% as_tibble()
+    readxl::read_excel("tmp/tmp.xlsx", sheet = "system_metadata", range="A1:B20") %>% tibble::column_to_rownames(var = "field") %>% t() %>% as_tibble()
   
   sources <- readxl::read_excel("tmp/tmp.xlsx", sheet = "sources")
   monitoring_locations <-
@@ -43,13 +34,13 @@ readTemplate <- function(path) {
   conservation_policies <-
     readxl::read_excel("tmp/tmp.xlsx", sheet = "conservation_policies")
   delivery <-
-    readxl::read_excel("tmp/tmp.xlsx", sheet = "delivery")
+    readxl::read_excel("tmp/tmp.xlsx", sheet = "delivery", col_types=c("date","date","numeric"))
   supply <-
-    readxl::read_excel("tmp/tmp.xlsx", sheet = "supply_conditions")
+    readxl::read_excel("tmp/tmp.xlsx", sheet = "supply_conditions", col_types=c("text","text","date","numeric","text","text"))
   monitoring_data <-
-    readxl::read_excel("tmp/tmp.xlsx", sheet = "monitoring_data")
+    readxl::read_excel("tmp/tmp.xlsx", sheet = "monitoring_data", col_types=c("text","text","text","date"))
   conservation_status <-
-    readxl::read_excel("tmp/tmp.xlsx", sheet = "conservation_status")
+    readxl::read_excel("tmp/tmp.xlsx", sheet = "conservation_status", col_types=c("text","date","text","text"))
   
   unlink("tmp/tmp.xlsx")
   list <-
@@ -70,8 +61,6 @@ readTemplate <- function(path) {
 metaToUtilityThing <- function(meta) {
   
   id <- paste0("NC", gsub("-", "", meta$pwsid))
-  service_area <- sf::read_sf(paste0("https://geoconnex.us/ref/pws/",id))$geometry
-  service_sfc <- sf::st_sfc(service_area$geometry)
   
   thing <-
       list(
@@ -94,26 +83,12 @@ metaToUtilityThing <- function(meta) {
           fax = meta$fax,
           email = meta$email,
           wsrp_link = meta$wsrp_link
-        )
+        ),
+        Locations = list(list(`@iot.id` = id))
         )
   
-  loc <- list(
-          `@iot.id` = paste0(id," - Service Area"),
-          name = paste0(id, " Service area"),
-          description = paste0("Service area of ",thing$name),
-          encodingType = "application/vnd.geo+json",
-          location = list(
-            type="Point",
-            coordinates = list(
-              4.9,
-              52.3
-            )
-          )
-        )
-      
-  utility <- list(thing=thing,location=loc)    
     
-  return(utility)
+  return(thing)
 }
 
 staPost <- function(url, payload, user, password) {
@@ -140,37 +115,25 @@ strip_iot_id <- function(list){
 }
 
 uploadUtility <- function(api, utility, user, password) { 
-  id <- utility$thing$`@iot.id`
-  id.l <- utility$location$`@iot.id`
+  id <- utility$`@iot.id`
   
   status <- httr::GET(paste0(api, "Things('", id, "')"))$status
   if (status == 200) {
     
     staPatch(
       url = paste0(api, "Things('", id, "')"),
-      payload = strip_iot_id(utility$thing),
+      payload = strip_iot_id(utility),
       user = user,
       password = password
     )
     
-    staPatch(
-      url = paste0(api, "Locations('", id.l, "')"),
-      payload = strip_iot_id(utility$location),
-      user = user,
-      password = password
-    )
   } else {
     staPost(
       url = paste0(api, "Things"),
-      payload = utility$thing,
-      user = user,
-      password = password
-    )
-    staPost(
-      url = paste0(api, "Things('", id, "')/Locations"),
-      payload = utility$location,
+      payload = utility,
       user = user,
       password = password
     )
   }
 }
+
