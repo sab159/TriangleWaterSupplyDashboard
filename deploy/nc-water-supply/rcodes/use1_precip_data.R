@@ -201,10 +201,10 @@ rm(pcp)
 #          1-7 day total precipitation forecast amount
 #
 ###################################################################################################################################
-file_to_geojson(input="https://www.wpc.ncep.noaa.gov/kml/qpf/QPF168hr_Day1-7_latest.kmz", method='web', output= paste0(swd_html, 'pcp\\qpf1-7dayforecast'))
-pcp <- read_sf(paste0(swd_html, 'pcp\\qpf1-7dayforecast.geojson'))# %>% dplyr::select(Name, geometry) %>% st_transform(crs = 4326)
+file_to_geojson(input="https://www.wpc.ncep.noaa.gov/kml/qpf/QPF168hr_Day1-7_latest.kml", method='web', output= paste0(swd_html, 'pcp\\qpf1-7dayforecast'))
+pcp <- read_sf(paste0(swd_html, 'pcp\\qpf1-7dayforecast.geojson')) %>% select(Name, geometry) %>% sf::st_transform(crs = 4326)
 
-pcp2 <- st_crop(pcp, extent(huc8)) 
+#pcp2 <- st_crop(pcp, extent(huc8)) 
 
 #add colors
 pcp2 <- pcp %>% rename(bands = Name) %>% dplyr::select(bands, geometry) %>% 
@@ -213,7 +213,10 @@ pcp2 <- pcp %>% rename(bands = Name) %>% dplyr::select(bands, geometry) %>%
                     ifelse(bands==1.75, "#9370db", ifelse(bands==2, "#663399", ifelse(bands==2.5, "#800080", #purples
                     ifelse(bands==3, "darkred", ifelse(bands==4, "red", ifelse(bands==5, "#ff4500", ifelse(bands==7, "orange", #red/orange
                     ifelse(bands==10, "#8b6313",ifelse(bands==15, "#daa520",ifelse(bands<=20,"yellow", "black"))))))))))))))))))))
+mapview::mapviewOptions(fgb = FALSE)
 mapview::mapview(pcp2)
+pcp2 <- st_zm(pcp2); #Not sure what this does but it makes it work
+leaflet() %>%  addProviderTiles("Stamen.TonerLite") %>% addPolygons(data = pcp2, fillOpacity= 0.6, fillColor = pcp2$colorVal, color="black", weight=0)
 #pcp2 <- pcp2 %>% ms_simplify(0.5, keep_shapes=TRUE)
 geojson_write(pcp2, file =  paste0(swd_html, "pcp\\qpf1-7dayforecast.geojson"))
 
@@ -244,7 +247,7 @@ julian <- read.csv(paste0(swd_html, "julian-daymonth.csv"))
 nc.data <-as.data.frame(matrix(nrow=0, ncol=12)); colnames(nc.data) <- c("locID","date","var","value","unit","score","nettype","vartype","obtime","obtype","obnum","value_accum")
 #count how much of data useing
 total.obsv = 0;
-for (i in 2:length(pcp.list)){
+for (i in 1:length(pcp.list)){
    #build api link
   url_loc = pcp.list[i]
   last_date = old.pcp %>% filter(id==pcp.list[i]) %>% filter(date == max(date)) %>% dplyr::select(date) %>% mutate(date = as.Date(date, "%Y-%m-%d") + 1)
@@ -257,15 +260,18 @@ for (i in 2:length(pcp.list)){
   
   #call url
   zt <- readLines(full_url, warn=FALSE)
-  #start cleaning
-  yt.obsv <- as.numeric(str_split(zt[11],": ", simplify=TRUE)[1,2])
   
-  #call value data
-  yt.df <- read_csv(zt, comment="##")
-  
-  #total obs
-  total.obsv = total.obsv + yt.obsv;
-  nc.data <- rbind(nc.data, yt.df);
+  if(length(zt)>=11){
+    #start cleaning
+    yt.obsv <- as.numeric(str_split(zt[11],": ", simplify=TRUE)[1,2])
+    
+    #call value data
+    yt.df <- read_csv(zt, comment="##")
+    
+    #total obs
+    total.obsv = total.obsv + yt.obsv;
+    nc.data <- rbind(nc.data, yt.df);
+  }
 
   print(paste0(i, ": ", total.obsv))
 }
@@ -278,7 +284,7 @@ bk.data <- nc.data
 ###################################################################################################################################
 #check QAQC flagged data
 nc.data %>% filter(score==3) %>% as.data.frame()# keep?
-table(nc.data$unit); #should all be inches
+table(nc.data$unit); #should all be inches... MV seems to be missing value
 table(nc.data$nettype); #should all be measured
 table(nc.data$vartype); #these are all A - aggregate of multiple variables?
 table(nc.data$obtype); #these should all be d for daily

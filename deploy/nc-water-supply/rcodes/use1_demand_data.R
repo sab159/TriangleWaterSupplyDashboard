@@ -23,7 +23,7 @@ mymonths <- c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov",
 
 #read in basic data
 con.status <- read.csv(paste0(swd_html, "basic_info.csv"))
-old.demand <- read.csv()
+old.demand <- read.csv(paste0(swd_html, "demand\\demand_over_time.csv"))
 
 #calculate moving average function
 ma <- function(x,n=7){stats::filter(x,rep(1/n,n), sides=1)}
@@ -56,10 +56,10 @@ url.base <- "https://twsd.internetofwater.dev/api/v1.1/Datastreams"
 url.data <- "ShortageStage"
 full.url <- paste0(url.base, "('", selected.pwsid, "-", url.data, "')/Observations?$count=true")
 foo <- fromJSON(full.url)
-https://twsd.internetofwater.dev/api/v1.1/Datastreams('NC0368010-ShortageStage')/Observations
+#https://twsd.internetofwater.dev/api/v1.1/Datastreams('NC0368010-ShortageStage')/Observations
 
 
-#set up for water demand data
+#set up for water demand data----------------------------------------------------------------------------------------------
 url.data <- "WaterDistributed"
 
 #set up data frame
@@ -67,11 +67,11 @@ demand <- as.data.frame(matrix(nrow=0, ncol=3)); colnames(demand) = c("pwsid", "
 #loop through the systems to call data
 for(i in 1:length(pwsid.list)){
   selected.pwsid  <- pwsid.list[i] 
-  old.zt <- old.demand %>% filter(pwsid == selected.pwsid)
-  last.date <- max(old.demand$date2)
+  #old.zt <- old.demand %>% filter(pwsid == selected.pwsid)
+  #last.date <- max(old.demand$date2)
   
-  #full.url <- paste0(url.base, "('", selected.pwsid, "-", url.data, "')/Observations?$count=true")
-  full.url <- paste0(url.base, "('", selected.pwsid, "-", url.data, "')/Observations?$filter=phenomenonTime gt ", last.date, "T00:00:01.000Z&$count=true")
+  full.url <- paste0(url.base, "('", selected.pwsid, "-", url.data, "')/Observations?$count=true")
+  #full.url <- paste0(url.base, "('", selected.pwsid, "-", url.data, "')/Observations?$filter=phenomenonTime gt ", last.date, "T00:00:01.000Z&$count=true")
   
   #read in data
   foo <- fromJSON(full.url)

@@ -31,7 +31,6 @@ serv <- "dv"
 nc.sites <- read_sf(paste0(swd_html, "streamflow\\stream_gauge_sites.geojson")) %>% select(site, name, huc8, startYr, endYr, nYears, geometry)
 ws.bounds <- read_sf(paste0(swd_html, "water_supply_watersheds.geojson")) %>% select(-nSheds, -drawFile)
 current.date = as.Date(substr(Sys.time(),0,10),"%Y-%m-%d")
-current.year <- year(current.date)
 
 
 #################################################################################################################################

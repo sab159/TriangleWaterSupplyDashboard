@@ -53,7 +53,7 @@ julian <- read.csv(paste0(swd_html, "julian-daymonth.csv"))
 
 #variables used to update data
 today = substr(Sys.time(),1,10); today;
-current.year <- year(current.date)
+current.year <- year(today);
 
 start.date = "1990-01-01"; #set for the start of the period that we want to assess
 end.date = paste0(year(today), "-12-31")
