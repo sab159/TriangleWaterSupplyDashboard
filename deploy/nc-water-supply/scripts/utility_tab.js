@@ -2,6 +2,12 @@
 //                   MY UTILITY TAB
 //                   Function to create utility tab on selection
 //##############################################################################################
+//capitlizae first letter
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function(txt){
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}
 
 //read in d3 with basic info
 function myUtilityInfo(myUtility){
@@ -43,7 +49,7 @@ function myUtilityInfo(myUtility){
      var myUtilityStage = selectData[0].stage;
             
      utilityText.innerHTML = "<h3 class='chartTitles'>You are located in the <a href = " + myUtilityWebsite + " target='_blank'>" + myUtility + "</a> service area</h3><br>" + 
-      "<p> My Water Conservation Status is: " + myUtilityStage + "<br>" + 
+      "<p> My water conservation status is: <b>" + toTitleCase(myUtilityStage) + "</b><br>" + 
       "To learn more about my utility's water conservation plan, click <a href = " + myUtilityWaterPlan + " target='_blank'>here</a>. <br>This plan was last updated in " + myUtilityUpdatePlan + ".<br></p>";
 
 

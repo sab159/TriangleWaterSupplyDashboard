@@ -35,7 +35,8 @@
     <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
     
     <script src="https://d3js.org/d3.v5.min.js"></script>           
-    <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js" defer></script>
+    <!-- <script src = "js/plotly-latest.min.js"></script> -->
     <script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script> <!-- create mapbox vector tiles-->
     <link rel="stylesheet" href="css/main_content.css">
 
@@ -98,7 +99,7 @@
 
     <!--ADD DIV TO TURN ON WHEN QPF 7-day forecast selected-->
       <div id="moreForecastInfo" style="text-align: center; color: rgb(26,131,130); display: none;">
-          <p>For additional forecasts, please visit the <a href="https://www.wpc.ncep.noaa.gov/#page=ovw" target="_blank">Weather Precition Center</a>.</p>
+          <p>For additional forecasts, please visit the <a href="https://www.wpc.ncep.noaa.gov/#page=ovw" target="_blank">Weather Precipitation Center</a>.</p>
       </div>
  </div> <!--creates space for map; map-layer-row-->
 
@@ -588,8 +589,8 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 });
 </script>
 <script type="text/javascript" src="scripts/drawMap.js"></script> <!--needs to be asyn-->
-<script type="text/javascript" src="scripts/utility_tab.js" defer></script>
-<script type="text/javascript" src="scripts/map_hover_click.js" defer></script> <!--needs to be asyn-->
+<script type="text/javascript" src="scripts/utility_tab.js"></script>
+<script type="text/javascript" src="scripts/map_hover_click.js"></script> <!--needs to be asyn-->
 <script type="text/javascript" src="scripts/stream_stats.js" defer></script>
 <script type="text/javascript" src="scripts/demandTab.js" defer></script>
 <script type="text/javascript" src="scripts/groundwaterTab.js" defer></script>
