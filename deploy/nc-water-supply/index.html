@@ -129,6 +129,7 @@ function setSystemThis(target){
   var sel = document.getElementById('setSystem');
     myUtilityID = sel.value;
     myUtility = sel.options[sel.selectedIndex].text;
+    geocoder.clear();
 
     map.setFilter('water_supply', ['in', 'drawFile', myUtilityID]);
     map.setFilter('water_supply_name', ['in', 'drawFile', myUtilityID]);
