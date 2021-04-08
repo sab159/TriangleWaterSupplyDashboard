@@ -24,31 +24,31 @@ NC0332010,Durham City,"Hand Watering, Drip Irrigation, Subsurface Irrigation",st
 NC0332010,Durham City,"New Landscape, Exception License",stage 4,Not Allowed
 NC0332010,Durham City,Vehicle Washing,stage 4,Not Allowed
 NC0332010,Durham City,Surface Washing,stage 4,Not Allowed
-NC0392020,Cary Town,Outdoor Spray Irrigation,year round,Three days per week
-NC0392020,Cary Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",year round,Allowed
-NC0392020,Cary Town,"Pressure Washing, Car Washing, Swimming Pools, etc.",year round,Allowed
-NC0392020,Cary Town,New Turf Watering Exception Permits,year round,Allowed
-NC0392020,Cary Town,Indoor Water Use,year round,Allowed
-NC0392020,Cary Town,Outdoor Spray Irrigation,stage 1,One day per week
-NC0392020,Cary Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 1,Allowed
-NC0392020,Cary Town,"Pressure Washing, Car Washing, Swimming Pools, etc.",stage 1,Allowed
-NC0392020,Cary Town,New Turf Watering Exception Permits,stage 1,No new permits; permits beginning more than 2 weeks after stage 1 date rescinded
-NC0392020,Cary Town,Indoor Water Use,stage 1,Allowed
-NC0392020,Cary Town,Outdoor Spray Irrigation,stage 2,Not Allowed
-NC0392020,Cary Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 2,Allowed
-NC0392020,Cary Town,"Pressure Washing, Car Washing, Swimming Pools, etc.",stage 2,Allowed
-NC0392020,Cary Town,New Turf Watering Exception Permits,stage 2,Not Allowed
-NC0392020,Cary Town,Indoor Water Use,stage 2,Allowed
-NC0392020,Cary Town,Outdoor Spray Irrigation,stage 3,Not Allowed
-NC0392020,Cary Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 3,Not Allowed
-NC0392020,Cary Town,"Pressure Washing, Car Washing, Swimming Pools, etc.",stage 3,Not Allowed
-NC0392020,Cary Town,New Turf Watering Exception Permits,stage 3,Not Allowed
-NC0392020,Cary Town,Indoor Water Use,stage 3,Limited to normal indoor winter use
-NC0392020,Cary Town,Outdoor Spray Irrigation,stage 4,Not Allowed
-NC0392020,Cary Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 4,Not Allowed
-NC0392020,Cary Town,"Pressure Washing, Car Washing, Swimming Pools, etc.",stage 4,Not Allowed
-NC0392020,Cary Town,New Turf Watering Exception Permits,stage 4,Not Allowed
-NC0392020,Cary Town,Indoor Water Use,stage 4,Reduce normal indoor winter use by 15%
+NC0392020,Cary,Outdoor Spray Irrigation,year round,Three days per week
+NC0392020,Cary,"Hand Watering, Drip Irrigation, Subsurface Irrigation",year round,Allowed
+NC0392020,Cary,"Outdoor Water Use: Pressure Washing, Car Washing, Swimming Pools, etc.",year round,Allowed
+NC0392020,Cary,New Turf Watering Exception Permits,year round,Allowed
+NC0392020,Cary,Indoor Water Use Restrictions,year round,None
+NC0392020,Cary,Outdoor Spray Irrigation,stage 1,One day per week
+NC0392020,Cary,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 1,Allowed
+NC0392020,Cary,"Outdoor Water Use: Pressure Washing, Car Washing, Swimming Pools, etc.",stage 1,Allowed
+NC0392020,Cary,New Turf Watering Exception Permits,stage 1,No new permits; permits beginning more than 2 weeks after stage 1 date rescinded
+NC0392020,Cary,Indoor Water Use Restrictions,stage 1,None
+NC0392020,Cary,Outdoor Spray Irrigation,stage 2,Not Allowed
+NC0392020,Cary,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 2,Allowed
+NC0392020,Cary,"Outdoor Water Use: Pressure Washing, Car Washing, Swimming Pools, etc.",stage 2,Allowed
+NC0392020,Cary,New Turf Watering Exception Permits,stage 2,Not Allowed
+NC0392020,Cary,Indoor Water Use Restrictions,stage 2,None
+NC0392020,Cary,Outdoor Spray Irrigation,stage 3,Not Allowed
+NC0392020,Cary,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 3,Not Allowed
+NC0392020,Cary,"Outdoor Water Use: Pressure Washing, Car Washing, Swimming Pools, etc.",stage 3,Not Allowed
+NC0392020,Cary,New Turf Watering Exception Permits,stage 3,Not Allowed
+NC0392020,Cary,Indoor Water Use Restrictions,stage 3,Limited to normal indoor winter use
+NC0392020,Cary,Outdoor Spray Irrigation,rationing,Not Allowed
+NC0392020,Cary,"Hand Watering, Drip Irrigation, Subsurface Irrigation",rationing,Not Allowed
+NC0392020,Cary,"Outdoor Water Use: Pressure Washing, Car Washing, Swimming Pools, etc.",rationing,Not Allowed
+NC0392020,Cary,New Turf Watering Exception Permits,rationing,Not Allowed
+NC0392020,Cary,Indoor Water Use Restrictions,rationing,Reduce normal indoor winter use by 15%
 NC0368010,Orange Water and Sewer Authority,Sray Irrigation on Turf and Grass (designated days),year round,"3 days per week, up to 1 inch per week, 6 pm - 10 am only"
 NC0368010,Orange Water and Sewer Authority,Spray Irrigation of Non-Turf Plant Material (designated days),year round,"3 days per week, up to 1 inch per week, 6 pm - 10 am only"
 NC0368010,Orange Water and Sewer Authority,"Hand Watering, Drip Irrigation, Subsurface Irrigation",year round,Allowed
@@ -144,23 +144,28 @@ NC0326010,Fayetteville Public Works,Vehicle Washing,stage 4,Not Allowed; Commerc
 NC0326010,Fayetteville Public Works,Surface Washing,stage 4,Not Allowed
 NC0326010,Fayetteville Public Works,"Filling, Refilling, or Topping off Ornamental Ponds, Fountains, etc.",stage 4,Not Allowed
 NC0326010,Fayetteville Public Works,Indoor Water Use,stage 4,Reduce by 30%
-NC0392045,Apex Town,Outdoor Spray Irrigation,year round,3 days per week
-NC0392045,Apex Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",year round,Allowed
-NC0392045,Apex Town,"Other outdoor watering, such as pressure washing, car washing, filling pools",year round,Allowed
-NC0392045,Apex Town,New Turf Watering Exception Permits,year round,Allowed
-NC0392045,Apex Town,Outdoor Spray Irrigation,stage 1,1 day per week
-NC0392045,Apex Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 1,Allowed
-NC0392045,Apex Town,"Other outdoor watering, such as pressure washing, car washing, filling pools",stage 1,Allowed
-NC0392045,Apex Town,New Turf Watering Exception Permits,stage 1,Now new permits; Rescind permits less than 2 weeks old
-NC0392045,Apex Town,Outdoor Spray Irrigation,stage 2,Not Allowed
-NC0392045,Apex Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 2,Allowed
-NC0392045,Apex Town,"Other outdoor watering, such as pressure washing, car washing, filling pools",stage 2,Allowed
-NC0392045,Apex Town,New Turf Watering Exception Permits,stage 2,Not Allowed
-NC0392045,Apex Town,Outdoor Spray Irrigation,stage 3,Not Allowed
-NC0392045,Apex Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 3,Not Allowed
-NC0392045,Apex Town,"Other outdoor watering, such as pressure washing, car washing, filling pools",stage 3,Not Allowed
-NC0392045,Apex Town,New Turf Watering Exception Permits,stage 3,Not Allowed
-NC0392045,Apex Town,Outdoor Spray Irrigation,stage 4,Not Allowed
-NC0392045,Apex Town,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 4,Not Allowed
-NC0392045,Apex Town,"Other outdoor watering, such as pressure washing, car washing, filling pools",stage 4,Not Allowed
-NC0392045,Apex Town,New Turf Watering Exception Permits,stage 4,Not Allowed
+NC0392045,Apex,Outdoor Spray Irrigation,year round,3 days per week
+NC0392045,Apex,"Hand Watering, Drip Irrigation, Subsurface Irrigation",year round,Allowed
+NC0392045,Apex,"Other outdoor watering, such as pressure washing, car washing, filling pools",year round,Allowed
+NC0392045,Apex,New Turf Watering Exception Permits,year round,Allowed
+NC0392045,Apex,Indoor Water Use Restrictions,year round,None
+NC0392045,Apex,Outdoor Spray Irrigation,stage 1,1 day per week
+NC0392045,Apex,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 1,Allowed
+NC0392045,Apex,"Other outdoor watering, such as pressure washing, car washing, filling pools",stage 1,Allowed
+NC0392045,Apex,New Turf Watering Exception Permits,stage 1,"No new permits issued, permits beginning more than 14 days after stage 1 date rescinded "
+NC0392045,Apex,Indoor Water Use Restrictions,stage 1,None
+NC0392045,Apex,Outdoor Spray Irrigation,stage 2,Not Allowed
+NC0392045,Apex,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 2,Allowed
+NC0392045,Apex,"Other outdoor watering, such as pressure washing, car washing, filling pools",stage 2,Allowed
+NC0392045,Apex,New Turf Watering Exception Permits,stage 2,Not Allowed
+NC0392045,Apex,Indoor Water Use Restrictions,stage 2,None
+NC0392045,Apex,Outdoor Spray Irrigation,stage 3,Not Allowed
+NC0392045,Apex,"Hand Watering, Drip Irrigation, Subsurface Irrigation",stage 3,Not Allowed
+NC0392045,Apex,"Other outdoor watering, such as pressure washing, car washing, filling pools",stage 3,Not Allowed
+NC0392045,Apex,New Turf Watering Exception Permits,stage 3,Not Allowed
+NC0392045,Apex,Indoor Water Use Restrictions,stage 3,Limited to normal indoor winter use
+NC0392045,Apex,Outdoor Spray Irrigation,rationing,Not Allowed
+NC0392045,Apex,"Hand Watering, Drip Irrigation, Subsurface Irrigation",rationing,Not Allowed
+NC0392045,Apex,"Other outdoor watering, such as pressure washing, car washing, filling pools",rationing,Not Allowed
+NC0392045,Apex,New Turf Watering Exception Permits,rationing,Not Allowed
+NC0392045,Apex,Indoor Water Use Restrictions,rationing,Reduce normal indoor winter use by 15%

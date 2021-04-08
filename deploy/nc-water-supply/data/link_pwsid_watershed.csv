@@ -1,5 +1,5 @@
 pwsid,utility_name,ws_watershed,huc8,huc8_name,huc6_name
-NC0392020,Cary Town,Haw River (Jordan Lake),3030002,Haw,Cape Fear
+NC0392020,Cary,Haw River (Jordan Lake),3030002,Haw,Cape Fear
 NC0332010,Durham City,Haw River (Jordan Lake),3030002,Haw,Cape Fear
 NC0332010,Durham City,Eno River (Lower),3020201,Upper Neuse,Neuse
 NC0332010,Durham City,Falls Lake,3020201,Upper Neuse,Neuse
@@ -25,4 +25,4 @@ NC,none,,3020202,Middle Neuse,Neuse
 NC,none,,3020201,Upper Neuse,Neuse
 NC0368015,Hillsborough Town,Eno River (Lake Ben Johnson),3020201,Upper Neuse,Neuse
 NC0368015,Hillsborough Town,Eno River (Corporation Lake),3020201,Upper Neuse,Neuse
-NC0392045,Apex Town,Haw River (Jordan Lake),3030002,Haw,Cape Fear
+NC0392045,Apex,Haw River (Jordan Lake),3030002,Haw,Cape Fear
