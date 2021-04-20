@@ -41,7 +41,7 @@ for (i in 1:length(project.df$Loc_ID)){
   location.id <- project.df$Loc_ID[i]; location.id
   full_url <- paste0(baseURL, report_url, location.id, parameter_url)
 
-  api.data <- GET(full_url, timeout(15000)) #use httr libirary to avoid timeout
+  api.data <- GET(full_url, timeout(15000)) #use httr library to avoid timeout
     dam.data <- content(api.data, "parse")
 
   lake_level = data_frame(

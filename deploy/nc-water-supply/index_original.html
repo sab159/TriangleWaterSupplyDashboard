@@ -38,7 +38,7 @@
     <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js" defer></script>
     <!-- <script src = "js/plotly-latest.min.js"></script> -->
     <script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script> <!-- create mapbox vector tiles-->
-    <link rel="stylesheet" href="css/main_content.css">
+    <link rel="stylesheet" href="css/main_content_original.css">
 
     <style type="text/css">
 
@@ -61,19 +61,14 @@
 ####################################################################################################################-->
 <div class = "row header" style="margin-left: 20px;">
   <p style=" font-size: 14px;"><i><b>Disclaimer:</b> This tool is best viewed in Chrome, Firefox, Microsoft Edge, and Safari.</i></p>
-  <p style="font-size: 16px;"><span style="color: rgb(252,57,67); font-size: 18px"><b>To get started,</b></span> select a utility from the map, drop down menu, or type an address.<br>
-    <span style="color: rgb(252,57,67); font-size: 18px"><b>Next,</b></span> select different tabs on the right to learn more about water supply conditions.<br>
-    <span style="color: rgb(252,57,67); font-size: 18px"><b>The help icons</b></span> provide more details to understand each tab.
-  </p>
-  <h3 class = "chartTitles" id="dataUpdateNotice" style="padding-top: 20px; left: 50%;"></h3>
-  <br>
-  <!-- <img id="utilityHelp" style="position: absolute; height: 22px; right: 5px;" src="img/info_icon.png"> -->
+   <!--h4 style= "color: black;"><b>Introductory Text:</b></h4-->
     <form name="selectSystem"> 
         <h4 style="display: inline-block">Select a utility on the map, in the drop down menu, or by typing in an address:</h4>&nbsp;
-      <select style="width: 350px;" name="setSystem" id="setSystem" onchange="setSystemThis(this);">
+      <select style="width: 320px;" name="setSystem" id="setSystem" onchange="setSystemThis(this);">
               <option selected = "selected" value="none"> Select a Utility </option>
       </select>  
   </form>
+  <br>
 </div>
 
 
@@ -81,8 +76,7 @@
                                     TAB SET UP
     ######################################################################################################-->
 <div class="container">
-  <div class="col-sm-5" style="padding:0px">
-      <div class= "map-layers-row">   
+  <div class="col-sm-5 map-layers-row">   
         <h3 class="chartTitles">Turn Map Layers On and Off</h3> 
         <div class="row" style="text-align: center; display: inline;"> 
             <button class = "btn" value = "menuUtility" id = "menuUtility" style= "background-color: #3f97a8; color: white;">Utility</button>
@@ -101,27 +95,17 @@
             <button class="btn forecast" value= "menuQPF7day" id= "menuQPF7day">QPF 7-day Forecast</button>
             <button class="btn forecast" value= "menuForecastPCP6" id= "menuForecastPCP6">Precip 6-10 Day Forecast</button>
             <button class="btn forecast" value= "menuForecastTEMP6" id= "menuForecastTEMP6">Temp 6-10 Day Forecast</button>
-        </div><!--end top row-->
-     <!--ADD DIV TO TURN ON WHEN QPF 7-day forecast selected-->
-     <div id="moreForecastInfo" style="text-align: center; color: rgb(26,131,130); display: none;">
-        <p>For additional forecasts, please visit the <a href="https://www.wpc.ncep.noaa.gov/#page=ovw" target="_blank">Weather Precipitation Center</a>.</p>
-    </div>
+    </div><!--end top row-->
 
-    </div><!-- end map layers row-->
+    <!--ADD DIV TO TURN ON WHEN QPF 7-day forecast selected-->
+      <div id="moreForecastInfo" style="text-align: center; color: rgb(26,131,130); display: none;">
+          <p>For additional forecasts, please visit the <a href="https://www.wpc.ncep.noaa.gov/#page=ovw" target="_blank">Weather Precipitation Center</a>.</p>
+      </div>
+ </div> <!--creates space for map; map-layer-row-->
 
-    <!--#######################################################################################################
-                                    MAP DIV
-    ######################################################################################################-->
-     <div class="map-layer-row" id = "map-column" style="z-index: 1px;" style="border: thin solid rgb(26,131,130);">
-           <div id="map" style="height: 600px; z-index: 10;"> <!--border: thin solid black;"--> 
-           <div class="infoMap" id="map_hover_box"><p><strong>Hover over utilities</strong></p></div>
-           <div class="legend" id="stream-legend" style="display: none;"></div>    
-           <div class="legend" id="drought-legend" style="display: none;"></div>    
-         </div> <!--end map Div-->
-      </div><!--end map row div-->
-  </div> <!--co-sm-5 end Map section-->
-
-     
+  <div class="col-sm-7" style = "padding-bottom: 2px; border-bottom: 2px solid #5D6D7E;">
+    <h3 class = "chartTitles" id="dataUpdateNotice" style="padding-top: 20px;"></h3>
+  
  <script>//LOAD DROP DOWN LIST
   document.getElementById("setSystem").options.length = 1;
   opts = document.getElementById('setSystem');
@@ -167,10 +151,6 @@ function setSystemThis(target){
 </script>
 
 
-<!--#######################################################################################################
-                                      Tab Content
-  ######################################################################################################-->
-<div class = "col-sm-7">
     <div class="row">
     <ul id="tabs" class="nav nav-pills" data-tabs="tabs">
         <li class = "active"><a href="#about" data-toggle="tab">My <br> Utility</a></li>
@@ -180,9 +160,30 @@ function setSystemThis(target){
         <li><a href="#groundwater" data-toggle="tab">Ground-<br>water</a></li>
       </ul>
     </div>
+  </div> <!--End Div for Tabs-->
+</div> <!-- end container div -->
+
+
+<!--#######################################################################################################
+                                    MAP DIV
+    ######################################################################################################-->
+<div class="row container" id = "main-one">
+  <div class="col-sm-5" id = "map-column" style="z-index: 1px;"> 
+   <div class = "row" style="border: thin solid rgb(26,131,130);">
+      <div id="map" style="height: 600px; z-index: 10;"> <!--border: thin solid black;"--> 
+      <div class="infoMap" id="map_hover_box"><p><strong>Hover over utilities</strong></p></div>
+      <div class="legend" id="stream-legend" style="display: none;"></div>    
+      <div class="legend" id="drought-legend" style="display: none;"></div>    
+    </div> <!--end map Div-->
+  </div><!--end map row div-->
+
+  </div><!--end col-sm-6 .... ### HAD TO SEPARATE TO FIX OFFSET. https://github.com/mapbox/mapbox-gl-js/issues/9467-->
   
-<div class="row" id="main-one" style="padding: 0 10px;">
-   <div id="my-tab-content" class="tab-content clearfix;">
+
+  <!--#####################################################################################################-->
+
+  <div class = "col-sm-7" > <!--style= "border: thin solid red;"-->
+      <div id="my-tab-content" class="tab-content clearfix;">
   <!--#######################################################################################################
                                       My Utility Tab
   ######################################################################################################-->
@@ -219,7 +220,7 @@ function setSystemThis(target){
       <!--Info Tab-->
        <img class="help-icon" id="surfaceHelp" src="img/info_icon.png">
       <div class="row" id="surface_tab_info" style="margin: 5px; display: none; z-index: 8;">
-            <img src="img/surface-tab.png" style="width: 95%; display: inline-block;">
+            <img src="img/surface-tab.png" style="width: 510px; height: 670px; display: inline-block;">
       </div>
       
      <!-- PLOTS -->
@@ -397,9 +398,8 @@ function setSystemThis(target){
                                       endTabs
       ######################################################################################################-->
     </div> <!-- end my-tab-content-->
-   </div> <!--end row -->
-   </div> <!--end col-7-sm -->
-</div> <!-- end main container-->  
+  </div> <!-- end column 6 pane-->
+</div> <!-- end row for main one-->  
 
  <script>
     jQuery(document).ready(function(){
