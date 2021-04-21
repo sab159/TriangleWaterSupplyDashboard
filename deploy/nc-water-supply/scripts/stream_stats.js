@@ -365,7 +365,7 @@ var layout = {
     //fixedrange: false
 };
 
-Plotly.newPlot('streamPlot', data, layout);
+Plotly.newPlot('streamPlot', data, layout, config);
 
 /*#####################################################################################
          COUNT PERCENT OF TIME SPENT IN DIFFERENT STATUS

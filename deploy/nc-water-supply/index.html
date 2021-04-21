@@ -226,20 +226,17 @@ function setSystemThis(target){
       <h4 class = "chartTitles" id = "selectDataName">Select a stream gauge or reservoir to see plot</h4>
       <div class="row" id="selectMetadata" style="text-align: center; color: darkgray">  </div>
       
-      <div class="row" id = "switchStatsDiv" style= "margin-left: 20px; display: none;">
-        <br>
+      <div class="row" id = "switchStatsDiv" style= "margin: 10px 20px; display: none;">
         <input type="checkbox" id="switchStats" onclick="toggleStats(this.value)">&nbsp;&nbsp;Turn stats layer on
       </div>
             
-      <div class="row" id = "streamPlot" style= "margin-left: 10px;">
+      <div class="row chart-row" id = "streamPlot">
         <img class = "chart-holder-icon" src="img/stream_chart_icon.png">
       </div>
 
             <!-- TABLES -->
       <h4 id = "summaryTitle" class = "chartTitles">Recent Streamflow Conditions for Selected Utility Watersheds</h4> 
-      
-      <div class="row" id="summaryTableDiv" style="margin-top: 0px; margin-left: 10px; margin-right: 10px; text-align: center;">
-      </div>
+      <div class="row chart-row" id="summaryTableDiv"></div>
 
     </div> <!-- end waterSupplyStatus pane-->
 
@@ -301,12 +298,12 @@ function setSystemThis(target){
       </div>
 
       <h5 class = "chartTitles" id = "relGWTitle"></h5>
-       <div class="row" id = "gwPlot2">
+       <div class="row chart-row" id = "gwPlot2">
             <img class="chart-holder-icon" src="img/gw_chart_icon.png">
        </div>
  
        <h5 class = "chartTitles" id = "longGWTitle"></h5>
-       <div class="row" id = "gwPlot3"></div>
+       <div class="row chart-row" id = "gwPlot3"></div>
     
     </div> <!-- endGroundwater pane-->
 
@@ -354,7 +351,7 @@ function setSystemThis(target){
          <div class = "col-sm-2 dstat" id = "d4div" style="background-color: #730000; color: white;"></div>
       </div>
           <!-- PLOTS -->
-      <div class="row" id = "droughtPlot" style="margin-left: 10px">
+      <div class="row chart-row" id = "droughtPlot">
         <img class = "chart-holder-icon" src="img/drought_chart_icon.png" style= "height: 200px; width: 200px;">
       </div>
        <div class = "row" style="margin-left: 10px;">
@@ -456,6 +453,13 @@ function setSystemThis(target){
   var fileName;
   var streamPlotType = "off";
   var gwPlotType = "off";
+
+  //configures plotly displays
+  var config = {
+  displayModeBar: true,
+  modeBarButtonsToRemove: ['lasso2d', 'select2d', 'resetscale2d', 'toggleSpikelines', 'hoverCompareCartesian', 'hoverClosestCartesian']
+  };
+
   
   // Create a popup, but don't add it to the map yet.
   var popup = new mapboxgl.Popup({

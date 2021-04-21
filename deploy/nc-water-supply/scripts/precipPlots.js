@@ -33,28 +33,13 @@ function plotPrecipitation(pcpID, checked) {
         //create a trace for each year
         var data = [];
         var xMonth = [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
         ];
         var yOther;
         var OtherYearTrace;
         //draw the traces for all years but current
         var xYear = [];
-        var minYear = d3.min(
-            selpcp.map(function (d) {
-                return d.year;
-            })
-        );
+        var minYear = d3.min(selpcp.map(function (d) {  return d.year; }) );
         for (var i = minYear; i <= 2020; i++) {
             xYear.push(i);
         }
@@ -118,7 +103,9 @@ function plotPrecipitation(pcpID, checked) {
                 });
             tempName = "%{y:.1f} inches in %{x}, " + tempSelect;
             colorLine = colorLineAll[i];
-            //if (tempSelect <= 2008) { colorLine = "red"; } // highlight drought years
+            if (tempSelect === 2002) { colorLine = "red"; } // highlight drought years
+            if (tempSelect === 2007) { colorLine = "darkred"; } // highlight drought years
+            if (tempSelect === 2008) { colorLine = "orange"; } // highlight drought years
             //if (tempSelect === 2003 || tempSelect === 2018){ colorLine = "blue"; } // highlight wettest years on record
 
             selectTraces = {
@@ -183,7 +170,7 @@ function plotPrecipitation(pcpID, checked) {
             legend: { x: 1, y: 1, xanchor: "left", font: { size: 10 } },
             margin: { t: 30, b: 30, r: 10, l: 35 },
         };
-        Plotly.newPlot("pcpMonthPlot", data, layout);
+        Plotly.newPlot("pcpMonthPlot", data, layout, config);
     }); //end d3
     //##################################################################################################################################
     //                     END THAT PLOT
@@ -603,6 +590,6 @@ function plotPrecipitation(pcpID, checked) {
                 },
             ],
         };
-        Plotly.newPlot("pcpCumPlot", cumdata, layout);
+        Plotly.newPlot("pcpCumPlot", cumdata, layout, config);
     }); //end d3
 } //end plotPrecipitation function

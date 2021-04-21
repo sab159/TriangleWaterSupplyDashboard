@@ -457,6 +457,12 @@ function setSystemThis(target){
   var streamPlotType = "off";
   var gwPlotType = "off";
   
+  //configures plotly
+  var config = {
+  displayModeBar: true,
+  modeBarButtonsToRemove: ['lasso2d', 'select2d', 'resetscale2d', 'toggleSpikelines', 'hoverCompareCartesian', 'hoverClosestCartesian']
+  };
+
   // Create a popup, but don't add it to the map yet.
   var popup = new mapboxgl.Popup({
     closeButton: false,

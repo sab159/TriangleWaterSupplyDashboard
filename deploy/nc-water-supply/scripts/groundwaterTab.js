@@ -190,7 +190,7 @@ d3.csv("data/gw/gw_levels_time.csv").then(function(gwLevels){
     },
     height: 300,
     showlegend: true,
-    margin: {t: 20, b: 60, r: 60, l: 40 },
+    margin: {t: 30, b: 30, r: 60, l: 40 },
     shapes: [{
       type: 'line', xref: 'paper', yref: 'y',
       x0: 0, x1: 1, y0:0, y1: 0,
@@ -209,7 +209,7 @@ d3.csv("data/gw/gw_levels_time.csv").then(function(gwLevels){
 };
 
 //console.log(data);
-Plotly.newPlot('gwPlot2', data2, gwlayout2);
+Plotly.newPlot('gwPlot2', data2, gwlayout2, config);
 });//end D3
 });//end D3
 
@@ -263,7 +263,7 @@ d3.csv("data/gw/gw_annual_level.csv").then(function(gwAnnual){
     height: 300,
     showlegend: true,
     legend: {x: 0, y: 0.95, xanchor: 'left', yanchor: 'right'},
-    margin: {t: 20, b: 60, r: 30, l: 50 },
+    margin: {t: 30, b: 30, r: 30, l: 50 },
     shapes: [{
       type: 'line', xref: 'paper', yref: 'y',
       x0: 0, x1: 1, y0:0, y1: 0,
@@ -281,7 +281,7 @@ d3.csv("data/gw/gw_annual_level.csv").then(function(gwAnnual){
     ]
 };
 var data3 = [traceAnnual];
-Plotly.newPlot('gwPlot3', data3, gwlayout3);
+Plotly.newPlot('gwPlot3', data3, gwlayout3, config);
   });//end D3
 
 } //END CREATE CHART FUNCTION ##########################################################

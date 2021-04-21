@@ -304,6 +304,11 @@ select {
     text-align: center;
 }
 
+.chart-row {
+    margin: 0 5px;
+    text-align: center;
+}
+
 .btn {
     background: rgb(200, 200, 200);
     border: 1px solid rgba(0, 0, 0, 0.4);
