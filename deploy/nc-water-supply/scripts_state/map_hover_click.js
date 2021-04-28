@@ -335,7 +335,7 @@ map.on("click", "streamgauge-layer", function (e) {
         " target='_blank'>" +
         streamGaugeName +
         "</a><h4>";
-    fileName = "data/streamflow/stream_stats.csv";
+    fileName = "data_state/streamflow/stream_stats.csv";
 
     createDailyStatistics(streamID, streamPlotType);
 });
@@ -371,7 +371,7 @@ map.on("click", "reservoirs", function (e) {
         " target='_blank'>" +
         reservoirName +
         "</a></u><h4>";
-    fileName = "data/reservoirs/reservoir_stats.csv";
+    fileName = "data_state/reservoirs/reservoir_stats.csv";
     createDailyStatistics(streamID, streamPlotType);
 });
 

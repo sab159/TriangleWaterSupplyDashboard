@@ -485,8 +485,10 @@ function drawMap(){
             property: 'flow50',
             stops:[
               [1, 2],
-              [21,5],
-              [100, 10],
+              [21,4],
+              [100, 6],
+              [500, 8],
+              [1000, 10],
             ]
           },
           'circle-color': [ 

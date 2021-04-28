@@ -66,6 +66,8 @@ update.date <- paste0(mymonths[month(today)]," ", day(today), ", ", end.year) %>
 colnames(update.date) <- "today_date"
 write.csv(update.date, paste0(swd_html, "update_date.csv"), row.names=FALSE)
 
+#calculate moving average function
+ma <- function(x,n=7){stats::filter(x,rep(1/n,n), sides=1)}
 
 
 

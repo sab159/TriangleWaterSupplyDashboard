@@ -30,7 +30,7 @@ serv <- "dv"
 #What sites are available in NC?
 nc.sites <- read_sf(paste0(swd_html, "streamflow\\stream_gauge_sites.geojson")) %>% select(site, name, huc8, startYr, endYr, nYears, geometry)
 ws.bounds <- read_sf(paste0(swd_html, "water_supply_watersheds.geojson")) %>% select(-nSheds, -drawFile)
-current.date = as.Date(substr(Sys.time(),0,10),"%Y-%m-%d")
+all.data <- read.csv(paste0(swd_html, "streamflow\\all_stream_data.csv"), colClasses=c("site" = "character")) %>% mutate(date = as.Date(date, format="%Y-%m-%d"))
 
 
 #################################################################################################################################
@@ -48,45 +48,63 @@ table(nc.sites$STREAM_NAM, useNA="ifany")
 
 #go through stream sites and calculate statistics
 unique.sites <- unique(nc.sites$site)
-#calculate moving average function
-ma <- function(x,n=7){stats::filter(x,rep(1/n,n), sides=1)}
+
 
 #set up data frame for stats and include year
-stats <- as.data.frame(matrix(nrow=0,ncol=13));        colnames(stats) <- c("Site", "julian", "min", "flow10", "flow25", "flow50", "flow75", "flow90", "max", "Nobs","startYr","endYr","date"); 
-year.flow  <- as.data.frame(matrix(nrow=0, ncol=4));    colnames(year.flow) <- c("site", "date", "julian", "flow_cms")
-
+year.flow  <- as.data.frame(matrix(nrow=0, ncol=4));    colnames(year.flow) <- c("site", "date", "julian", "flow")
 #Loop through each site and calculate statistics
 for (i in 1:length(unique.sites)){
-  zt <- readNWISdv(siteNumbers = unique.sites[i], parameterCd = pcode, statCd = scode, startDate=start.date, endDate = end.date)
+  old.data <- all.data %>% filter(site==unique.sites[i]) %>% filter(date==max(date))
+  zt <- readNWISdv(siteNumbers = unique.sites[i], parameterCd = pcode, statCd = scode, startDate=(old.data$date[1]+1), endDate = end.date); #only read in new data
     zt <- renameNWISColumns(zt);
+  
+  if (dim(zt)[1] > 0)  {
+    zt <- zt %>% mutate(julian = as.POSIXlt(Date, format = "%Y-%m-%d")$yday); #calculates julian date
     
-    #Check for missing days, if so, add NA rows: #https://waterdata.usgs.gov/blog/moving-averages/
-    if(as.numeric(diff(range(zt$Date))) != (nrow(zt)+1)){
-      fullDates <- seq(from=min(zt$Date), to = max(zt$Date), by="1 day")
-      fullDates <- data.frame(Date = fullDates, stringsAsFactors = FALSE)
-      zt <- full_join(zt, fullDates,by=c("Date")) %>% arrange(Date)
-    }
+    zt <- zt %>% dplyr::select(site_no, Date, julian, Flow);    colnames(zt) <- c("site", "date", "julian", "flow")
+    zt <- zt %>% group_by(site, date, julian) %>% summarize(flow = median(flow, na.rm=TRUE), .groups="drop")
+    
+    year.flow <- rbind(year.flow, zt)
+  }
+    
+ print(paste0(i, " is ", round(i/length(unique.sites)*100,2), "% done"))
+}
+summary(year.flow)
 
-    zt <- zt %>%  mutate(rollMean = round(as.numeric(ma(Flow)),4), julian = as.numeric(strftime(Date, format = "%j")), Year = year(Date))%>% filter(Date >= as.Date("1991-01-01"))
-    #keep in cfs... I think they just use what is on usgs
+all.data <- rbind(all.data, year.flow) %>% arrange(site, date)
+write.csv(all.data, paste0(swd_html, "streamflow\\all_stream_data.csv"), row.names=FALSE)
+#do rolling average etc next
+
+#bind all.data and year flow together and calculate 7 day rolling average (function is in global api)
+#Check for missing days, if so, add NA rows: #https://waterdata.usgs.gov/blog/moving-averages/
+year.flow  <- as.data.frame(matrix(nrow=0, ncol=4));    colnames(year.flow) <- c("site", "date", "julian", "flow")
+stats <- as.data.frame(matrix(nrow=0,ncol=13));        colnames(stats) <- c("Site", "julian", "min", "flow10", "flow25", "flow50", "flow75", "flow90", "max", "Nobs","startYr","endYr","date"); 
+for (i in 1:length(unique.sites)){
+  zt <- all.data %>% filter(site==unique.sites[i])
+  
+  if(as.numeric(diff(range(zt$date))) != (nrow(zt)+1)){
+    fullDates <- seq(from=min(zt$date), to = max(zt$date), by="1 day")
+    fullDates <- data.frame(date = fullDates, stringsAsFactors = FALSE)
+    zt <- full_join(zt, fullDates,by=c("date")) %>% arrange(date) %>% mutate(site=unique.sites[i], julian = as.POSIXlt(date, format = "%Y-%m-%d")$yday)
+  }
+  zt <- zt %>% mutate(rollMean=round(as.numeric(ma(flow)),4)) %>% mutate(year = year(date))
   
   #summarize annual
-  zt.stats <- zt %>% group_by(julian) %>% summarize(Nobs = n(), min=round(min(rollMean, na.rm=TRUE),2), flow10 = round(quantile(rollMean, 0.10, na.rm=TRUE),2), flow25 = round(quantile(rollMean, 0.25, na.rm=TRUE),2),
+  zt.stats <- zt %>% group_by(site, julian) %>% summarize(Nobs = n(), min=round(min(rollMean, na.rm=TRUE),2), flow10 = round(quantile(rollMean, 0.10, na.rm=TRUE),2), flow25 = round(quantile(rollMean, 0.25, na.rm=TRUE),2),
                                                     flow50 = round(quantile(rollMean, 0.5, na.rm=TRUE),2), flow75 = round(quantile(rollMean, 0.75, na.rm=TRUE),2), flow90 = round(quantile(rollMean, 0.90, na.rm=TRUE),2), 
                                                     max = round(max(rollMean, na.rm=TRUE),2),  .groups="drop")
-  zt.stats <- zt.stats %>% mutate(site = as.character(unique.sites[i]), startYr = min(zt$Year), endYr = max(zt$Year)) %>% select(site, julian, min, flow10, flow25, flow50, flow75, flow90, max, Nobs, startYr, endYr)
+  
+  zt.stats <- zt.stats %>% mutate(startYr = min(zt$year), endYr = max(zt$year)) %>% select(site, julian, min, flow10, flow25, flow50, flow75, flow90, max, Nobs, startYr, endYr)
   if(dim(zt.stats)[1] == 366) {zt.stats$date = julian$month.day366; }
   if(dim(zt.stats)[1] == 365) {zt.stats$date = subset(julian, julian <= 364)$month.day365; }
   
-  
-  #fill dataframe
+  zt <- zt %>% filter(year>=(current.year-2)) %>% dplyr::select(site, date, julian, rollMean);    colnames(zt) <- c("site", "date", "julian", "flow")
+
+#fill dataframe
   stats <- rbind(stats, zt.stats)
-  zt <- zt %>% filter(Year>=(current.year-2)) %>% select(site_no, Date, julian, rollMean);    colnames(zt) <- c("site", "date", "julian", "flow")
   year.flow <- rbind(year.flow, zt)
-    
- print(i)
+  print(paste0(i, " with ", round(i/length(unique.sites)*100,2), "% done"))
 }
-bk.up <- stats;
 summary(stats)
 summary(year.flow)
 
@@ -103,11 +121,14 @@ current.stat <- current.stat %>% mutate(flow = round(flow, 2))
 current.stat <- current.stat %>% mutate(status = ifelse(flow <= flow10, "Extremely Dry", ifelse(flow > flow10 & flow <= flow25, "Very Dry", ifelse(flow >= flow25 & flow < flow50, "Moderately Dry", 
                                                  ifelse(flow >= flow50 & flow < flow75, "Moderately Wet", ifelse(flow >= flow75 & flow < flow90, "Very Wet", ifelse(flow >= flow90, "Extremely Wet", "Unknown")))))))
 current.stat$status <- ifelse(is.na(current.stat$status), "unknown", current.stat$status)
+table(current.stat$status, useNA="ifany")
+#set those that are not collecting data to unknown
+current.stat <- current.stat %>% mutate(status = ifelse(endYr < current.year & julian > 30, "unknown", ifelse(endYr < (current.year-1), "unknown", status)))
 table(current.stat$status)
+
 #merge to geojson file with current status for map display
 nc.sites2 <- merge(nc.sites, current.stat[,c("site","status","flow","julian","date","flow50")], by.x="site", by.y="site")
 geojson_write(nc.sites2, file=paste0(swd_html, "streamflow\\stream_gauge_sites.geojson"))
-
 
 
 #to create stats diagram with past and current year - need to make separate for dates and then rbind
@@ -139,7 +160,7 @@ current.stat2 <- merge(current.stat2, site.huc, by.x="site", by.y="site", all.x=
 write.csv(current.stat2, paste0(swd_html, "streamflow\\sites_status.csv"), row.names=FALSE)
 
 
-rm(site.huc, current.stat2, stats2, nc.sites2, year.flow2, year.flow, year.past, stats.past, recent.flow, current.stat, zt, stats, nc.sites, gages.huc, bk.up)
+rm(site.huc, current.stat2, stats2, nc.sites2, year.flow2, year.flow, year.past, stats.past, recent.flow, current.stat, zt, stats, nc.sites, gages.huc)
 
 
 

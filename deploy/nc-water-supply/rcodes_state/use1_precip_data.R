@@ -288,9 +288,11 @@ table(nc.data$nettype); #should all be measured
 table(nc.data$vartype); #these are all A - aggregate of multiple variables?
 table(nc.data$obtype); #these should all be d for daily
 
+#for many the current day is NA
+pcp.data <- nc.data %>% group_by(location) %>% filter(datetime < max(datetime))
 
 #rename columns and minimize
-pcp.data <- nc.data %>% dplyr::select(location, datetime, value, value_accum) %>% mutate(value = as.numeric(value))
+pcp.data <- pcp.data %>% dplyr::select(location, datetime, value, value_accum) %>% mutate(value = as.numeric(value))
 colnames(pcp.data) <- c("id", "date", "pcp_in", "cum_pcp")
 #set NA / bad data to zero
 #pcp.data[is.na(pcp.data)] <-0

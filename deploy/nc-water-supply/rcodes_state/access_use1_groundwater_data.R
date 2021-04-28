@@ -10,15 +10,6 @@
 
 ######################################################################################################################################################################
 #
-#   Set variables
-#
-######################################################################################################################################################################
-#create a list of counties where you want data (limit to triangle counties)
-county.list <- c("Alamance County", "Orange County", "Durham County", "Granville County", "Wake County", "Franklin County", "Chatham County",
-                 "Lee County", "Harnett County", "Johnstown County", "Cumberland County", "Randolph County", "Moore County", "Hoke County", "Sampson County")
-
-######################################################################################################################################################################
-#
 #   ACCESS GROUNDWATER DATA = MANUAL PROCESS
 #
 ######################################################################################################################################################################
@@ -27,13 +18,11 @@ county.list <- c("Alamance County", "Orange County", "Durham County", "Granville
 #because of set up did a manual download of sites in NC
 nc.sites <- read.csv(paste0(swd_html, "gw\\ALL_SITE_INFO.csv")); #all NAD83
 nc.sites <- nc.sites %>% select(AgencyCd, SiteNo, SiteName, DecLatVa, DecLongVa, AltVa, AltUnitsNm, WellDepth, WellDepthUnitsNm, NatAquiferCd, NatAqfrDesc, StateCd, StateNm, CountyCd, CountyNm,
-                                LocalAquiferCd, LocalAquiferName, SiteType, AquiferType)
-#merge together
-nc.sites <- nc.sites %>% filter(CountyNm %in% county.list) %>% rename(site = SiteNo)
+                                LocalAquiferCd, LocalAquiferName, SiteType, AquiferType) %>% rename(site = SiteNo)
 #table(nc.sites$CountyNm)
 
 #save out sites
-write.csv(nc.sites, paste0(swd_html, "gw\\triangle_sites.csv"), row.names = FALSE)
+write.csv(nc.sites, paste0(swd_html, "gw\\gw_sites.csv"), row.names = FALSE)
 
 
 ######################################################################################################################################################################
@@ -68,8 +57,14 @@ for (i in 1:length(unique.usgs.sites)){
   zt <- zt[-1,]
   #start cleaning
   zt <- data.frame(do.call('rbind', strsplit(as.character(zt$df_split),'\t',fixed=TRUE)))
-  zt <- zt %>% rename(site = X2, date=X3, depth_below_surface_ft = X8) %>% select(site, date, depth_below_surface_ft) %>% mutate(depth_below_surface_ft = as.numeric(as.character(depth_below_surface_ft)))
+  print(paste(unique.usgs.sites[i], "has ", dim(zt)[2], " columns"))
   
+  if(dim(zt)[2]==5){
+    zt <- zt %>% rename(site = X2, date=X3, depth_below_surface_ft = X4) %>% select(site, date, depth_below_surface_ft) %>% mutate(depth_below_surface_ft = as.numeric(as.character(depth_below_surface_ft)))
+  }
+  if(dim(zt)[2]==9){
+    zt <- zt %>% rename(site = X2, date=X3, depth_below_surface_ft = X8) %>% select(site, date, depth_below_surface_ft) %>% mutate(depth_below_surface_ft = as.numeric(as.character(depth_below_surface_ft)))
+  }
   #if missing data the site number is repeated or non-numeric value
   zt <- zt %>% mutate(depth_below_surface_ft = ifelse(depth_below_surface_ft > 99999, NA, depth_below_surface_ft))
   
@@ -94,13 +89,12 @@ for (i in 1:length(unique.usgs.sites)){
   print(i)
 }
 #if inifinite value because of 1 observation... 
-is.na(stats) <- sapply(stats, is.infinite)
+#is.na(stats) <- sapply(stats, is.infinite)
 summary(stats)
 summary(year.flow)
 
-
-
-
+usgs.stats <- stats;
+usgs.year.flow <- year.flow;
 
 
 ############################################     RUN FOR NCDWR   #####################################################################################################
@@ -120,20 +114,21 @@ for (i in 1:length(unique.dwr.sites)){
     rvest::html_node("table") %>%
     rvest::html_nodes(xpath="//a") 
   a.test <- grep('elev.txt', a, value=TRUE)
+  
   for (v in 1:length(a)){
     a.test = grep('lev.txt', html_attr(a[v], "href"), value=TRUE)
     if(length(a.test) > 0) {
       url.sites$link[i] <- paste0("https://www.ncwater.org",html_attr(a[v],"href")) 
     }
   }
-print(url.sites$link[i])
+print(paste(i, "-", url.sites$link[i]))
 }  
 
 nc.sites <- merge(nc.sites, url.sites[,c("site2","link")], by.x="site", by.y="site2", all.x=TRUE)
 #head(nc.sites)
-#set usgs link
-nc.sites <- nc.sites %>% mutate(link = ifelse(AgencyCd=="USGS", paste0("https://waterdata.usgs.gov/nc/nwis/uv/?site_no=", site, "&PARAmeter_cd=72019"), link))
-write.csv(nc.sites, paste0(swd_html, "gw\\triangle_sites.csv"), row.names = FALSE)
+#set usgs link - https://waterdata.usgs.gov/monitoring-location/355944079013401/#parameterCode=72019&period=P7D
+nc.sites <- nc.sites %>% mutate(link = ifelse(AgencyCd=="USGS", paste0("https://waterdata.usgs.gov/monitoring-location/", site, "#parameterCode=72019&period=P7D"), link))
+write.csv(nc.sites, paste0(swd_html, "gw\\gw_sites.csv"), row.names = FALSE)
 
 
 #Build on USGS dataframe
@@ -171,12 +166,16 @@ summary(stats)
 summary(year.flow)
 write.csv(year.flow, paste0(swd_html, "gw\\all_gw_levels.csv"), row.names=FALSE)
 
+
+
+
+
+
 ##############################################################################################################################################################################
 #
 #           NOW CLEAN AND PREP FILES FOR DASHBOARD
 #
 #########################################################################################################################################################################
-
 stats <- stats %>% mutate(date2 = as.Date(paste0(current.year,date), "%Y-%b-%d")) %>% as.data.frame()
 
 #set up data frame for stats and include year
