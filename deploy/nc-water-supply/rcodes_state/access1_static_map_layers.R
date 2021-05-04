@@ -14,32 +14,42 @@
 #
 ######################################################################################################################################################################
 #create a list of pwsid list of utilities
-pwsid.list <- read.csv(paste0(swd_html, "basic_info.csv"), header=TRUE)
-
+pwsid.info <- read.csv(paste0(swd_html, "basic_info.csv"), header=TRUE) %>% select(pwsid, utility_name, data)
+pwsid.list <- unique(pwsid.info$pwsid)
 
 ######################################################################################################################################################################
 #
-#   Create Utility Map Layer
+#   Create Utility Map Layer FROM GEOCONNEX
 #
 ######################################################################################################################################################################
-#read in water systems - note that this link may change over time
-baseURL =  "https://aboutus.internetofwater.dev/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&typename=geonode%3APWS_NC_20190&outputFormat=json&srs=EPSG%3A2264&srsName=EPSG%3A2264"
-  nc.systems <- read_sf(baseURL)
+#read in water systems - note that this link may change over time... this does take longer because of files
+
+nc.systems <- read_sf(paste0("https://info.geoconnex.us/collections/pws/items?PWSID=",pwsid.list[1]))
+for(i in 2:length(pwsid.list)){
+  zt <- read_sf(paste0("https://info.geoconnex.us/collections/pws/items?PWSID=",pwsid.list[i]))
+  nc.systems <- rbind(nc.systems, zt)
+}
+nc.systems <- nc.systems %>% rename(pwsid = id) %>% select(pwsid, uri, geometry)
+nc.systems  <- merge(nc.systems, pwsid.info, by="pwsid")
+
+#simplify and reduce size
+nc.systems <- ms_simplify(nc.systems, keep = 0.1, keep_shapes=TRUE)
+mapview::mapview(nc.systems)
+geojson_write(nc.systems, file =  paste0(swd_html, "nc_utilities.geojson"))
+
+
+#baseURL =  "https://aboutus.internetofwater.dev/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&typename=geonode%3APWS_NC_20190&outputFormat=json&srs=EPSG%3A2264&srsName=EPSG%3A2264"
+#nc.systems <- read_sf(baseURL)
+#limit to only those utilities in the pilot
+#nc.systems <- nc.systems %>% st_transform(crs = 4326) %>% select(PWSID) %>% mutate(ncpwsid = paste0("NC", str_remove_all(PWSID, "[-]"))) %>% mutate(ncpwsid = str_remove_all(ncpwsid, "[_]")); #one of the pwsid has a data entry error
+#nc.systems <- merge(nc.systems, pwsid.list, by.x="ncpwsid", by.y="pwsid"); #merge to get preferred utility names into the shapefile
+#nc.systems <- nc.systems %>% select(PWSID, ncpwsid, utility_name, data)
+
+
   
-  #limit to only those utilities in the pilot
-  nc.systems <- nc.systems %>% st_transform(crs = 4326) %>% select(PWSID) %>% mutate(ncpwsid = paste0("NC", str_remove_all(PWSID, "[-]"))) %>% mutate(ncpwsid = str_remove_all(ncpwsid, "[_]")); #one of the pwsid has a data entry error
-  nc.systems <- merge(nc.systems, pwsid.list, by.x="ncpwsid", by.y="pwsid"); #merge to get preferred utility names into the shapefile
-  nc.systems <- nc.systems %>% select(PWSID, ncpwsid, utility_name, data)
-
-  #simplify and reduce size
-  nc.systems <- ms_simplify(nc.systems, keep = 0.1, keep_shapes=TRUE)
-  mapview::mapview(nc.systems)
-  geojson_write(nc.systems, file =  paste0(swd_html, "nc_utilities.geojson"))
-
-  
 ######################################################################################################################################################################
 #
-#   Create River Basin and Watershed Layers
+#   Create STATIC MAP LAYERS FROM GEOCONNEX
 #
 ######################################################################################################################################################################
 #read in state data
@@ -92,7 +102,7 @@ ws <- read_sf("https://opendata.arcgis.com/datasets/fb32d3871a5640a986b72087c412
 ws <- ws %>%  ms_simplify(keep=0.08, keep_shapes=TRUE) %>% select(STREAM_NAM, geometry) %>% group_by(STREAM_NAM) %>% summarize(nSheds = n(), .groups="drop") %>% mutate(drawFile = "none")
 
 #link to pwsid based on a manually created spreadsheet
-link.df <- read.csv(paste0(swd_html, "link_pwsid_watershed.csv"))
+link.df <- read.csv(paste0(swd_html, "link_pwsid_watershed.csv")) %>% select(pwsid, utility_name, ws_watershed)
 link.ws <- merge(ws, link.df[,c("pwsid", "ws_watershed")], by.x="STREAM_NAM", by.y="ws_watershed") %>% mutate(drawFile = pwsid) %>% select(-pwsid) %>% group_by(STREAM_NAM, nSheds, drawFile, geometry) %>% distinct()
 ws <- rbind(ws, link.ws)
 #note that this creates duplicates of watersheds shared by utilities. This is necessary in order to draw individual watersheds based on utility selection. There may be better ways to do this. Just my solution.
