@@ -69,12 +69,14 @@ project.df <- read.csv(paste0(swd_html, "reservoirs\\matchNID_LocID.csv"))
 
 
 #full_url <- "https://water.usace.army.mil/a2w/CWMS_CRREL.cwms_data_api.get_report_json?p_location_id=1745041&p_parameter_type=Stor%3AElev&p_start_date=2015-09-01&p_end_date=2016-08-31&p_unit_system=EN&p_format=CSV"
+last_number = 1; #number of units to collect
+last_unit = "years"; #other options are months, weeks, and days
 report_url = "CWMS_CRREL.cwms_data_api.get_report_json?p_location_id="
-parameter_url <- "&p_parameter_type=Stor%3AElev&p_last=6&p_last_unit=years&p_unit_system=EN&p_format=JSON"
+parameter_url <- paste0("&p_parameter_type=Stor%3AElev&p_last=", last_number, "&p_last_unit=", last_unit, "&p_unit_system=EN&p_format=JSON")
 
 #create dataframes
 district.id = "SAW"
-district_data <- as.data.frame(matrix(nrow=0, ncol=8)); colnames(district_data) <- c("date", "elev_Ft", "stroage_AF", "fstorage_AF", "locid", "district", "NIDID", "name")
+district_data <- as.data.frame(matrix(nrow=0, ncol=8)); colnames(district_data) <- c("date", "elev_Ft", "storage_AF", "fstorage_AF", "locid", "district", "NIDID", "name")
 zt <- subset(project.df, District==district.id)
 
 for (i in 1:length(zt$Loc_ID)){
@@ -185,7 +187,7 @@ unique.nid <- unique(new.data$NIDID); unique.nid
   
   #remove anything new before that date
   nx2 <- nx %>% left_join(old.last.date, by="NIDID") %>% filter(date > lastDate)
-  fx.2014 <- fx %>% filter(Year==max(Year)-8) %>% select(NIDID, julian, OT_FT, OT_ACFT); #delete by 8 because 2016 data are incomplete
+  fx.2014 <- fx %>% filter(Year==2012) %>% select(NIDID, julian, OT_FT, OT_ACFT); #delete by 8 because 2016 data are incomplete
   nx2 <- merge(nx, fx.2014, by.x=c("NIDID","julian"), by.y=c("NIDID","julian"), all.x=TRUE)  
   
   nx2 <- nx2 %>% select(NIDID, name, date, Year, day_month, julian, elev_Ft, storage_AF, OT_FT, OT_ACFT); colnames(nx2) <- colnames(fx)

@@ -18,7 +18,6 @@
 pcode = '00060'; #discharge (cfs); #Identify parameter of interest: https://help.waterdata.usgs.gov/code/parameter_cd_query?fmt=rdb&inline=true&group_cd=%
 scode = "00003";  #mean;  #Identify statistic code for daily values: https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=%25&fmt=html
 serv <- "dv"; #pick service... daily value
-stateAbb <- "NC"
 
 
 

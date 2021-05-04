@@ -49,7 +49,7 @@ for (i in 81:88){
     url_time_start = paste0("&start=",substr(zt.pcp$start_date,0,10))
   }
   if(zt.pcp$startYear < 1990) {
-    url_time_start = paste0("&start=1990-01-01")
+    url_time_start = paste0("&start=", start.date)
   }
   url_time_end = paste0("&end=,",today)
   url_hash = paste0("&hash=", ncsco.key)
@@ -95,6 +95,13 @@ nc.data <- nc.data %>% group_by(location) %>% filter(datetime < max(datetime)) %
 #save files
 write.csv(nc.data, paste0(swd_html, "pcp\\boneyard\\ncsu_data_restofState2.csv"), row.names = FALSE)
 write.csv(nc.loc, paste0(swd_html, "pcp\\boneyard\\ncsu_locations_restofState2.csv"), row.names = FALSE)
+
+
+
+
+
+
+
 
 
 

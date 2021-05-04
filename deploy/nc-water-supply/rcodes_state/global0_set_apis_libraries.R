@@ -47,6 +47,8 @@ rm(list=ls()) #removes anything stored in memory
 source_path = rstudioapi::getActiveDocumentContext()$path 
 setwd(dirname(source_path))
 swd_html <- paste0("..\\data_state\\")
+
+#state info
 stateAbb <- "NC"
 stateFips <- 37
 
