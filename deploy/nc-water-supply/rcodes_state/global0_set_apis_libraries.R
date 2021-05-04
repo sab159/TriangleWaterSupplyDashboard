@@ -11,13 +11,22 @@
 #   LOAD LIBRARIES
 #
 ######################################################################################################################################################################
-library(rstudioapi)
-library(readxl); #in tidyverse
-library(sf); library(rgdal); library(spData); library(raster); library(leaflet);
-library(tidycensus); #requires a personal api
-library(jsonlite); library(tidyverse); library(lubridate)
-library(rmapshaper); library(geojsonio)
-library(rvest); library(purrr); library(stringr);  library(httr); 
+## First specify the packages of interest
+packages = c("rstudioapi", "readxl", 
+             "sf", "rgdal", "spData", "raster", "leaflet", "rmapshaper","geojsonio",
+             "tidycensus", "jsonlite", "rvest", "purrr", "httr",
+             "tidyverse", "lubridate", "plotly", "stringr")
+
+## Now load or install&load all
+package.check <- lapply(
+  packages,
+  FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  }
+)
 
 #usgs packages
 install.packages("dataRetrieval", repos=c("http://owi.usgs.gov/R", getOption("repos")))
@@ -40,13 +49,14 @@ setwd(dirname(source_path))
 swd_html <- paste0("..\\data_state\\")
 
 
-#census api key - 
+#census api key - https://api.census.gov/data/key_signup.html
 census_api_key("95ed45e11e89f232bfc54d2541f31858c8cfbf9e", install=TRUE, overwrite=TRUE); #LAUREN REMEMBER TO DELETE THIS
 readRenviron("~/.Renviron")
 
 
-#nc state climate office key
+#nc state climate office key - https://api.climate.ncsu.edu/
 ncsco.key <- "43977148bc44a20e61d3aaea3b95f161c1f56726"; #WHOEVER INHERITS WILL NEED TO CREATE THEIR OWN KEY AND PUT IT HERE
+
 
 #load data used throughout
 julian <- read.csv(paste0(swd_html, "julian-daymonth.csv"))

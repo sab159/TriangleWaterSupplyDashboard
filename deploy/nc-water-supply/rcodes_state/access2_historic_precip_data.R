@@ -35,7 +35,11 @@ nc.data <-as.data.frame(matrix(nrow=0, ncol=12)); colnames(nc.data) <- c("locID"
 total.obsv = 0;
 url_base = "https://api.climate.ncsu.edu/data.php?var=precip&obtype=D&output=csv&loc=location="; #for daily precipitation
 #for (i in 1:length(pcp.list)){
-for (i in 1:5){
+for (i in 81:88){
+  #make empty
+  zt = NA
+  yt.df = NA
+  yt.loc = NA
   #build api link
   url_loc = pcp.list[i]
 
@@ -55,10 +59,18 @@ for (i in 1:5){
   #call url
   zt <- readLines(full_url, warn=FALSE)
   #start cleaning
+ 
   yt.obsv <- as.numeric(str_split(zt[11],": ", simplify=TRUE)[1,2])
-  
   #call location data
-  yt.loc <- str_split(zt[62],",", simplify = TRUE)[1,(2:13)] %>% t() %>% as.data.frame()
+  for (j in 60:72){
+    #yt.loc <- str_split(zt[62],",", simplify = TRUE)[1,(2:13)] %>% t() %>% as.data.frame()
+    foo <- str_split(zt[j], ",", simplify=TRUE)
+    if(foo[1,1] == "## Location ID"){
+      yt.loc <- str_split(zt[j+1],",", simplify = TRUE)[1,(2:13)] %>% t() %>% as.data.frame()
+      break
+    }
+    print(j)
+  }
   colnames(yt.loc) <- c("locID","network","name","city","county","state","lat_y","long_x","elev_ft","agency","startDate","endDate")
   
   #call value data
@@ -74,9 +86,18 @@ for (i in 1:5){
   
   print(paste0(i, ": ", total.obsv, " which is ", round(total.obsv/600000*100,2),"% of monthly quota"))
 }
+bk.up.loc <- nc.loc
+bk.up.data <- nc.data
+
+#remove current day... is missing value
+nc.data <- nc.data %>% group_by(location) %>% filter(datetime < max(datetime)) %>% distinct()
+
 #save files
-write.csv(nc.data, paste0(swd_html, "pcp\\ncsu_triangle_data_restofState.csv"), row.names = FALSE)
-write.csv(nc.loc, paste0(swd_html, "pcp\\ncsu_triangle_locations_restofState.csv"), row.names = FALSE)
+write.csv(nc.data, paste0(swd_html, "pcp\\boneyard\\ncsu_data_restofState2.csv"), row.names = FALSE)
+write.csv(nc.loc, paste0(swd_html, "pcp\\boneyard\\ncsu_locations_restofState2.csv"), row.names = FALSE)
+
+
+
 
 #mutate and save out slimmed version
 nc.data %>% filter(score==3) %>% as.data.frame()# keep?
@@ -98,12 +119,12 @@ table(pcp.data$id, pcp.data$year)
 
 
 check.last.date <- pcp.data %>% group_by(id) %>% filter(is.na(pcp_in) == FALSE) %>% filter(date == max(date)) %>% dplyr::select(id, date, month)
-table(check.last.date$date)
+table(substr(check.last.date$date,0,10))
 
 
 #merge with triangle data --> one time
-nc.data.triangle<-read.csv(paste0(swd_html, "pcp\\ncsu_triangle_data.csv")) %>% mutate(date = as.POSIXct(date, format="%Y-%m-%d"), day = day(date))
-nc.loc.triangle <- read.csv(paste0(swd_html, "pcp\\ncsu_triangle_locations.csv"))
+nc.data.triangle<-read.csv(paste0(swd_html, "pcp\\pcp_data.csv")) %>% mutate(date = as.POSIXct(date, format="%Y-%m-%d"), day = day(date))
+nc.loc.triangle <- read.csv(paste0(swd_html, "pcp\\pcp_locations.csv"))
 
 nc.loc2 <- rbind(nc.loc.triangle, nc.loc)
 nc.data2 <- rbind(nc.data.triangle, pcp.data)# %>% mutate(date = paste0(year,"-",month,"-",day))

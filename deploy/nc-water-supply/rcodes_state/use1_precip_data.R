@@ -304,7 +304,7 @@ pcp.data <- pcp.data %>% mutate(date = as.Date(substr(date,0,10), "%Y-%m-%d"), y
 pcp.data <- rbind(old.pcp, pcp.data)
 
 pcp.data <- pcp.data %>% arrange(id, date) %>% distinct()
-  table(pcp.data$id, pcp.data$year)
+#  table(pcp.data$id, pcp.data$year)
 
 check.last.date <- pcp.data %>% group_by(id) %>% filter(is.na(pcp_in) == FALSE) %>% filter(date == max(date)) %>% dplyr::select(id, date, month)
 table(check.last.date$date)
@@ -331,6 +331,7 @@ current.month <- month(Sys.time()); current.year <- year(Sys.time())
 
 foo.month <- foo.month %>% mutate(pcp_in = ifelse((month == current.month & year == current.year) | ndays >=27, pcp_in, NA))
   yt <- foo.month %>% filter(is.na(pcp_in)); table(yt$year, yt$month)
+  foo.month <- foo.month %>% mutate(year = as.numeric(as.character(year))) %>% filter(year >= year(start.date))
 
 #save file --- since only plotting recent years will only save out 2000 onward
 #foo.month <- foo.month %>% filter(year>=1997)
@@ -343,6 +344,7 @@ write.csv(foo.month, paste0(swd_html, "pcp\\pcp_months_total.csv"), row.names=FA
 #          CUM PCP THEY GIVE IS NOT BASED ON CALENDAR YEAR 
 #
 ###################################################################################################################################
+pcp.data <- pcp.data %>% filter(date>start.date)
 foo.count <- pcp.data %>% group_by(id, year) %>% count() %>% filter(year < current.year & n>340 | year == current.year) %>% mutate(idyr = paste0(id,"-",year)) 
 foo.cum <- pcp.data %>% mutate(idyr = paste0(id,"-",year)) %>% filter(idyr %in% foo.count$idyr) %>% arrange(id, year, month, day) %>% mutate(date= as.Date(date, format="%Y-%m-%d"))
 foo.cum <- foo.cum %>% distinct() %>% filter(year>=2000); #shorten for this file
@@ -353,8 +355,6 @@ foo.cum <- foo.cum %>% mutate(julian = as.POSIXlt(date, format = "%Y-%m-%d")$yda
 table(foo.cum$id, foo.cum$year)
 #in case duplicate days - take average
 foo.cum <- foo.cum %>% group_by(id, year, date, julian) %>% summarize(pcp_in = round(mean(pcp_in, na.rm=TRUE),2), .groups="drop") %>% distinct()
-#foo.cum3 <- foo.cum %>% group_by(id, julian) %>% mutate(row_num=1:n()) %>% ungroup() %>% pivot_wider(names_from = year, names_prefix = "yr_", values_from = pcp_in) %>% arrange(id, julian) %>% distinct()
-#foo.cum3 <- foo.cum %>% group_by(id, julian) %>% mutate(row_num=1:n()) %>% ungroup() %>% pivot_wider(id_cols = c("id", "julian"), names_from = year, names_prefix = "yr_", values_from = pcp_in) %>% arrange(id, julian) %>% distinct()
 foo.cum <- foo.cum %>% pivot_wider(id_cols = c("id", "julian"), names_from = year, names_prefix = "yr_", values_from = pcp_in, values_fn = mean) %>% arrange(id, julian) %>% distinct()
 
 foo.cum <- foo.cum %>% pivot_longer(cols = starts_with("yr"), names_to = "year", names_prefix = "yr_", values_to = "pcp_in", values_drop_na = FALSE) %>% arrange(id, year, julian) %>% 
@@ -402,4 +402,12 @@ nc.sites <- merge(sites, ytd.now[,c("id", "julian", "date", "year", "pcp_in", "s
 geojson_write(nc.sites, file = paste0(swd_html, "pcp\\pcp_sites.geojson"))
 
 
+#load triangle sites and save out only those data
+swd_html <- paste0("..\\data\\")
+t.sites <- nc.loc <- read.csv(paste0("..\\data\\pcp\\ncsu_triangle_locations.csv"))
+t.cum2 <- foo.cum2 %>% filter(id %in% t.sites$locID)
+write.csv(t.cum2, paste0("..\\data\\pcp\\pcp_cum_total.csv"), row.names=FALSE)
+t.cum2 <- foo.month %>% filter(id %in% t.sites$locID)
+write.csv(t.cum2, paste0("..\\data\\pcp\\pcp_months_total.csv"), row.names=FALSE)
 
+rm(foo.cum, foo.cum2, foo.month, foo.count, pcp.data, sites, ytd2, ytd.now, ytd.now.cum, yt, check.last.date, nc.data, bk.data)

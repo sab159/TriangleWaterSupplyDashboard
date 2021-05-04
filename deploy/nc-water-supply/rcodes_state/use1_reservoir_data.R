@@ -137,13 +137,14 @@ unique.nid <- unique(new.data$NIDID); unique.nid
   fx$day_month <- substr(fx$date, 6, 10)
   fx$julian <-  as.integer(format(fx$date, "%j"))
   
+  
   #what is the most recent date?
   old.last.date <- fx %>% group_by(NIDID) %>% filter(date == max(date, na.rm=TRUE)) %>% select(NIDID, date) %>% distinct() %>% rename(lastDate = date)
   
   #remove anything new before that date
   nx2 <- nx %>% left_join(old.last.date, by="NIDID") %>% filter(date > lastDate)
-  fx.2014 <- fx %>% filter(Year==2020) %>% select(NIDID, julian, OT_FT, OT_ACFT) %>% distinct(); #2020 has complete data
-  nx2 <- merge(nx, fx.2014, by.x=c("NIDID","julian"), by.y=c("NIDID","julian"), all.x=TRUE)  
+  fx.2014 <- fx %>% filter(Year>=2016) %>% select(NIDID, day_month, OT_FT, OT_ACFT) %>% distinct(); #2020 has complete data
+  nx2 <- merge(nx, fx.2014, by.x=c("NIDID","day_month"), by.y=c("NIDID","day_month"), all.x=TRUE)  
   nx2 <- nx2 %>% mutate(percentStorage = round(storage_AF/OT_ACFT*100,2))
     nx2 <- nx2 %>% select(NIDID, name, date, Year, day_month, julian, elev_Ft, storage_AF, OT_FT, OT_ACFT, percentStorage); colnames(nx2) <- colnames(fx)
   

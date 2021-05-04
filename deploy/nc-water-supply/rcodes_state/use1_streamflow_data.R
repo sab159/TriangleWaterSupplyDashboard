@@ -160,6 +160,21 @@ current.stat2 <- merge(current.stat2, site.huc, by.x="site", by.y="site", all.x=
 write.csv(current.stat2, paste0(swd_html, "streamflow\\sites_status.csv"), row.names=FALSE)
 
 
+#copy over to triangle
+t.sites <- read.csv("..//data//streamflow//sites_status.csv", colClasses = c("site" = "character"))
+t.sites2 <- nc.sites2 %>% filter(site %in% t.sites$site)
+geojson_write(t.sites2, file="..\\data\\streamflow\\stream_gauge_sites.geojson")
+
+t.all <- all.data %>% filter(site %in% t.sites$site)
+write.csv(t.all, "..//data//streamflow//all_stream_data.csv", row.names=FALSE)
+
+t.stats2 <- stats2 %>% filter(site %in% t.sites$site)
+write.csv(t.stats2, "..//data//streamflow//stream_stats.csv", row.names=FALSE)
+
+t.current <- current.stat2 %>% filter(site %in% t.sites$site)
+write.csv(t.current, "..//data//streamflow//sites_status.csv", row.names=FALSE)
+
+
 rm(site.huc, current.stat2, stats2, nc.sites2, year.flow2, year.flow, year.past, stats.past, recent.flow, current.stat, zt, stats, nc.sites, gages.huc)
 
 

@@ -117,8 +117,9 @@ for (i in 1:length(unique.dwr.sites)){
   start.date.data <- max(old.data$date)+1
   
   zt <- read.csv(zt.site$link[1], header=FALSE, sep="\t")
+  #print(zt[dim(zt)[1],])
     colnames(zt) <- c("date", "depth_below_surface_ft", "elevation")
-    zt <- zt %>% mutate(julian = as.POSIXlt(date, format = "%Y-%m-%d")$yday, year = year(date), site = zt.site) %>% filter(date >= start.date.data)
+    zt <- zt %>% mutate(julian = as.POSIXlt(date, format = "%Y-%m-%d")$yday, year = year(date), site = zt.site$site[1]) %>% filter(date >= start.date.data)
     #999.99 are no data
     
     if(dim(zt)[1] > 0){
@@ -230,6 +231,23 @@ write.csv(current.stat2, paste0(swd_html, "gw\\gw_stats.csv"), row.names=FALSE)
 #let's do annual trends
 gw.annual <- year.flow %>% mutate(year = year(date)) %>% group_by(site, year) %>% summarize(medianDepth = median(depth_ft, na.rm=TRUE), nobsv = n(), .groups="drop")
 write.csv(gw.annual, paste0(swd_html, "gw\\gw_annual_level.csv"), row.names=FALSE)
+
+
+#make triangle site updates
+
+t.sites <- read.csv("..\\data\\gw\\triangle_sites.csv")
+t.sites2 <- nc.sites2 %>% filter(site %in% t.sites$site)
+geojson_write(t.sites2, file="..\\data\\gw\\gw_sites.geojson")
+
+t.stats2 <- stats2 %>% filter(site %in% t.sites$site)
+write.csv(t.stats2, "..\\data\\gw\\gw_levels_time.csv", row.names=FALSE)
+
+t.current <- current.stat2 %>% filter(site %in% t.sites$site)
+write.csv(t.current, "..\\data\\gw\\gw_stats.csv", row.names=FALSE)
+
+t.annual <- gw.annual %>% filter(site %in% t.sites$site)
+write.csv(t.annual, "..\\data\\gw\\gw_annual_level.csv", row.names=FALSE)
+
 
 
 #remove files
