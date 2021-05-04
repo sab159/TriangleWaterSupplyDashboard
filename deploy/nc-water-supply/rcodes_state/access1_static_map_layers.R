@@ -26,13 +26,13 @@ pwsid.list <- read.csv(paste0(swd_html, "basic_info.csv"), header=TRUE)
 baseURL =  "https://aboutus.internetofwater.dev/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&typename=geonode%3APWS_NC_20190&outputFormat=json&srs=EPSG%3A2264&srsName=EPSG%3A2264"
   nc.systems <- read_sf(baseURL)
   
-  #limit to only those in triangle study
+  #limit to only those utilities in the pilot
   nc.systems <- nc.systems %>% st_transform(crs = 4326) %>% select(PWSID) %>% mutate(ncpwsid = paste0("NC", str_remove_all(PWSID, "[-]"))) %>% mutate(ncpwsid = str_remove_all(ncpwsid, "[_]")); #one of the pwsid has a data entry error
   nc.systems <- merge(nc.systems, pwsid.list, by.x="ncpwsid", by.y="pwsid"); #merge to get preferred utility names into the shapefile
   nc.systems <- nc.systems %>% select(PWSID, ncpwsid, utility_name, data)
 
   #simplify and reduce size
-  nc.systems <- ms_simplify(nc.systems, keep = 0.08, keep_shapes=TRUE)
+  nc.systems <- ms_simplify(nc.systems, keep = 0.1, keep_shapes=TRUE)
   mapview::mapview(nc.systems)
   geojson_write(nc.systems, file =  paste0(swd_html, "nc_utilities.geojson"))
 
@@ -42,29 +42,36 @@ baseURL =  "https://aboutus.internetofwater.dev/geoserver/ows?service=WFS&versio
 #   Create River Basin and Watershed Layers
 #
 ######################################################################################################################################################################
-#read in HUC8 shapefile
-outdir = swd_html; #set to a download folder
-download_wbd(outdir, url = paste0("https://prd-tnm.s3.amazonaws.com/StagedProducts/", "Hydrography/WBD/National/GDB/WBD_National_GDB.zip"))  
+#read in state data
+state <- read_sf(paste0("https://info.geoconnex.us/collections/states/items?STUSPS=",stateAbb))
+#read in county data
+county <- read_sf(paste0("https://info.geoconnex.us/collections/counties/items?STATEFP=",stateFips))
+mapview::mapview(county)
+  
+#create name - remove anything before "County"... or before ","
+county <- county %>% rename(name = NAME, GEOID = id) %>% select(GEOID, name)
+county <- county %>% ms_simplify(keep=0.5, keep_shapes=TRUE)
+geojson_write(county, file = paste0(swd_html, "county.geojson"))
+leaflet() %>% addProviderTiles("Stamen.TonerLite") %>% addPolygons(data = county,  fillOpacity= 0.6,  fillColor = "gray", color="black",  weight=3)
 
-#read in geodatabase
-gdb <- path.expand(paste0(outdir, "WBD_National_GDB.gdb")    )
-ogrListLayers(gdb)
-huc8 <- readOGR(gdb, "WBDHU8")
+#read in huc8
+huc8 <- read_sf(paste0("https://info.geoconnex.us/collections/hu08/items?bbox=", paste(sf::st_bbox(state), collapse = ","))); #includes hucs outside of NC
+#intersect with state to keep those
+huc8.keep <- st_intersection(huc8, state)
+huc8 <- huc8 %>% filter(id %in% huc8.keep$id)
+#leaflet() %>% addProviderTiles("Stamen.TonerLite") %>% addPolygons(data = huc8,  fillOpacity= 0.6,  fillColor = "gray", color="black",  weight=3)
+huc8 <- huc8 %>% rename(huc8 = id, name = NAME) %>% select(huc8, name, uri, geometry) %>% ms_simplify(keep=0.5, keep_shapes=TRUE)
+leaflet() %>% addProviderTiles("Stamen.TonerLite") %>% addPolygons(data = huc8,  fillOpacity= 0.6,  fillColor = "gray", color="black",  weight=1); #better check than mapview to ensure correct projections
+geojson_write(huc8, file = paste0(swd_html, "huc8.geojson"))
 
-#keep HUC8 for NC
-nc <- huc8[str_detect(huc8$states,"NC")==TRUE,]; #filter to nc
-#simplify and transform and safe out
-nc <- nc %>% st_as_sf() %>% st_transform(crs = 4326) %>% ms_simplify(keep=0.05, keep_shapes=TRUE) %>% select(name, areasqkm, huc8)
-leaflet() %>% addProviderTiles("Stamen.TonerLite") %>% addPolygons(data = nc,  fillOpacity= 0.6,  fillColor = "gray", color="black",  weight=1); #better check than mapview to ensure correct projections
-geojson_write(nc, file = paste0(swd_html, "huc8.geojson"))
 
-#Keep Huc 6 for NC
-huc6 <- readOGR(gdb, "WBDHU6")
-nc <- huc6[str_detect(huc6$states,"NC")==TRUE,]; #filter to nc
-#simplify and transform and safe out
-nc <- nc %>% st_as_sf() %>% st_transform(crs = 4326) %>% ms_simplify(keep=0.05, keep_shapes=TRUE) %>% select(name, areasqkm, huc6)
-leaflet() %>% addProviderTiles("Stamen.TonerLite") %>% addPolygons(data = nc,  fillOpacity= 0.6,  fillColor = "gray", color="black",  weight=1); #better check than mapview to ensure correct projections
-geojson_write(nc, file = paste0(swd_html, "huc6.geojson"))
+huc6 <- read_sf(paste0("https://info.geoconnex.us/collections/hu06/items?bbox=", paste(sf::st_bbox(state), collapse = ","))); #includes hucs outside of NC
+#intersect with state to keep those
+huc6.keep <- st_intersection(huc6, state)
+huc6 <- huc6 %>% filter(id %in% huc6.keep$id)
+huc6 <- huc6 %>% rename(huc6 = id, name = NAME) %>% select(huc6, name, uri, geometry) %>% ms_simplify(keep=0.5, keep_shapes=TRUE)
+leaflet() %>% addProviderTiles("Stamen.TonerLite") %>% addPolygons(data = huc6,  fillOpacity= 0.6,  fillColor = "gray", color="black",  weight=1); #better check than mapview to ensure correct projections
+geojson_write(huc6, file = paste0(swd_html, "huc6.geojson"))
 
 
 ######################################################################################################################################################################
@@ -92,24 +99,6 @@ ws <- rbind(ws, link.ws)
 leaflet() %>% addProviderTiles("Stamen.TonerLite") %>% addPolygons(data = ws,  fillOpacity= 0.4,  fillColor = "blue", color="black",  weight=1); #better check than mapview to ensure correct projections
 geojson_write(ws, file=paste0(swd_html, "water_supply_watersheds.geojson"))
 
-
-######################################################################################################################################################################
-#
-#   CREATE COUNTY LAYER FROM CENSUS API
-#
-######################################################################################################################################################################
-county <- get_acs(geography = "county", variables = "B01001_001E", state = "37", year = 2019, geometry = TRUE) %>% st_transform(crs = 4326); #pulls county variable
-#create name - remove anything before "County"... or before ","
-county <- county %>% mutate(name = gsub("(.*),.*", "\\1", NAME)) %>% mutate(name = substr(name,0,(nchar(name)-7))) %>% select(GEOID, name)
-county <- county %>% ms_simplify(keep=0.45, keep_shapes=TRUE)
-geojson_write(county, file = paste0(swd_html, "county.geojson"))
-leaflet() %>% addProviderTiles("Stamen.TonerLite") %>% addPolygons(data = county,  fillOpacity= 0.6,  fillColor = "gray", color="black",  weight=3)
-
-
-
-
-  
-  
 
 
 

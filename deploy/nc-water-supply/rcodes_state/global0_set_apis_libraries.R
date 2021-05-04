@@ -47,11 +47,8 @@ rm(list=ls()) #removes anything stored in memory
 source_path = rstudioapi::getActiveDocumentContext()$path 
 setwd(dirname(source_path))
 swd_html <- paste0("..\\data_state\\")
-
-
-#census api key - https://api.census.gov/data/key_signup.html
-census_api_key("95ed45e11e89f232bfc54d2541f31858c8cfbf9e", install=TRUE, overwrite=TRUE); #LAUREN REMEMBER TO DELETE THIS
-readRenviron("~/.Renviron")
+stateAbb <- "NC"
+stateFips <- 37
 
 
 #nc state climate office key - https://api.climate.ncsu.edu/
