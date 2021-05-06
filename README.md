@@ -23,6 +23,7 @@ The Water Supply Dashboard administrator will operate an instance of a SensorThi
 The Water Supply Dashboard will operate an R docker image that serves two functions:
 
 A. It periodically checks the template worksheets for updates and issues HTTP POST requests to the SensorThings Server
+
 B. It downloads data from the SensorThings Server and any external APIs (e.g. USGS, USACE) as necessary, and processes them for visualization by the dashboard.
 
 [Docker setup desribed here](https://www.bioconductor.org/packages/release/bioc/vignettes/sevenbridges/inst/doc/docker.html#1_Introduction)
