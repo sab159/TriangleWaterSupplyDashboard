@@ -2,6 +2,7 @@
 Workflows for getting data into Triangle Water Supply Dashboard
 
 ## Components
+![image](https://user-images.githubusercontent.com/44071350/117358844-9c87e580-ae84-11eb-8667-17a738600857.png)
 
 ### 1. Data Upload
 
