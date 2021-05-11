@@ -31,7 +31,7 @@ serv <- "dv"
 nc.sites <- read_sf(paste0(swd_html, "streamflow\\stream_gauge_sites.geojson")) %>% select(site, name, huc8, startYr, endYr, nYears, geometry)
 ws.bounds <- read_sf(paste0(swd_html, "water_supply_watersheds.geojson")) %>% select(-nSheds, -drawFile)
 all.data <- read.csv(paste0(swd_html, "streamflow\\all_stream_data.csv"), colClasses=c("site" = "character")) %>% mutate(date = as.Date(date, format="%Y-%m-%d"))
-
+all.data <- all.data %>% group_by(site) %>% filter(date < max(date))
 
 #################################################################################################################################
 #
@@ -49,19 +49,22 @@ table(nc.sites$STREAM_NAM, useNA="ifany")
 #go through stream sites and calculate statistics
 unique.sites <- unique(nc.sites$site)
 
-
 #set up data frame for stats and include year
 year.flow  <- as.data.frame(matrix(nrow=0, ncol=4));    colnames(year.flow) <- c("site", "date", "julian", "flow")
 #Loop through each site and calculate statistics
 for (i in 1:length(unique.sites)){
   old.data <- all.data %>% filter(site==unique.sites[i]) %>% filter(date==max(date))
-  zt <- readNWISdv(siteNumbers = unique.sites[i], parameterCd = pcode, statCd = scode, startDate=(old.data$date[1]+1), endDate = end.date); #only read in new data
+  #zt <- readNWISdv(siteNumbers = unique.sites[i], parameterCd = pcode, statCd = scode, startDate=(old.data$date[1]+1), endDate = end.date); #only read in new data
+  zt <- readNWISuv(siteNumbers = unique.sites[i], parameterCd = pcode, startDate=(old.data$date[1]+1), endDate = end.date); #only read in new data
     zt <- renameNWISColumns(zt);
   
   if (dim(zt)[1] > 0)  {
-    zt <- zt %>% mutate(julian = as.POSIXlt(Date, format = "%Y-%m-%d")$yday); #calculates julian date
+    zt <- zt %>% mutate(julian = as.POSIXlt(dateTime, format = "%Y-%m-%d")$yday) %>% mutate(date = as.Date(dateTime, format="%Y-%m-%d")); #calculates julian date
+    #calculate mean value
+    zt <- zt %>% group_by(site_no, julian, date) %>% summarize(Flow = median(Flow_Inst, na.rm=TRUE), .groups="drop")
     
-    zt <- zt %>% dplyr::select(site_no, Date, julian, Flow);    colnames(zt) <- c("site", "date", "julian", "flow")
+    
+    zt <- zt %>% dplyr::select(site_no, date, julian, Flow);    colnames(zt) <- c("site", "date", "julian", "flow")
     zt <- zt %>% group_by(site, date, julian) %>% summarize(flow = median(flow, na.rm=TRUE), .groups="drop")
     
     year.flow <- rbind(year.flow, zt)
@@ -95,8 +98,11 @@ for (i in 1:length(unique.sites)){
                                                     max = round(max(rollMean, na.rm=TRUE),2),  .groups="drop")
   
   zt.stats <- zt.stats %>% mutate(startYr = min(zt$year), endYr = max(zt$year)) %>% select(site, julian, min, flow10, flow25, flow50, flow75, flow90, max, Nobs, startYr, endYr)
-  if(dim(zt.stats)[1] == 366) {zt.stats$date = julian$month.day366; }
-  if(dim(zt.stats)[1] == 365) {zt.stats$date = subset(julian, julian <= 364)$month.day365; }
+  zt.stats$date2 <- as.Date(zt.stats$julian, origin=paste0(current.year,"-01-01"))
+  zt.stats$date <- format(zt.stats$date2, format="%b-%d")
+  
+ # if(dim(zt.stats)[1] == 366) {zt.stats$date = julian$month.day366; }
+#  if(dim(zt.stats)[1] == 365) {zt.stats$date = subset(julian, julian <= 364)$month.day365; }
   
   zt <- zt %>% filter(year>=(current.year-2)) %>% dplyr::select(site, date, julian, rollMean);    colnames(zt) <- c("site", "date", "julian", "flow")
 
@@ -110,7 +116,7 @@ summary(year.flow)
 
 #for current stats - find out status of streamflow for sites and for flow points
 #set up date
-stats <- stats %>% mutate(date2 = as.Date(paste0(current.year,"-",date), "%Y-%b-%d")) %>% as.data.frame()
+#stats <- stats %>% mutate(date2 = as.Date(paste0(current.year,"-",date), "%Y-%b-%d")) %>% as.data.frame()
 
 #Now attach most recent value to stream stats
 recent.flow <- year.flow %>% group_by(site) %>% filter(is.na(flow)==FALSE) %>% filter(date == max(date))

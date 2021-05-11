@@ -58,6 +58,7 @@ year.flow  <- as.data.frame(matrix(nrow=0, ncol=4));    colnames(year.flow) <- c
 #Loop through each site and calculate statistics
 for (i in 1:length(unique.sites)){
   zt <- readNWISdv(siteNumbers = unique.sites[i], parameterCd = pcode, statCd = scode, startDate=start.date, endDate = end.date)
+  zt <- readNWISuv(siteNumbers = unique.sites[i], parameterCd = pcode, statCd = scode, startDate=start.date, endDate = end.date); #instantaneous values if updating often
     zt <- renameNWISColumns(zt);
     
     #Check for missing days, if so, add NA rows: #https://waterdata.usgs.gov/blog/moving-averages/
