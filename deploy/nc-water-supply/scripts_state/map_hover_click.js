@@ -20,6 +20,7 @@ map.on("mousemove", "utilities-layer", function (e) {
             ")<br>Data Available</p>";
     } // end if hover over map
 
+    //console.log(e.features[0])
     utilityID = e.features[0].id;
     if (utilityID) {
         //console.log(utilityID);
@@ -55,7 +56,7 @@ map.on("mousemove", "no-utilities-layer", function (e) {
             "<p><strong>Utility Information <br><br></strong>" +
             e.features[0].properties.utility_name +
             " (" +
-            e.features[0].properties.PWSID +
+            e.features[0].properties.pwsid +
             ")<br>No Data Available</p>";
     } // end if hover over map
 
@@ -286,7 +287,7 @@ map.on("click", "utilities-layer", function (e) {
     geocoder.clear();
     myUtilityID = e.features[0].properties.pwsid;
     myUtility = e.features[0].properties.utility_name;
-    console.log(utilityID + ": " + myUtility);
+    console.log(myUtilityID + ": " + myUtility);
 
     //filter water supply watersheds?? Not sure how to do
     map.setFilter("water_supply", ["in", "drawFile", myUtilityID]);
