@@ -22,13 +22,13 @@ function myUtilityInfo(myUtility){
     }
     
     if (myUtility !== "none"){
-      map.setFilter('utilities-selected', ['in', 'ncpwsid', myUtilityID]);
+      map.setFilter('utilities-selected', ['in', 'pwsid', myUtilityID]);
       map.setLayoutProperty('utilities-selected', 'visibility', 'visible');
 
       //try to set zoom for selected drop down
       var myFeatures = map.querySourceFeatures('utilities-source', {
         sourceLayer: 'utilities-source',
-        filter: ["in", "ncpwsid", myUtilityID]
+        filter: ["in", "pwsid", myUtilityID]
     });
       //zoom to utility
     var coordinates = myFeatures[0].geometry.coordinates[0];

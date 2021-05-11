@@ -40,15 +40,12 @@
     <script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script> <!-- create mapbox vector tiles-->
     <link rel="stylesheet" href="css/main_content.css">
 
-    <style type="text/css">
-
-    </style>
 </head>
 
 <body>
 <div class = "row header">
     <div class="col-sm-9">    
-        <h1 style="padding-left: 1em;">TNorth Carolina Water Supply</h1>    
+        <h1 style="padding-left: 1em;">North Carolina Water Supply</h1>    
         <hr style="background-color: #02145C; height: 5px; margin-top: 1px;">
     </div>
     <div class="col-sm-3">
@@ -60,7 +57,7 @@
 
 ####################################################################################################################-->
 <div class = "row header" style="margin-left: 20px;">
-  <p style=" font-size: 14px;"><i><b>Disclaimer:</b> This tool is best viewed in Chrome, Firefox, Microsoft Edge, and Safari.</i></p>
+  <!-- <p style=" font-size: 14px;"><i><b>Disclaimer:</b> This tool is best viewed in Chrome, Firefox, Microsoft Edge, and Safari.</i></p> -->
   <p style="font-size: 16px;"><span style="color: rgb(252,57,67); font-size: 18px"><b>To get started,</b></span> select a utility from the map, drop down menu, or type an address.<br>
     <span style="color: rgb(252,57,67); font-size: 18px"><b>Next,</b></span> select different tabs on the right to learn more about water supply conditions.<br>
     <span style="color: rgb(252,57,67); font-size: 18px"><b>The help icons</b></span> provide more details to understand each tab.
@@ -562,14 +559,14 @@ function setSystemThis(target){
 //draw initial map... set delay to ensure utilities loaded first
   var utilities;
   function getSystemData() { 
-    return $.getJSON("data/nc_utilities.geojson", function(siteData){
+    return $.getJSON("data_state/nc_utilities.geojson", function(siteData){
            utilities = siteData; 
            setTimeout(drawMap(), 4000);
     });
   }
   getSystemData();
   
-
+  
   //Get the most recent stream gauge data to show map updates
   d3.csv("data_state/update_date.csv").then(function(today){
         var lastDate = today[0].today_date;
@@ -590,7 +587,7 @@ function setSystemThis(target){
     utilities.features.forEach(function(d){
       if (d3.geoContains(d, addressReturn)) {
         myUtility = d.properties.utility_name;
-        myUtilityID = d.properties.ncpwsid;
+        myUtilityID = d.properties.pwsid;
         myUtilityData = d.properties.data;
       }
     }); // end forEach

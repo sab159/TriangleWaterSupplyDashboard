@@ -23,27 +23,35 @@ pwsid.list <- unique(pwsid.info$pwsid)
 #
 ######################################################################################################################################################################
 #read in water systems - note that this link may change over time... this does take longer because of files
-
 nc.systems <- read_sf(paste0("https://info.geoconnex.us/collections/pws/items?PWSID=",pwsid.list[1]))
 for(i in 2:length(pwsid.list)){
   zt <- read_sf(paste0("https://info.geoconnex.us/collections/pws/items?PWSID=",pwsid.list[i]))
   nc.systems <- rbind(nc.systems, zt)
 }
+
 nc.systems <- nc.systems %>% rename(pwsid = id) %>% select(pwsid, uri, geometry)
 nc.systems  <- merge(nc.systems, pwsid.info, by="pwsid")
-
 #simplify and reduce size
 nc.systems <- ms_simplify(nc.systems, keep = 0.1, keep_shapes=TRUE)
 mapview::mapview(nc.systems)
 geojson_write(nc.systems, file =  paste0(swd_html, "nc_utilities.geojson"))
 
 
-#baseURL =  "https://aboutus.internetofwater.dev/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&typename=geonode%3APWS_NC_20190&outputFormat=json&srs=EPSG%3A2264&srsName=EPSG%3A2264"
-#nc.systems <- read_sf(baseURL)
+#Read in all water systems
+baseURL =  "https://aboutus.internetofwater.dev/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&typename=geonode%3APWS_NC_20190&outputFormat=json&srs=EPSG%3A2264&srsName=EPSG%3A2264"
+nc.systems2 <- read_sf(baseURL)
 #limit to only those utilities in the pilot
-#nc.systems <- nc.systems %>% st_transform(crs = 4326) %>% select(PWSID) %>% mutate(ncpwsid = paste0("NC", str_remove_all(PWSID, "[-]"))) %>% mutate(ncpwsid = str_remove_all(ncpwsid, "[_]")); #one of the pwsid has a data entry error
-#nc.systems <- merge(nc.systems, pwsid.list, by.x="ncpwsid", by.y="pwsid"); #merge to get preferred utility names into the shapefile
+nc.systems <- nc.systems2 %>% st_transform(crs = 4326) %>% select(PWSID, SystemName.x) %>% mutate(ncpwsid = paste0("NC", str_remove_all(PWSID, "[-]"))) %>% 
+  mutate(pwsid = str_remove_all(ncpwsid, "[_]")) %>% rename(utility_name=SystemName.x); #one of the pwsid has a data entry error
+nc.systems <- merge(nc.systems, pwsid.info, by.x="pwsid", by.y="pwsid", all.x=TRUE); #merge to get preferred utility names into the shapefile
 #nc.systems <- nc.systems %>% select(PWSID, ncpwsid, utility_name, data)
+nc.systems <- nc.systems %>% mutate(utility_name = ifelse(is.na(utility_name.y), utility_name.x, utility_name.y), data = ifelse(is.na(data), "no", data)) %>% 
+                                      select(pwsid, utility_name, data, geometry)
+nc.systems <- ms_simplify(nc.systems, keep = 0.1, keep_shapes=TRUE)
+
+#add system names
+mapview::mapview(nc.systems)
+geojson_write(nc.systems, file =  paste0(swd_html, "nc_utilities.geojson"))
 
 
   

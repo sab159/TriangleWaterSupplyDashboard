@@ -3,6 +3,27 @@
 //                   created by Lauren Patterson
 //##############################################################################################
 function drawMap(){
+
+// //build initial index of tiles
+// var tileIndex = geojsonvt(utilities,
+//   {
+//     maxZoom: 14,  // max zoom to preserve detail on; can't be higher than 24
+//     tolerance: 3, // simplification tolerance (higher means simpler)
+//     extent: 4096, // tile extent (both width and height)
+//     buffer: 64,   // tile buffer on each side
+//     debug: 0,     // logging level (0 to disable, 1 or 2)
+//     lineMetrics: false, // whether to enable line metrics tracking for LineString/MultiLineString features
+//     promoteId: null,    // name of a feature property to promote to feature.id. Cannot be used with `generateId`
+//     generateId: false,  // whether to generate feature ids. Cannot be used with `promoteId`
+//     indexMaxZoom: 5,       // max zoom in the initial tile index
+//     indexMaxPoints: 100000 // max number of points per tile in the index
+//   });
+// //console.log(tileIndex)
+
+// //request a particular tile
+// var tile = tileIndex.getTile();
+// console.log(tileIndex);
+
 //LOAD MAPS----------------------------------------------------------------
   //have to add sources on load
   map.on('load', function() {
@@ -30,7 +51,7 @@ function drawMap(){
     'filter': ['in', 'data', 'yes'],
     'paint': {'fill-color': '#708090', 
               'fill-outline-color': 'black',
-              'fill-opacity': 0.55,
+              'fill-opacity': 0.75,
              },
     'layout': {"visibility": 'visible'}
     });
@@ -50,7 +71,16 @@ function drawMap(){
     'id': 'utilities-layer-line',
     'type': 'line',
     'source': 'utilities-source',
-    'paint': {'line-color': 'black', 'line-width': 1 },
+    // 'paint': {'line-color': 'black', 'line-width': 0.25 },
+    'paint': {'line-color': [
+            'match',
+              ['get', 'data'],
+                'yes', 'black',
+                'no', 'darkgray',
+                /* other */ '#ccc'
+            ],
+            'line-width': 0.25
+    },
     'layout': {"visibility": 'visible'}
     }); //if want thicker line
 

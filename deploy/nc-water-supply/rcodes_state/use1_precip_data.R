@@ -290,6 +290,7 @@ table(nc.data$obtype); #these should all be d for daily
 
 #for many the current day is NA
 pcp.data <- nc.data %>% group_by(location) %>% filter(datetime < max(datetime))
+table(pcp.data$unit)
 
 #rename columns and minimize
 pcp.data <- pcp.data %>% dplyr::select(location, datetime, value, value_accum) %>% mutate(value = as.numeric(value))
