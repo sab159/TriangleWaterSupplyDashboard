@@ -37,7 +37,7 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>           
     <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js" defer></script>
     <!-- <script src = "js/plotly-latest.min.js"></script> -->
-    <script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script> <!-- create mapbox vector tiles-->
+    <!--script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script--> <!-- create mapbox vector tiles-->
     <link rel="stylesheet" href="css/main_content.css">
 
 </head>
@@ -512,13 +512,13 @@ function setSystemThis(target){
   var myUtility = "none";
   var myUtilityID = "none";
   var myHUC = "none";
-  var currentYear = 2021;
+  var currentYear = new Date().getFullYear();
   var clickedLayer;
   var streamLegend = document.getElementById('stream-legend');
   var recentDate;
   var streamID = "none";  var gwID = "none"; var pcpID = "none";
-  var checked = ['2020']; 
-  var checkedDemand= ['2020'];
+  var checked = [currentYear-1]; 
+  var checkedDemand= [currentYear-1];
   var fileName;
   var streamPlotType = "off";
   var gwPlotType = "off";
@@ -591,7 +591,9 @@ function setSystemThis(target){
         myUtilityData = d.properties.data;
       }
     }); // end forEach
-    console.log(myUtility);
+    //console.log(myUtility);
+    //set dropdown list to whatever is selected
+    document.getElementById('setSystem').value = myUtilityID;
 
     if (myUtilityData === "yes"){
       map.setFilter('water_supply', ['in', 'drawFile', myUtilityID]);
@@ -605,7 +607,6 @@ function setSystemThis(target){
     }
     
     myUtilityInfo(myUtility);
-    
   }); //end geocoder on
 
 

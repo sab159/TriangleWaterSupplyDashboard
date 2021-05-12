@@ -22,6 +22,10 @@ pwsid.list <- unique(pwsid.info$pwsid)
 #   Create Utility Map Layer FROM GEOCONNEX
 #
 ######################################################################################################################################################################
+#https://info.geoconnex.us/collections/pws/items?ST=NC&startindex=20&limit=10&f=json
+lt <- read_sf("https://info.geoconnex.us/collections/pws/items?ST=NC&startindex=20&limit=10&f=json")
+lt2 <- read_sf("https://info.geoconnex.us/collections/pws/items?ST=NC&limit=10&f=json&startindex=20")
+
 #read in water systems - note that this link may change over time... this does take longer because of files
 nc.systems <- read_sf(paste0("https://info.geoconnex.us/collections/pws/items?PWSID=",pwsid.list[1]))
 for(i in 2:length(pwsid.list)){

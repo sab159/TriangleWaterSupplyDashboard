@@ -9,10 +9,13 @@ function toTitleCase(str) {
     });
 }
 
+console.log(document.getElementById('setSystem'))
 //read in d3 with basic info
 function myUtilityInfo(myUtility){
   //Fill in form
     var utilityText = document.getElementById("utilityResult");
+    
+    
     if (myUtility === "none"){ 
       map.setLayoutProperty('utilities-selected', 'visibility', 'none');
 
@@ -39,7 +42,7 @@ function myUtilityInfo(myUtility){
     
       
      //load data 
-     d3.csv("data/basic_info.csv").then(function(dataCSV){
+     d3.csv("data_state/basic_info.csv").then(function(dataCSV){
      var selectData = dataCSV.filter(function(d) {return d.utility_name === myUtility; });
      //console.log(dataCSV); console.log(selectData);
      var myUtilityWebsite = selectData[0].utility_website; 

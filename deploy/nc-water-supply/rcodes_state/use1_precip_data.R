@@ -236,7 +236,7 @@ rm(pcp, pcp2)
 nc.loc <- read.csv(paste0(swd_html, "pcp\\pcp_locations.csv"))
 old.pcp <- read.csv(paste0(swd_html, "pcp\\pcp_data.csv")) %>% mutate(date = as.Date(date, "%Y-%m-%d"))
 pcp.list <- unique(old.pcp$id)
-julian <- read.csv(paste0(swd_html, "julian-daymonth.csv"))
+#julian <- read.csv(paste0(swd_html, "julian-daymonth.csv"))
   
 
 ###################################################################################################################################
@@ -366,8 +366,10 @@ foo.cum2 <- foo.cum %>% group_by(id, year) %>% mutate(nMissing = sum(is.na(pcp_i
 foo.cum2 <- foo.cum2 %>% filter(year == current.year | year < current.year & nMissing <= 31) %>% dplyr::select(-nMissing) #removes those missing more than a month of data
 
 #add this to include in plot_ly by setting tick format to %b-%d
-foo.cum2 <- merge(foo.cum2, julian[,c("julian","month.day365","month.day366")], by.x="julian", by.y="julian", all.x=TRUE) %>% arrange(id, year, julian)
-foo.cum2$date = ifelse(foo.cum2$ndays==366, foo.cum2$month.day366, foo.cum2$month.day365) 
+#foo.cum2 <- merge(foo.cum2, julian[,c("julian","month.day365","month.day366")], by.x="julian", by.y="julian", all.x=TRUE) %>% arrange(id, year, julian)
+#foo.cum2$date = ifelse(foo.cum2$ndays==366, foo.cum2$month.day366, foo.cum2$month.day365) 
+foo.cum2$date2 <- as.Date(foo.cum2$julian, origin=paste0(foo.cum2$year,"-01-01"))
+foo.cum2$date <- format(foo.cum2$date2, format="%b-%d")
 foo.cum2 <- foo.cum2 %>% dplyr::select(id, year, julian, pcp_in, date)
 
 write.csv(foo.cum2, paste0(swd_html, "pcp\\pcp_cum_total.csv"), row.names=FALSE)
@@ -404,8 +406,10 @@ geojson_write(nc.sites, file = paste0(swd_html, "pcp\\pcp_sites.geojson"))
 
 
 #load triangle sites and save out only those data
-swd_html <- paste0("..\\data\\")
-t.sites <- nc.loc <- read.csv(paste0("..\\data\\pcp\\ncsu_triangle_locations.csv"))
+t.sites <- read.csv(paste0("..\\data\\pcp\\ncsu_triangle_locations.csv"))
+t.sites2 <- nc.sites %>% filter(id %in% t.sites$locID);
+geojson_write(nc.sites, file = paste0("..\\data\\pcp\\pcp_sites.geojson"))
+
 t.cum2 <- foo.cum2 %>% filter(id %in% t.sites$locID)
 write.csv(t.cum2, paste0("..\\data\\pcp\\pcp_cum_total.csv"), row.names=FALSE)
 t.cum2 <- foo.month %>% filter(id %in% t.sites$locID)

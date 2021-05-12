@@ -89,8 +89,8 @@ function drawMap(){
 //         ADD Water Supply Source Here
 //#########################################################################################
   //WATERSOURCE DATA
-  console.log(myUtilityID);
-      map.addSource('water_supply', {
+  //console.log(myUtilityID);
+    map.addSource('water_supply', {
       type: 'geojson',
       data: 'data_state/water_supply_watersheds.geojson'
     });
@@ -604,11 +604,7 @@ function drawMap(){
         }//end paint*/
     }); //end addLayer
 
-
- 
-
-});//end map on load
-
+  });//end map on load
 }//end Draw Map
 
 

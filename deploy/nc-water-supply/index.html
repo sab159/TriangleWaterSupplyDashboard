@@ -526,6 +526,8 @@ function setSystemThis(target){
       }
     }); // end forEach
     console.log(myUtility);
+    //set dropdown list to whatever is selected
+    document.getElementById('setSystem').value = myUtilityID;
 
     if (myUtilityData === "yes"){
       map.setFilter('water_supply', ['in', 'drawFile', myUtilityID]);

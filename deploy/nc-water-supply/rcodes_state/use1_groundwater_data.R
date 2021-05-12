@@ -151,11 +151,13 @@ for (i in 1:length(unique.sites)){
                                                   max = round(max(depth_ft, na.rm=TRUE),4), .groups="drop")
 
   zt.stats <- zt.stats %>% mutate(startYr = min(zt$year), endYr = max(zt$year)) %>% dplyr::select(site, julian, min, flow10, flow25, flow50, flow75, flow90, max, Nobs, startYr, endYr)
-  if(dim(zt.stats)[1] == 366) {zt.stats$date = julian$month.day366}
-  if(dim(zt.stats)[1] < 366) { 
-      zt.stats <- merge(zt.stats, julian[,c("julian", "month.day365")], by.x="julian", by.y="julian", all.x=TRUE)   
-      zt.stats <- zt.stats %>% rename(date = month.day365)
-  } #assumes 365 days... could be wrong
+  zt.stats$date2 <- as.Date(zt.stats$julian, origin=paste0(current.year,"-01-01"))
+  zt.stats$date <- format(zt.stats$date2, format="%b-%d")
+  #if(dim(zt.stats)[1] == 366) {zt.stats$date = julian$month.day366}
+  #if(dim(zt.stats)[1] < 366) { 
+  #    zt.stats <- merge(zt.stats, julian[,c("julian", "month.day365")], by.x="julian", by.y="julian", all.x=TRUE)   
+  #    zt.stats <- zt.stats %>% rename(date = month.day365)
+  #} #assumes 365 days... could be wrong
   stats <- rbind(stats, zt.stats)
   print(paste(i, "is ", round(i/length(unique.sites)*100,2), "percent done"))
 }
@@ -163,7 +165,7 @@ bk.up <- stats;
 
 is.na(stats) <- sapply(stats, is.infinite)
 summary(stats)
-stats <- stats %>% mutate(date2 = as.Date(paste0(current.year,"-",date), format="%Y-%b-%d")) %>% as.data.frame()
+#stats <- stats %>% mutate(date2 = as.Date(paste0(current.year,"-",date), format="%Y-%b-%d")) %>% as.data.frame()
 
 head(stats)
 

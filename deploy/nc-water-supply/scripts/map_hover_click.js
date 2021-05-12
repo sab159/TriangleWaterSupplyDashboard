@@ -287,6 +287,8 @@ map.on("click", "utilities-layer", function (e) {
     myUtilityID = e.features[0].properties.ncpwsid;
     myUtility = e.features[0].properties.utility_name;
     //console.log(utilityID + ": " + myUtility);
+    //set dropdown list to whatever is selected
+    document.getElementById('setSystem').value = myUtilityID;
 
     //filter water supply watersheds?? Not sure how to do
     map.setFilter("water_supply", ["in", "drawFile", myUtilityID]);

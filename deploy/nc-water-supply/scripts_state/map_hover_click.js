@@ -289,6 +289,9 @@ map.on("click", "utilities-layer", function (e) {
     myUtility = e.features[0].properties.utility_name;
     console.log(myUtilityID + ": " + myUtility);
 
+    //set dropdown list to whatever is selected
+    document.getElementById('setSystem').value = myUtilityID;
+
     //filter water supply watersheds?? Not sure how to do
     map.setFilter("water_supply", ["in", "drawFile", myUtilityID]);
     map.setFilter("water_supply_name", ["in", "drawFile", myUtilityID]);
