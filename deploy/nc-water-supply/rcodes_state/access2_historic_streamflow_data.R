@@ -39,18 +39,14 @@ nc.sites2 <- nc.sites2 %>% dplyr::select(site_no, station_nm, dec_lat_va, dec_lo
 #calculate unique sites
 unique.sites <- unique(nc.sites2$site)
 
-#for graphs - how far back do you want to see details? Right now set for last 2 years
-yearFlowStart = end.year - 2;
-
 #set up data frame for stats and include year
-year.flow  <- as.data.frame(matrix(nrow=0, ncol=5));    colnames(year.flow) <- c("site", "date", "julian", "flow_cfs")
+year.flow  <- as.data.frame(matrix(nrow=0, ncol=5));    colnames(year.flow) <- c("site", "date", "julian", "flow")
 #Loop through each site, pulls data, and calculate statistics
 for (i in 1:length(unique.sites)){
   zt <- readNWISdv(siteNumbers = unique.sites[i], parameterCd = pcode, statCd = scode, startDate=start.date, endDate = end.date)
     zt <- renameNWISColumns(zt);
-  zt <- zt %>% mutate(julian = as.POSIXlt(Date, format = "%Y-%m-%d")$yday); #calculates julian date
-  
-  zt <- zt %>% dplyr::select(site_no, Date, julian, Flow);    colnames(zt) <- c("site", "date", "julian", "flow_cfs")
+  zt <- zt %>% mutate(julian = as.POSIXlt(Date, format = "%Y-%m-%d")$yday) %>% rename(date = Date, flow = Flow, site=site_no) %>% dplyr::select(site, date, julian, flow); #calculates julian date
+
   zt <- zt %>% group_by(site, date, julian) %>% summarize(flow = median(flow, na.rm=TRUE), .groups="drop")
   
   year.flow <- rbind(year.flow, zt)
