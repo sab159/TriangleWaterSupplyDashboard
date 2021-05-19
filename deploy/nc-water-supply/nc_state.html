@@ -627,14 +627,46 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
       document.getElementById('menuSource').click();
     }
     
-    /*visibility = map.getLayoutProperty('reservoirs', 'visibility');
+    visibility = map.getLayoutProperty('reservoirs', 'visibility');
     if (visibility === "none") {
       document.getElementById('menuReservoirs').click();
-    }*/
-  }
+    }
+
+    //Turn off other layers if they are on
+    if (map.getLayoutProperty('groundwater', 'visibility') !== "none"){
+      document.getElementById('menuGroundwater').click();
+    }
+    if (map.getLayoutProperty('precipitation', 'visibility') !== "none"){
+      document.getElementById('menuPrecipitation').click();
+    }
+    if (map.getLayoutProperty('drought', 'visibility') !== "none"){
+      document.getElementById('menuDrought').click();
+    }
+
+
+  }//end stream gauge tab
 
   if(target=="#demand"){
     createDemandInfo(myUtilityID, checkedDemand);
+    
+    //turn off other layers
+    if (map.getLayoutProperty('streamgauge-layer', 'visibility') !== "none"){
+      document.getElementById('menuStreamGages').click();
+    }
+    if (map.getLayoutProperty('reservoirs', 'visibility') !== "none"){
+      document.getElementById('menuReservoirs').click();
+    }
+    if (map.getLayoutProperty('groundwater', 'visibility') !== "none"){
+      document.getElementById('menuGroundwater').click();
+    }
+    if (map.getLayoutProperty('precipitation', 'visibility') !== "none"){
+      document.getElementById('menuPrecipitation').click();
+    }
+    if (map.getLayoutProperty('drought', 'visibility') !== "none"){
+      document.getElementById('menuDrought').click();
+    }
+
+
   }
 
   if(target=="#groundwater"){
@@ -645,6 +677,25 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     if (gwID !== "none"){
       createGWTab(gwID, recentDate);
     }
+
+    //turn off other layers
+    if (map.getLayoutProperty('streamgauge-layer', 'visibility') !== "none"){
+      document.getElementById('menuStreamGages').click();
+    }
+    if (map.getLayoutProperty('reservoirs', 'visibility') !== "none"){
+      document.getElementById('menuReservoirs').click();
+    }
+    if (map.getLayoutProperty('water_supply', 'visibility') !== "none"){
+      document.getElementById('menuSource').click();
+    }
+    if (map.getLayoutProperty('precipitation', 'visibility') !== "none"){
+      document.getElementById('menuPrecipitation').click();
+    }
+    if (map.getLayoutProperty('drought', 'visibility') !== "none"){
+      document.getElementById('menuDrought').click();
+    }
+
+
   }
 
   if(target=="#pcpDrought"){
@@ -656,7 +707,21 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     if (visibility === "none") {
       document.getElementById('menuDrought').click();
     }
- 
+
+    //turn layers off
+    //turn off other layers
+    if (map.getLayoutProperty('streamgauge-layer', 'visibility') !== "none"){
+      document.getElementById('menuStreamGages').click();
+    }
+    if (map.getLayoutProperty('reservoirs', 'visibility') !== "none"){
+      document.getElementById('menuReservoirs').click();
+    }
+    if (map.getLayoutProperty('groundwater', 'visibility') !== "none"){
+      document.getElementById('menuGroundwater').click();
+    }
+    if (map.getLayoutProperty('water_supply', 'visibility') !== "none"){
+      document.getElementById('menuSource').click();
+    }
   }
 });
 </script>
