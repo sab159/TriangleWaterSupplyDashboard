@@ -238,7 +238,6 @@ write.csv(gw.annual, paste0(swd_html, "gw\\gw_annual_level.csv"), row.names=FALS
 
 
 #make triangle site updates
-
 t.sites <- read.csv("..\\data\\gw\\triangle_sites.csv")
 t.sites2 <- nc.sites2 %>% filter(site %in% t.sites$site)
 geojson_write(t.sites2, file="..\\data\\gw\\gw_sites.geojson")

@@ -45,6 +45,7 @@ gauges_huc <- st_intersection(nc.sites, ws.bounds);
 zt <- gauges_huc %>% as.data.frame() %>% select(site, STREAM_NAM) %>% distinct()
 nc.sites <- merge(nc.sites, zt, by.x="site", by.y="site", all.x=TRUE)
 table(nc.sites$STREAM_NAM, useNA="ifany")
+end.date = paste0(year(today), "-12-31")
 
 #go through stream sites and calculate statistics
 unique.sites <- unique(nc.sites$site)
@@ -54,9 +55,17 @@ year.flow  <- as.data.frame(matrix(nrow=0, ncol=4));    colnames(year.flow) <- c
 #Loop through each site and calculate statistics
 for (i in 1:length(unique.sites)){
   old.data <- all.data %>% filter(site==unique.sites[i]) %>% filter(date==max(date))
-  #zt <- readNWISdv(siteNumbers = unique.sites[i], parameterCd = pcode, statCd = scode, startDate=(old.data$date[1]+1), endDate = end.date); #only read in new data
-  zt <- readNWISuv(siteNumbers = unique.sites[i], parameterCd = pcode, startDate=(old.data$date[1]+1), endDate = end.date); #only read in new data
-    zt <- renameNWISColumns(zt);
+  #stream_start_date = paste0( current.year-30,"-01-01")
+  #if(dim(old.data)[1]>0){
+  #  stream_start_date = (old.data$date[1]+1)
+  #}
+  
+  #zt_type = "daily"
+  zt <- readNWISdv(siteNumbers = unique.sites[i], parameterCd = pcode, statCd = scode, startDate=stream_start_date, endDate = end.date); #only read in new data
+  
+  #zt_type = "instant"
+  #zt <- readNWISuv(siteNumbers = unique.sites[i], parameterCd = pcode, startDate=stream_start_date, endDate=end.date); #only read in new data
+    zt <- renameNWISColumns(zt) 
   
   if (dim(zt)[1] > 0)  {
     zt <- zt %>% mutate(julian = as.POSIXlt(dateTime, format = "%Y-%m-%d")$yday) %>% mutate(date = as.Date(dateTime, format="%Y-%m-%d")); #calculates julian date

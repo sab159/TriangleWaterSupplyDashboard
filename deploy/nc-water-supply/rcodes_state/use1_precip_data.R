@@ -15,7 +15,17 @@
 #
 ################################################################################################################################################
 #download spatial data
-drought <- file_to_geojson(input="https://droughtmonitor.unl.edu/data/kmz/usdm_current.kmz", method='web', output=paste0(swd_html, 'drought\\current_drought'))
+if(http_status(GET("https://droughtmonitor.unl.edu/data/kmz/usdm_current.kmz"))$category=="success"){
+  drought <- file_to_geojson(input="https://droughtmonitor.unl.edu/data/kmz/usdm_current.kmz", method='web', output=paste0(swd_html, 'drought\\current_drought'))
+} else {
+  #if not found is returned
+  d <- today()
+  prev.days <- seq(d-7,d,by='day')
+  d <- prev.days[weekdays(prev.days)=='Tuesday'][1] %>% str_remove_all("[-]")
+  
+  drought <- file_to_geojson(input=paste0("https://droughtmonitor.unl.edu/data/kmz/usdm_",d,".kmz"), method="web", output=paste0(swd_html,'drought\\current_drought'))  
+  print("backup used")
+}
 drought <- read_sf(paste0(swd_html, 'drought\\current_drought.geojson')) %>%  st_transform(drought, crs = 4326) %>% select(Name, geometry); #already in correct projection
 
 #download tables for HUCS of interest 
@@ -105,7 +115,7 @@ zt4 <- raster(url.used, band=4)
 #clip zt2 to huc
 zt1.proj <- projectRaster(zt1, crs="+proj=longlat +datum=WGS84")
 zt1.proj <- crop(zt1.proj, extent(huc8));    #zt1.proj <- mask(zt1.proj, huc); #extent makes a box, while mask clips to huc
-  mapview::mapview(zt1.proj)
+#  mapview::mapview(zt1.proj)
 #NA value is -10000
 pol <- rasterToPolygons(zt1.proj); colnames(pol@data) <- c("obsv_in")
 pol <- pol %>% st_as_sf() %>% mutate(obsv_in = round(obsv_in,2)) %>% ms_simplify(keep = 0.5, keep_shapes=TRUE); #convert to a geojson and simplify to plot faster
@@ -285,7 +295,7 @@ bk.data <- nc.data
 nc.data %>% filter(score==3) %>% as.data.frame()# keep?
 table(nc.data$unit); #should all be inches... MV seems to be missing value
 table(nc.data$nettype); #should all be measured
-table(nc.data$vartype); #these are all A - aggregate of multiple variables?
+table(nc.data$vartype); #these are all A - aggregate of multiple variables?...may have changed variable to "paramtype"
 table(nc.data$obtype); #these should all be d for daily
 
 #for many the current day is NA

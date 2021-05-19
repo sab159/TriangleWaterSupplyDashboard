@@ -308,19 +308,33 @@ if(streamPlotType === "off"){
   var yOT2 = [];
   for (j=0; j<xColorPoints.length; j++){  yOT2[j] = 100; }  
   
-  traceColorStatus = {
-    type: 'scatter',
-    x: xColorPoints,  y: yColorPoints,
-    text: streamStatus,
-    mode: 'lines+markers',
-    name: 'flow',
-    marker: { color: colorPoints, size: 5, opacity: 0.8},
-    line: { color: 'gray',  width: 1},
-    hovertemplate:
-              "<b>%{text}</b><br>" +
-              "Flow (cfs): %{y:.2f}<br>" +
-              "Date: %{x}"
-  };
+  var traceColorStatus;
+  if(fileName==="data_state/streamflow/stream_stats.csv"){
+    traceColorStatus = {
+      type: 'scatter',
+      x: xColorPoints,  y: yColorPoints,
+      text: streamStatus,
+      mode: 'lines+markers',
+      name: 'flow',
+      marker: { color: colorPoints, size: 5, opacity: 0.8},
+      line: { color: 'gray',  width: 1},
+      hovertemplate: "<b>%{text}</b><br>" + "Flow: %{y:.2f} cfs<br>" + "Date: %{x}"
+    };
+  }
+  
+  if(fileName==="data_state/reservoirs/reservoir_stats.csv"){
+    traceColorStatus = {
+      type: 'scatter',
+      x: xColorPoints,  y: yColorPoints,
+      text: streamStatus,
+      mode: 'lines+markers',
+      name: 'storage',
+      marker: { color: colorPoints, size: 5, opacity: 0.8},
+      line: { color: 'gray',  width: 1},
+      hovertemplate: "<b>%{text}</b><br>" + "Storage: %{y:.2f}%<br>" + "Date: %{x}"
+    };
+  }
+  
 
   traceOT2 = {
     type: 'scatter',   mode: 'lines',

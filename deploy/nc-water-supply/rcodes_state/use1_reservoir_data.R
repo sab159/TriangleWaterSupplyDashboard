@@ -29,7 +29,7 @@ report_url = "CWMS_CRREL.cwms_data_api.get_report_json?p_location_id="
 parameter_url <- paste0("&p_parameter_type=Stor%3AElev&p_last=", timeAmt, "&p_last_unit=", timeUnit, "&p_unit_system=EN&p_format=JSON");   #when weekly change months to weeks
 
 #read in shapefile
-project.df <- read_sf(paste0(swd_html, "reservoirs\\usace_sites.geojson"))
+project.df <- read_sf(paste0(swd_html, "reservoirs\\usace_sites.geojson")) %>% distinct()
 #add url to data
 res.url <- "http://water.usace.army.mil/a2w/f?p=100:1:0::::P1_LINK:"
 project.df <- project.df %>% mutate(url_link = paste0(res.url,Loc_ID,"-CWMS"))
@@ -147,21 +147,26 @@ unique.nid <- unique(new.data$NIDID); unique.nid
   nx2 <- merge(nx, fx.2014, by.x=c("NIDID","day_month"), by.y=c("NIDID","day_month"), all.x=TRUE)  
   nx2 <- nx2 %>% mutate(percentStorage = round(storage_AF/OT_ACFT*100,2))
     nx2 <- nx2 %>% select(NIDID, name, date, Year, day_month, julian, elev_Ft, storage_AF, OT_FT, OT_ACFT, percentStorage); colnames(nx2) <- colnames(fx)
-  
+    
+
   #combine
   fx <- rbind(fx, nx2)
   
   #make sure no duplicates
-  fx <- fx %>% distinct()
+  fx <- fx %>% mutate(Name = str_remove_all(Name, " Dam")) %>%  distinct()
   #arrange by NIDID and date
   fx <- fx %>% arrange(NIDID, date)
-  
-  #SCOTT KERR HAS HAD A NEW SEDIMENT SURVEY
+  #if dates are duplicated for some reason - get the mean flow
+  fx <- fx %>% group_by(NIDID, Name, date, Year, day_month, julian) %>% summarize(Elev_Ft=mean(Elev_Ft, na.rm=TRUE), Storage_ACFT = mean(Storage_ACFT, na.rm=TRUE), OT_FT = mean(OT_FT), OT_ACFT = mean(OT_ACFT), .groups="drop")
+  fx <- fx %>% mutate(percentStorage = round(Storage_ACFT/OT_ACFT*100,2))
+                                                                                   
+    #SCOTT KERR HAS HAD A NEW SEDIMENT SURVEY
   scott.ot = 36639
   fx <- fx %>% mutate(OT_ACFT = ifelse(NIDID == "NC00300" & Year >=2017, 36639, OT_ACFT))
   
   fx <- fx %>% mutate(percentStorage = round(Storage_ACFT/OT_ACFT*100,2)) %>% mutate(Storage_ACFT = ifelse(percentStorage > 300, NA, Storage_ACFT), percentStorage = ifelse(percentStorage > 300, NA, percentStorage))
   summary(fx)
+  fx <- fx %>% filter(date < today())
   write.csv(fx, paste0(swd_html, "reservoirs\\usace_dams.csv"), row.names=FALSE)
 
   
@@ -173,6 +178,10 @@ unique.nid <- unique(new.data$NIDID); unique.nid
 ########################################################################################################################################################################################################################
 unique.sites <- unique(project.df$NIDID)
 
+  #redo julian
+  fx$julian <-  as.integer(format(fx$date, "%j"))
+  fx <- fx %>% distinct()
+  
 #set up data frame for stats and include year
 stats <- as.data.frame(matrix(nrow=0,ncol=13));        colnames(stats) <- c("nidid", "julian", "min", "flow10", "flow25", "flow50", "flow75", "flow90", "max", "Nobs","startYr","endYr","date"); 
 year.flow  <- as.data.frame(matrix(nrow=0, ncol=10));   colnames(year.flow) <- c("nidid", "name", "date", "year", "julian", "elev_ft","storage_af", "target_ft", "target_af", "percent_storage")
@@ -185,8 +194,8 @@ year.flow  <- as.data.frame(matrix(nrow=0, ncol=10));   colnames(year.flow) <- c
                                                       flow50 = round(quantile(percentStorage, 0.5, na.rm=TRUE),4), flow75 = round(quantile(percentStorage, 0.75, na.rm=TRUE),4), flow90 = round(quantile(percentStorage, 0.90, na.rm=TRUE),4), 
                                                       max = round(max(percentStorage, na.rm=TRUE),4), .groups="drop")
     zt.stats <- zt.stats %>% mutate(nidid = as.character(unique.sites[i]), startYr = min(zt$Year), endYr = max(zt$Year)) %>% select(nidid, julian, min, flow10, flow25, flow50, flow75, flow90, max, Nobs, startYr, endYr)
-    if(dim(zt.stats)[1] == 366) {zt.stats$date = julian$month.day366}
-    if(dim(zt.stats)[1] == 365) {zt.stats$date = julian$month.day365[c(1:365)]} 
+    zt.stats$date2 <- as.Date((zt.stats$julian-1), origin=paste0("2020-01-01"))#make a leap yar
+    zt.stats$date <- format(zt.stats$date2, format="%b-%d")
     
     
     #fill dataframe
@@ -201,8 +210,8 @@ year.flow  <- as.data.frame(matrix(nrow=0, ncol=10));   colnames(year.flow) <- c
   summary(stats)
   summary(year.flow)
   
-  stats <- stats %>% mutate(date2 = as.Date(paste0(end.year, "-",date), "%Y-%b-%d")) %>% mutate(month = substr(date,0,3))
-  
+  stats <- stats %>% mutate(date2 = as.Date(paste0(end.year, "-",date), "%Y-%b-%d")) %>% mutate(month = substr(date,0,3)) %>% arrange(nidid, julian) %>% distinct()
+  year.flow <- year.flow %>% distinct() %>% arrange(date)
   
   #Now attach most recent value to stream stats for the map
   recent.flow <- year.flow %>% group_by(nidid) %>% filter(is.na(storage_af) == FALSE) %>% filter(date == max(date)); #do we want to do most recent date or most recent date with data?
@@ -221,10 +230,13 @@ year.flow  <- as.data.frame(matrix(nrow=0, ncol=10));   colnames(year.flow) <- c
   
 
   #rename nidid to site so can use same code as streamflow - used to make charts
-  current.year <- year.flow %>% filter(year == year(max(date)));     last.year <- year.flow %>% filter(year == (year(max(date))-1));     
-  stats.flow <- merge(stats, current.year[,c("nidid","julian","percent_storage")], by.x=c("nidid","julian"), by.y=c("nidid","julian"), all.x=TRUE) %>% rename(flow = percent_storage)
+  current.yr <- year.flow %>% filter(year == year(max(date)));     
+  last.year <- year.flow %>% filter(year == (year(max(date))-1));     
+  stats.flow <- merge(stats, current.yr[,c("nidid","julian","percent_storage")], by.x=c("nidid","julian"), by.y=c("nidid","julian"), all.x=TRUE) %>% rename(flow = percent_storage)
+  
   stats.past <- merge(stats, last.year[,c("nidid", "julian", "percent_storage")], by.x=c("nidid", "julian"), by.y=c("nidid", "julian"), all.x=TRUE) %>% mutate(date2 = as.Date(paste0((end.year-1),"-",date), "%Y-%b-%d"))  %>% 
     rename(flow = percent_storage) %>% as.data.frame()
+  
   stats.flow <- rbind(stats.past, stats.flow)
   
   stats.flow <- stats.flow %>% mutate(status = ifelse(flow <= flow10, "Extremely Dry", ifelse(flow > flow10 & flow <= flow25, "Very Dry", ifelse(flow >= flow25 & flow < flow50, "Moderately Dry", 
