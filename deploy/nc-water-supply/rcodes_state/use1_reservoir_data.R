@@ -15,7 +15,7 @@
 #Now read in the website data and add the most recent files to the end of it
 old.data <- read.csv(paste0(swd_html, "reservoirs\\usace_dams.csv"))
 max(old.data$date)
-timeAmt = 2
+timeAmt = 4
 timeUnit = "weeks"
 
 ######################################################################################################################################################################
@@ -35,64 +35,44 @@ res.url <- "http://water.usace.army.mil/a2w/f?p=100:1:0::::P1_LINK:"
 project.df <- project.df %>% mutate(url_link = paste0(res.url,Loc_ID,"-CWMS"))
 
 #create dataframes
-district_data <- as.data.frame(matrix(nrow=0, ncol=8)); colnames(district_data) <- c("date", "elev_Ft", "stroage_AF", "fstorage_AF", "locid", "district", "NIDID", "name")
+district_data <- as.data.frame(matrix(nrow=0, ncol=8)); colnames(district_data) <- c("date", "elev_Ft", "storage_AF", "fstorage_AF", "locid", "district", "NIDID", "name")
 
 for (i in 1:length(project.df$Loc_ID)){
   location.id <- project.df$Loc_ID[i]; location.id
   full_url <- paste0(baseURL, report_url, location.id, parameter_url)
 
   api.data <- GET(full_url, timeout(15000)) #use httr library to avoid timeout
-    dam.data <- content(api.data, "parse")
-
-  lake_level = data_frame(
-    time = map_chr(dam.data[[1]]$Elev, "time"),
-    elev_FT = map_dbl(dam.data[[1]]$Elev, "value")
-  )
+  dam.data <- jsonlite::fromJSON(content(api.data, 'text'), simplifyVector = TRUE, flatten=TRUE)
+  lake_level <- dam.data$Elev[[1]] 
+  lake_level <- lake_level %>% mutate(date = as.Date(substr(lake_level$time,1,11), "%d-%b-%Y")) %>% group_by(date) %>% summarize(elev_Ft = round(median(value, na.rm=TRUE),2), .groups = "drop")
   
-  lake_level <- lake_level %>% mutate(date = as.Date(substr(lake_level$time,1,11), "%d-%b-%Y")) %>% group_by(date) %>% summarize(elev_Ft = round(median(elev_FT, na.rm=TRUE),2), .groups = "drop")
-  #plot(lake_level$date, lake_level$elev_Ft, type="l"); #abline(h=251.5, col="blue")
+  lake_stor <- purrr::map(dam.data$`Conservation Storage`, ~ purrr::compact(.)) %>% purrr::keep(~length(.) != 0)
+  lake_stor <- lake_stor[[1]]
+  #flood_stor <- purrr::map(dam.data$`Flood Storage`, ~ purrr::compact(.)) %>% purrr::keep(~length(.) != 0)
+  #  flood_stor <- flood_stor[[1]]
   
-  #check to see if storage exists - because sometimes doesn't, build dataframe separately... the list number changes depending on what is available
-  if (dim(lake_level)[1] > 0){
-    for(j in 2:3){
-      time1 = map_chr(dam.data[[j]]$`Flood Storage`, "time");
-      storage_AF1 = map_int(dam.data[[3]]$`Conservation Storage`, "value");
-      storf1 = map_int(dam.data[[j]]$`Flood Storage`, "value");
-      
-      if (length(time1) > 0){ 
-        time = time1; 
-        storage_AF = storage_AF1;
-        fstor_AF = storf1; 
-      }
-    } #end data fill
-  } #end lake level
-    
-  if (dim(lake_level)[1] == 0){
-    for(j in 1:2){
-      #lake_stor = data_frame(
-      time1 = map_chr(dam.data[[j]]$`Flood Storage`, "time");
-      storage_AF1 = map_int(dam.data[[3]]$`Conservation Storage`, "value");
-      storf1 = map_int(dam.data[[j]]$`Flood Storage`, "value");
-      if (length(time1) > 0){
-        if (length(time1) > 0){ 
-          time = time1; 
-          storage_AF = storage_AF1;
-          fstor_AF = storf1; 
-        }
-      }
-    }
-  }#end lake level
-
-  lake_stor <- cbind(time, storage_AF, fstor_AF) %>% as.data.frame()
+  #since storage is often spotty - pull in rating curve
+  api.curve <- GET(paste0("https://water.usace.army.mil/a2w/CWMS_CRREL.cwms_data_api.get_rating_curve_json?p_location_id=",location.id))
+  stor.curve <- jsonlite::fromJSON(content(api.curve, 'text'), simplifyVector = TRUE, flatten=TRUE)
+  
   #Split time and group
   lake_stor <- lake_stor %>% mutate(date = as.Date(substr(lake_stor$time,1,11), "%d-%b-%Y")) %>% group_by(date) %>% 
-           summarize(storage_AF = round(median(as.numeric(as.character(storage_AF)), na.rm=TRUE),0), fstorage_AF = round(median(as.numeric(as.character(fstor_AF)), na.rm=TRUE),0), .groups="drop")
-  #plot(lake_stor$date, lake_stor$storage_AF, type="l"); lines(lake_stor$date, lake_stor$fstorage_AF, col="red")
+           summarize(storage_AF = round(median(as.numeric(as.character(value)), na.rm=TRUE),0), .groups="drop")
   
   lake_data <- merge(lake_level, lake_stor, by.x="date", by.y="date", all=TRUE)
   lake_data$locid <- as.character(location.id);             lake_data$district <- "SAW";
   lake_data$NIDID <- as.character(project.df$NIDID[i]);     lake_data$name <- as.character(project.df$Name[i])
   
+  #fill in missing storage_AF... makes chunkier because of rounding
+  if (length(stor.curve$data) > 1){  
+    stor.curve <- stor.curve$data
+    stor.curve <- stor.curve %>% mutate(elev_ft = as.numeric(as.character(depValue)), stor_acft = as.numeric(as.character(indValue1))*1000, OT_FT = as.numeric(as.character(topOfConservation)))
+    lake_data <- lake_data %>% mutate(round_elev = round(elev_Ft,1))
+    lake_data <- merge(lake_data, stor.curve[,c("elev_ft", "stor_acft")], by.x = "round_elev", by.y="elev_ft", all.x=TRUE) %>% arrange(date)
+    lake_data <- lake_data %>% mutate(storage_AF = ifelse(is.na(storage_AF), stor_acft, storage_AF)) %>% dplyr::select(-round_elev, -stor_acft)
+  }
+  
+  plot(lake_data$date, lake_data$storage_AF, type="l")
   #bind to larger dataframe
   district_data <- rbind(district_data, lake_data)
   rm(api.data)

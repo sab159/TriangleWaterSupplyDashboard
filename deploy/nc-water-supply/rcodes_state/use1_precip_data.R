@@ -15,17 +15,17 @@
 #
 ################################################################################################################################################
 #download spatial data
-if(http_status(GET("https://droughtmonitor.unl.edu/data/kmz/usdm_current.kmz"))$category=="success"){
+#if(http_status(GET("https://droughtmonitor.unl.edu/data/kmz/usdm_current.kmz"))$category=="success"){
   drought <- file_to_geojson(input="https://droughtmonitor.unl.edu/data/kmz/usdm_current.kmz", method='web', output=paste0(swd_html, 'drought\\current_drought'))
-} else {
+#} else {
   #if not found is returned
-  d <- today()
-  prev.days <- seq(d-7,d,by='day')
-  d <- prev.days[weekdays(prev.days)=='Tuesday'][1] %>% str_remove_all("[-]")
+#  d <- today()
+#  prev.days <- seq(d-7,d,by='day')
+#  d <- prev.days[weekdays(prev.days)=='Tuesday'][1] %>% str_remove_all("[-]")
   
-  drought <- file_to_geojson(input=paste0("https://droughtmonitor.unl.edu/data/kmz/usdm_",d,".kmz"), method="web", output=paste0(swd_html,'drought\\current_drought'))  
-  print("backup used")
-}
+#  drought <- file_to_geojson(input=paste0("https://droughtmonitor.unl.edu/data/kmz/usdm_",d,".kmz"), method="web", output=paste0(swd_html,'drought\\current_drought'))  
+#  print("backup used")
+#}
 drought <- read_sf(paste0(swd_html, 'drought\\current_drought.geojson')) %>%  st_transform(drought, crs = 4326) %>% select(Name, geometry); #already in correct projection
 
 #download tables for HUCS of interest 
@@ -295,7 +295,7 @@ bk.data <- nc.data
 nc.data %>% filter(score==3) %>% as.data.frame()# keep?
 table(nc.data$unit); #should all be inches... MV seems to be missing value
 table(nc.data$nettype); #should all be measured
-table(nc.data$vartype); #these are all A - aggregate of multiple variables?...may have changed variable to "paramtype"
+table(nc.data$paramtype); #these are all A - aggregate of multiple variables?...may have changed "vartype" to "paramtype"
 table(nc.data$obtype); #these should all be d for daily
 
 #for many the current day is NA
@@ -418,7 +418,7 @@ geojson_write(nc.sites, file = paste0(swd_html, "pcp\\pcp_sites.geojson"))
 #load triangle sites and save out only those data
 t.sites <- read.csv(paste0("..\\data\\pcp\\ncsu_triangle_locations.csv"))
 t.sites2 <- nc.sites %>% filter(id %in% t.sites$locID);
-geojson_write(nc.sites, file = paste0("..\\data\\pcp\\pcp_sites.geojson"))
+geojson_write(t.sites2, file = paste0("..\\data\\pcp\\pcp_sites.geojson"))
 
 t.cum2 <- foo.cum2 %>% filter(id %in% t.sites$locID)
 write.csv(t.cum2, paste0("..\\data\\pcp\\pcp_cum_total.csv"), row.names=FALSE)

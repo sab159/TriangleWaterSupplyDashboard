@@ -188,7 +188,7 @@ table(current.stat$status)
 #set those that are not collecting data to unknown
 max.julian <- current.stat %>% filter(endYr == current.year) %>% summarize(maxJ = max(julian, na.rm=TRUE))
 current.stat <- current.stat %>% mutate(status = ifelse(endYr < current.year & julian > 30, "unknown", ifelse(endYr < (current.year-1), "unknown", 
-                                                                                                              ifelse(endYr==current.year & julian < (max.julian$maxJ-30), "unknown", status))))
+                                 ifelse(endYr==current.year & julian < (max.julian$maxJ-60), "unknown", status))))
 table(current.stat$status, useNA="ifany")
 
 
