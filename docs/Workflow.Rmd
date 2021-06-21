@@ -91,14 +91,75 @@ registry <- read.csv(url_registry)
 knitr::kable(registry)
 ```
 
-1. For each row in `registry`, download the XLSX template and and upload any NEW data to the SensorThings endpoint
-   i. If the PWSID is not already represented in the XLSX template, then the entire data model will need to be populated.
+1. For each row in `registry`, download the XLSX template and and upload any NEW data to the SensorThings endpoint. This will involve making HTTP POST or PATCH requests to the SensorThings endpoint. Some interactive guidance on this can be found [here](https://gost1.docs.apiary.io).
+   i. If the PWSID is not already represented in the XLSX template, then the entire data model will need to be populated. To check if the PWSID is represented, we issue a GET request to the SensorThings API associated with `Thing({PWSID})`. If we receive HTTP status 200 it already exists. If we receive HTTP status 404 it does not. 
 ```{r read2}
-   x <- 1
+pwsid <- registry$pwsid[1] # retrieve the pwsid of the first row
+
+# We write a convenience function to check a
+# pwsid against an endpoint variable we have already set
+staThingCheck <- function(api_url,id){
+  call <- paste0(api_url,"Things('",id,"')") 
+  # This makes "https://example-sta-api_url.com/endpoint-interface/Things('{id}')
+  response <- httr::GET(call)$status
+  return(response)
+}
+
+staThingCheck(endpoint,pwsid)
+
 ```
-      i. First
-   i. ds sjksfs
+   Here, we find that the Apex PWSID does not exist in SensorThings yet, so we must create it as well as its Datastreams. First we create the Thing (utility metadata object) and its associated location (service area boundary as geojson). Thus, we first must read in the entire excel template. The function below defines this, given a path (url) to a an XSLX template, we can read in the template and import a list of dataframes corresponding to the XLSX sheets into the R environment. *Note that this requires a subdirectory called `tmp` to exist in the working directory.*
    
-1. woohoo 
+```{r readTemplate}
+readTemplate <- function(path) {
+  httr::GET(path, httr::write_disk("tmp/tmp.xlsx", overwrite = TRUE))
+  meta <-
+    readxl::read_excel("tmp/tmp.xlsx", sheet = "system_metadata") %>% tibble::column_to_rownames(var = "field") %>% t() %>% as_tibble()
+  
+  sources <- readxl::read_excel("tmp/tmp.xlsx", sheet = "sources")
+  monitoring_locations <-
+    readxl::read_excel("tmp/tmp.xlsx", sheet = "monitoring_locations")
+  conservation_policies <-
+    readxl::read_excel("tmp/tmp.xlsx", sheet = "conservation_policies")
+  delivery <-
+    readxl::read_excel("tmp/tmp.xlsx", sheet = "delivery")
+  supply <-
+    readxl::read_excel("tmp/tmp.xlsx", sheet = "supply_conditions")
+  monitoring_data <-
+    readxl::read_excel("tmp/tmp.xlsx", sheet = "monitoring_data")
+  conservation_status <-
+    readxl::read_excel("tmp/tmp.xlsx", sheet = "conservation_status")
+  
+  unlink("tmp/tmp.xlsx")
+  list <-
+    list(
+      metadata = meta,
+      sources = sources,
+      monitoring_locations = monitoring_locations,
+      conservation_policies = conservation_policies,
+      delivery = delivery,
+      supply = supply,
+      monitoring_data = monitoring_data,
+      conservation_status = conservation_status
+    )
+  
+  return(list)
+}
+
+```
+   
+Here we use the function to read in the XLSX associated with the first row of the utility registry (Apex in this case).
+```{r downloaddata}
+path <- registry$data_url[1]
+
+data <- readTemplate(path)
+head(data)
+```
+
+Now we can access the metadata sheet using `data$metadata` to create the Thing and Location.
+
+```{r makeThing}
+
+```
 
 

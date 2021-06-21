@@ -1836,16 +1836,126 @@ div.tocify {
 </tbody>
 </table>
 <ol style="list-style-type: decimal">
-<li>For each row in <code>registry</code>, download the XLSX template and and upload any NEW data to the SensorThings endpoint
+<li>For each row in <code>registry</code>, download the XLSX template and and upload any NEW data to the SensorThings endpoint. This will involve making HTTP POST or PATCH requests to the SensorThings endpoint. Some interactive guidance on this can be found <a href="https://gost1.docs.apiary.io">here</a>.
 <ol style="list-style-type: lower-roman">
-<li>If the PWSID is not already represented in the XLSX template, then the entire data model will need to be populated.</li>
+<li>If the PWSID is not already represented in the XLSX template, then the entire data model will need to be populated. To check if the PWSID is represented, we issue a GET request to the SensorThings API associated with <code>Thing({PWSID})</code>. If we receive HTTP status 200 it already exists. If we receive HTTP status 404 it does not.</li>
 </ol></li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>   x <span class="ot">&lt;-</span> <span class="dv">1</span></span></code></pre></div>
-<pre><code>  i. First</code></pre>
-<ol style="list-style-type: lower-roman">
-<li>ds sjksfs</li>
-</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pwsid <span class="ot">&lt;-</span> registry<span class="sc">$</span>pwsid[<span class="dv">1</span>] <span class="co"># retrieve the pwsid of the first row</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We write a convenience function to check a</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pwsid against an endpoint variable we have already set</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>staThingCheck <span class="ot">&lt;-</span> <span class="cf">function</span>(api_url,id){</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  call <span class="ot">&lt;-</span> <span class="fu">paste0</span>(api_url,<span class="st">&quot;Things(&#39;&quot;</span>,id,<span class="st">&quot;&#39;)&quot;</span>) </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This makes &quot;https://example-sta-api_url.com/endpoint-interface/Things(&#39;{id}&#39;)</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  response <span class="ot">&lt;-</span> httr<span class="sc">::</span><span class="fu">GET</span>(call)<span class="sc">$</span>status</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(response)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">staThingCheck</span>(endpoint,pwsid)</span></code></pre></div>
+<pre><code>## [1] 404</code></pre>
+<p>Here, we find that the Apex PWSID does not exist in SensorThings yet, so we must create it as well as its Datastreams. First we create the Thing (utility metadata object) and its associated location (service area boundary as geojson). Thus, we first must read in the entire excel template. The function below defines this, given a path (url) to a an XSLX template, we can read in the template and import a list of dataframes corresponding to the XLSX sheets into the R environment. <em>Note that this requires a subdirectory called <code>tmp</code> to exist in the working directory.</em></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>readTemplate <span class="ot">&lt;-</span> <span class="cf">function</span>(path) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  httr<span class="sc">::</span><span class="fu">GET</span>(path, httr<span class="sc">::</span><span class="fu">write_disk</span>(<span class="st">&quot;tmp/tmp.xlsx&quot;</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  meta <span class="ot">&lt;-</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">&quot;tmp/tmp.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;system_metadata&quot;</span>) <span class="sc">%&gt;%</span> tibble<span class="sc">::</span><span class="fu">column_to_rownames</span>(<span class="at">var =</span> <span class="st">&quot;field&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">t</span>() <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  sources <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">&quot;tmp/tmp.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;sources&quot;</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  monitoring_locations <span class="ot">&lt;-</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">&quot;tmp/tmp.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;monitoring_locations&quot;</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  conservation_policies <span class="ot">&lt;-</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">&quot;tmp/tmp.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;conservation_policies&quot;</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  delivery <span class="ot">&lt;-</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">&quot;tmp/tmp.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;delivery&quot;</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  supply <span class="ot">&lt;-</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">&quot;tmp/tmp.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;supply_conditions&quot;</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  monitoring_data <span class="ot">&lt;-</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">&quot;tmp/tmp.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;monitoring_data&quot;</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  conservation_status <span class="ot">&lt;-</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">&quot;tmp/tmp.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;conservation_status&quot;</span>)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlink</span>(<span class="st">&quot;tmp/tmp.xlsx&quot;</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  list <span class="ot">&lt;-</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">metadata =</span> meta,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">sources =</span> sources,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">monitoring_locations =</span> monitoring_locations,</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">conservation_policies =</span> conservation_policies,</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">delivery =</span> delivery,</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>      <span class="at">supply =</span> supply,</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>      <span class="at">monitoring_data =</span> monitoring_data,</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">conservation_status =</span> conservation_status</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(list)</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Here we use the function to read in the XLSX associated with the first row of the utility registry (Apex in this case).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> registry<span class="sc">$</span>data_url[<span class="dv">1</span>]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">readTemplate</span>(path)</span></code></pre></div>
+<pre><code>## New names:
+## * `` -&gt; ...3
+## * `` -&gt; ...4</code></pre>
+<pre><code>## New names:
+## * `` -&gt; ...3</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code></pre></div>
+<pre><code>## $metadata
+## # A tibble: 3 x 19
+##   pwsid year  system_name county basin ownership service_populat~
+##   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;           
+## 1 03-9~ 2014~ Apex        Wake   Cape~ Municipa~ 68500           
+## 2 &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;   Neus~ &lt;NA&gt;      &lt;NA&gt;            
+## 3 &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;   Haw ~ &lt;NA&gt;      &lt;NA&gt;            
+## # ... with 12 more variables: contact_first_name &lt;chr&gt;,
+## #   contact_middle_initial &lt;chr&gt;, contact_last_name &lt;chr&gt;, contact_title &lt;chr&gt;,
+## #   address &lt;chr&gt;, city &lt;chr&gt;, state &lt;chr&gt;, zip &lt;chr&gt;, phone &lt;chr&gt;, fax &lt;chr&gt;,
+## #   email &lt;chr&gt;, wsrp_link &lt;chr&gt;
+## 
+## $sources
+## # A tibble: 1 x 6
+##   source_name source_type capacity capacity_type capacity_units water_supply_wa~
+##   &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;          &lt;chr&gt;           
+## 1 B. Everett~ reservoir_~     10.6 storage       million_gallo~ Haw River (Jord~
+## 
+## $monitoring_locations
+## # A tibble: 0 x 5
+## # ... with 5 variables: monitoring_location_name &lt;lgl&gt;, parameters &lt;lgl&gt;,
+## #   ...3 &lt;lgl&gt;, latitude &lt;lgl&gt;, longitude &lt;lgl&gt;
+## 
+## $conservation_policies
+## # A tibble: 5 x 7
+##   conservation_st~ Description `Outdoor Spray ~ `Hand watering,~
+##   &lt;chr&gt;            &lt;chr&gt;       &lt;chr&gt;            &lt;chr&gt;           
+## 1 year-round       Outdoor sp~ Three days per ~ Allowed         
+## 2 stage 1          Spray Irri~ One day per week Allowed         
+## 3 stage 2          Spray irri~ None             Allowed         
+## 4 stage 3          No outdoor~ None             None            
+## 5 rationing        No outdoor~ None             None            
+## # ... with 3 more variables: `Other outdoor water use such as pressure washing,
+## #   car washing, filling/topping off swimming pools` &lt;chr&gt;, `New Turf Watering
+## #   Exception Permits` &lt;chr&gt;, `Indoor Water Use Restrictions` &lt;chr&gt;
+## 
+## $delivery
+## # A tibble: 2,558 x 3
+##    begin_date          end_date            delivery_million_gallons
+##    &lt;chr&gt;               &lt;chr&gt;                                  &lt;dbl&gt;
+##  1 YYYY-MM-DDTHH:MM:SS YYYY-MM-DDTHH:MM:SS                    NA   
+##  2 41640               41640.999305555553                      2.86
+##  3 41641               41641.999305497688                      3.22
+##  4 41642               41642.999305497688                      2.48
+##  5 41643               41643.999305497688                      2.58
+##  6 41644               41644.999305497688                      2.65
+##  7 41645               41645.999305497688                      2.87
+##  8 41646               41646.999305497688                      2.47
+##  9 41647               41647.999305497688                      2.95
+## 10 41648               41648.999305497688                      3.21
+## # ... with 2,548 more rows
+## 
+## $supply
+## # A tibble: 1 x 6
+##   source_name source_type date       value source_metric source_unit
+##   &lt;lgl&gt;       &lt;lgl&gt;       &lt;chr&gt;      &lt;lgl&gt; &lt;lgl&gt;         &lt;lgl&gt;      
+## 1 NA          NA          YYYY-MM-DD NA    NA            NA</code></pre>
 <ol style="list-style-type: decimal">
 <li>woohoo</li>
 </ol>
