@@ -82,7 +82,40 @@ We model the data like so:
     
 # The Workflow (in Progress)
 
-Below we describe and implement the full workflow, which is repeated for all participating utilities in a loop on a regular schedule:
+Below we describe and implement the full workflow, which is repeated for all participating utilities in a loop on a regular schedule. 
+Here is the pseudocode for the whole workflow, which is elaborated more fully (only partially so far) afterwards
+
+## Pseudocode
+
+```{r pseudocode, eval=FALSE}
+registry <- read.csv("path/to/utility_registry.csv")
+
+PWSIDs_in_database_already <- getThings(endpoint)
+
+PWSIDs_not_in_database_already <- registry[which(!(pwsid %in% PWSIDs_in_database_already)),]$pwsid
+
+for(i in PWSIDs_not_in_database_already){
+  data<-readExcel("path/to/excel_pwsid_i.xslx")
+  postMetaDataToSTA(data,endpoint)
+  createDatastreams(data,endpoint)
+  postDataToSTA(data,endpoint)
+}
+
+for(i in PWSIDs_in_database_already){
+  data<-readExcel("path/to/excel_pwsid_i.xslx")
+  PATCH_metadata(data,endpoint)
+
+  olddata <- getDatafromAPI(i,endpoint)
+  newdata <- filter(data, datetime > max(olddata$datetime))
+  postNewDatatoSTA(newdata,endpoint)
+
+}
+
+
+
+```
+
+## Modular real code
 
 1. Read in the `utility_registry.csv` [here](https://github.com/internetofwater/TriangleWaterSupplyDashboard/blob/master/utility_registry.csv) which matches a utility name and PWSID with the URL for its XLSX template.
 
@@ -90,6 +123,7 @@ Below we describe and implement the full workflow, which is repeated for all par
 registry <- read.csv(url_registry)
 knitr::kable(registry)
 ```
+
 
 1. For each row in `registry`, download the XLSX template and and upload any NEW data to the SensorThings endpoint. This will involve making HTTP POST or PATCH requests to the SensorThings endpoint. Some interactive guidance on this can be found [here](https://gost1.docs.apiary.io).
    i. If the PWSID is not already represented in the XLSX template, then the entire data model will need to be populated. To check if the PWSID is represented, we issue a GET request to the SensorThings API associated with `Thing({PWSID})`. If we receive HTTP status 200 it already exists. If we receive HTTP status 404 it does not. 
