@@ -127,21 +127,26 @@ knitr::kable(registry)
 
 1. For each row in `registry`, download the XLSX template and and upload any NEW data to the SensorThings endpoint. This will involve making HTTP POST or PATCH requests to the SensorThings endpoint. Some interactive guidance on this can be found [here](https://gost1.docs.apiary.io).
    i. If the PWSID is not already represented in the XLSX template, then the entire data model will need to be populated. To check if the PWSID is represented, we issue a GET request to the SensorThings API associated with `Thing({PWSID})`. If we receive HTTP status 200 it already exists. If we receive HTTP status 404 it does not. 
-```{r read2}
-pwsid <- registry$pwsid[1] # retrieve the pwsid of the first row
-
+   
+```{r check}
 # We write a convenience function to check a
 # pwsid against an endpoint variable we have already set
-staThingCheck <- function(api_url,id){
-  call <- paste0(api_url,"Things('",id,"')") 
+staThingCheck <- function(api_url){
+  call <- paste0(api_url,"Things?$select=@iot.id") 
   # This makes "https://example-sta-api_url.com/endpoint-interface/Things('{id}')
-  response <- httr::GET(call)$status
-  return(response)
+  response <- jsonlite::fromJSON(call)$value$`@iot.id`
+  pwsids_in_sta <- registry$pwsid[which(registry$pwsid %in% response)]
+  pwsids_not_in_sta <- registry$pwsid[which(!(registry$pwsid %in% response))]
+  
+  pwsids <- list("pwsids_in_sta"=pwsids_in_sta,"pwsids_not_in_sta"=pwsids_not_in_sta)
+  return(pwsids)
 }
 
-staThingCheck(endpoint,pwsid)
+staThingCheck(endpoint)
 
 ```
+   
+
    Here, we find that the Apex PWSID does not exist in SensorThings yet, so we must create it as well as its Datastreams. First we create the Thing (utility metadata object) and its associated location (service area boundary as geojson). Thus, we first must read in the entire excel template. The function below defines this, given a path (url) to a an XSLX template, we can read in the template and import a list of dataframes corresponding to the XLSX sheets into the R environment. *Note that this requires a subdirectory called `tmp` to exist in the working directory.*
    
 ```{r readTemplate}
@@ -190,10 +195,132 @@ data <- readTemplate(path)
 head(data)
 ```
 
-Now we can access the metadata sheet using `data$metadata` to create the Thing and Location.
+Now we can access the metadata sheet using `data$metadata` to create the Thing and Location into a hiearchical list object that can be POSTed as JSON to the SensorThings API
 
-```{r makeThing}
+```{r makeThing, eval=FALSE}
+meta <- data$metadata[1,]
+
+metaToUtilityThing <- function(meta) {
+  
+  id <- paste0("NC", gsub("-", "", meta$pwsid))
+  service_area <- sf::read_sf(paste0("https://geoconnex.us/ref/pws/",id))
+  service_sfc <- sf::st_as_sfc(service_area)
+  
+  thing <-
+      list(
+        `@iot.id` = id,
+        name = meta$system_name,
+        description = paste0("Data from the water utility: ",
+                             meta$system_name),
+        properties = list(
+          county = meta$county,
+          basin = meta$basin,
+          ownership = meta$ownership,
+          service_population = meta$service_population,
+          contact_name = paste0(meta$contact_first_name, " ", meta$contact_last_name),
+          contact_title = meta$contact_title,
+          address = meta$address,
+          city = meta$city,
+          state = meta$state,
+          zip = meta$zip,
+          phone = meta$phone,
+          fax = meta$fax,
+          email = meta$email,
+          wsrp_link = meta$wsrp_link
+        )
+        )
+  
+  loc <- list(
+          `@iot.id` = paste0(id," - Service Area"),
+          name = paste0(id, " Service area"),
+          description = paste0("Service area of ",thing$name),
+          encodingType = "application/vnd.geo+json",
+          location = list(
+            type="Point",
+            coordinates = list(
+              4.9,
+              52.3
+            )
+          )
+        )
+      
+  utility <- list(thing=thing,location=loc)    
+    
+  return(utility)
+}
+
+meta <- metaToUtilityThing(meta)
 
 ```
 
+Now we have to HTTP POST this object to STA. First we create HTTP POST, PATCH, and some convenience functions to enable this.
 
+```{r post_utility_functions}
+staPost <- function(url, payload, user, password) {
+  httr::POST(
+    url = url,
+    encode = "json",
+    httr::authenticate(user, password, type = "basic"),
+    body = payload
+  )
+}
+
+staPatch <- function(url, payload, user, password) {
+  httr::PATCH(
+    url = url,
+    encode = "json",
+    httr::authenticate(user, password, type = "basic"),
+    body = payload
+  )
+}
+
+strip_iot_id <- function(list){
+  list$`@iot.id` <- NULL
+  return(list)
+}
+```
+
+With these convenience functions, we can now create a function that processes the entire sheet and uploads to STA.
+
+```{r upload_utlity, eval=FALSE}
+
+
+uploadUtility <- function(api, utility, user, password) { 
+  id <- utility$thing$`@iot.id`
+  id.l <- utility$location$`@iot.id`
+  
+  status <- httr::GET(paste0(api, "Things('", id, "')"))$status
+  if (status == 200) {
+    
+    staPatch(
+      url = paste0(api, "Things('", id, "')"),
+      payload = strip_iot_id(utility$thing),
+      user = user,
+      password = password
+    )
+    
+    staPatch(
+      url = paste0(api, "Locations('", id.l, "')"),
+      payload = strip_iot_id(utility$location),
+      user = user,
+      password = password
+    )
+  } else {
+    staPost(
+      url = paste0(api, "Things"),
+      payload = utility$thing,
+      user = user,
+      password = password
+    )
+    staPost(
+      url = paste0(api, "Things('", id, "')/Locations"),
+      payload = utility$location,
+      user = user,
+      password = password
+    )
+  }
+}
+
+uploadUtility(endpoint, meta, user, pw)
+
+```

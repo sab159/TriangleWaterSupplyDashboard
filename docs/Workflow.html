@@ -1868,19 +1868,25 @@ div.tocify {
 <li>If the PWSID is not already represented in the XLSX template, then the entire data model will need to be populated. To check if the PWSID is represented, we issue a GET request to the SensorThings API associated with <code>Thing({PWSID})</code>. If we receive HTTP status 200 it already exists. If we receive HTTP status 404 it does not.</li>
 </ol></li>
 </ol>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pwsid <span class="ot">&lt;-</span> registry<span class="sc">$</span>pwsid[<span class="dv">1</span>] <span class="co"># retrieve the pwsid of the first row</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We write a convenience function to check a</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pwsid against an endpoint variable we have already set</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>staThingCheck <span class="ot">&lt;-</span> <span class="cf">function</span>(api_url,id){</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  call <span class="ot">&lt;-</span> <span class="fu">paste0</span>(api_url,<span class="st">&quot;Things(&#39;&quot;</span>,id,<span class="st">&quot;&#39;)&quot;</span>) </span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This makes &quot;https://example-sta-api_url.com/endpoint-interface/Things(&#39;{id}&#39;)</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  response <span class="ot">&lt;-</span> httr<span class="sc">::</span><span class="fu">GET</span>(call)<span class="sc">$</span>status</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(response)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">staThingCheck</span>(endpoint,pwsid)</span></code></pre></div>
-<pre><code>## [1] 404</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We write a convenience function to check a</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># pwsid against an endpoint variable we have already set</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>staThingCheck <span class="ot">&lt;-</span> <span class="cf">function</span>(api_url){</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  call <span class="ot">&lt;-</span> <span class="fu">paste0</span>(api_url,<span class="st">&quot;Things?$select=@iot.id&quot;</span>) </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This makes &quot;https://example-sta-api_url.com/endpoint-interface/Things(&#39;{id}&#39;)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  response <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(call)<span class="sc">$</span>value<span class="sc">$</span><span class="st">`</span><span class="at">@iot.id</span><span class="st">`</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  pwsids_in_sta <span class="ot">&lt;-</span> registry<span class="sc">$</span>pwsid[<span class="fu">which</span>(registry<span class="sc">$</span>pwsid <span class="sc">%in%</span> response)]</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  pwsids_not_in_sta <span class="ot">&lt;-</span> registry<span class="sc">$</span>pwsid[<span class="fu">which</span>(<span class="sc">!</span>(registry<span class="sc">$</span>pwsid <span class="sc">%in%</span> response))]</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  pwsids <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;pwsids_in_sta&quot;</span><span class="ot">=</span>pwsids_in_sta,<span class="st">&quot;pwsids_not_in_sta&quot;</span><span class="ot">=</span>pwsids_not_in_sta)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(pwsids)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">staThingCheck</span>(endpoint)</span></code></pre></div>
+<pre><code>## $pwsids_in_sta
+## [1] &quot;NC0326010&quot; &quot;NC0392020&quot; &quot;NC0368010&quot; &quot;NC0332010&quot; &quot;NC0392010&quot;
+## 
+## $pwsids_not_in_sta
+## [1] &quot;NC0392045&quot;</code></pre>
 <p>Here, we find that the Apex PWSID does not exist in SensorThings yet, so we must create it as well as its Datastreams. First we create the Thing (utility metadata object) and its associated location (service area boundary as geojson). Thus, we first must read in the entire excel template. The function below defines this, given a path (url) to a an XSLX template, we can read in the template and import a list of dataframes corresponding to the XLSX sheets into the R environment. <em>Note that this requires a subdirectory called <code>tmp</code> to exist in the working directory.</em></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>readTemplate <span class="ot">&lt;-</span> <span class="cf">function</span>(path) {</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  httr<span class="sc">::</span><span class="fu">GET</span>(path, httr<span class="sc">::</span><span class="fu">write_disk</span>(<span class="st">&quot;tmp/tmp.xlsx&quot;</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>))</span>
@@ -1983,7 +1989,120 @@ div.tocify {
 ##   source_name source_type date       value source_metric source_unit
 ##   &lt;lgl&gt;       &lt;lgl&gt;       &lt;chr&gt;      &lt;lgl&gt; &lt;lgl&gt;         &lt;lgl&gt;      
 ## 1 NA          NA          YYYY-MM-DD NA    NA            NA</code></pre>
-<p>Now we can access the metadata sheet using <code>data$metadata</code> to create the Thing and Location.</p>
+<p>Now we can access the metadata sheet using <code>data$metadata</code> to create the Thing and Location into a hiearchical list object that can be POSTed as JSON to the SensorThings API</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>meta <span class="ot">&lt;-</span> data<span class="sc">$</span>metadata[<span class="dv">1</span>,]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>metaToUtilityThing <span class="ot">&lt;-</span> <span class="cf">function</span>(meta) {</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  id <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;NC&quot;</span>, <span class="fu">gsub</span>(<span class="st">&quot;-&quot;</span>, <span class="st">&quot;&quot;</span>, meta<span class="sc">$</span>pwsid))</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  service_area <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="fu">paste0</span>(<span class="st">&quot;https://geoconnex.us/ref/pws/&quot;</span>,id))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  service_sfc <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_as_sfc</span>(service_area)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  thing <span class="ot">&lt;-</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">@iot.id</span><span class="st">`</span> <span class="ot">=</span> id,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">name =</span> meta<span class="sc">$</span>system_name,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">description =</span> <span class="fu">paste0</span>(<span class="st">&quot;Data from the water utility: &quot;</span>,</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>                             meta<span class="sc">$</span>system_name),</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">properties =</span> <span class="fu">list</span>(</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">county =</span> meta<span class="sc">$</span>county,</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">basin =</span> meta<span class="sc">$</span>basin,</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>          <span class="at">ownership =</span> meta<span class="sc">$</span>ownership,</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">service_population =</span> meta<span class="sc">$</span>service_population,</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">contact_name =</span> <span class="fu">paste0</span>(meta<span class="sc">$</span>contact_first_name, <span class="st">&quot; &quot;</span>, meta<span class="sc">$</span>contact_last_name),</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>          <span class="at">contact_title =</span> meta<span class="sc">$</span>contact_title,</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">address =</span> meta<span class="sc">$</span>address,</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>          <span class="at">city =</span> meta<span class="sc">$</span>city,</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>          <span class="at">state =</span> meta<span class="sc">$</span>state,</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>          <span class="at">zip =</span> meta<span class="sc">$</span>zip,</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>          <span class="at">phone =</span> meta<span class="sc">$</span>phone,</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>          <span class="at">fax =</span> meta<span class="sc">$</span>fax,</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>          <span class="at">email =</span> meta<span class="sc">$</span>email,</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>          <span class="at">wsrp_link =</span> meta<span class="sc">$</span>wsrp_link</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>  loc <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>          <span class="st">`</span><span class="at">@iot.id</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">paste0</span>(id,<span class="st">&quot; - Service Area&quot;</span>),</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>          <span class="at">name =</span> <span class="fu">paste0</span>(id, <span class="st">&quot; Service area&quot;</span>),</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>          <span class="at">description =</span> <span class="fu">paste0</span>(<span class="st">&quot;Service area of &quot;</span>,thing<span class="sc">$</span>name),</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>          <span class="at">encodingType =</span> <span class="st">&quot;application/vnd.geo+json&quot;</span>,</span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>          <span class="at">location =</span> <span class="fu">list</span>(</span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>            <span class="at">type=</span><span class="st">&quot;Point&quot;</span>,</span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>            <span class="at">coordinates =</span> <span class="fu">list</span>(</span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>              <span class="fl">4.9</span>,</span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>              <span class="fl">52.3</span></span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>  utility <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">thing=</span>thing,<span class="at">location=</span>loc)    </span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(utility)</span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">metaToUtilityThing</span>(meta)</span></code></pre></div>
+<p>Now we have to HTTP POST this object to STA. First we create HTTP POST, PATCH, and some convenience functions to enable this.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>staPost <span class="ot">&lt;-</span> <span class="cf">function</span>(url, payload, user, password) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  httr<span class="sc">::</span><span class="fu">POST</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">url =</span> url,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">encode =</span> <span class="st">&quot;json&quot;</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    httr<span class="sc">::</span><span class="fu">authenticate</span>(user, password, <span class="at">type =</span> <span class="st">&quot;basic&quot;</span>),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">body =</span> payload</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>staPatch <span class="ot">&lt;-</span> <span class="cf">function</span>(url, payload, user, password) {</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  httr<span class="sc">::</span><span class="fu">PATCH</span>(</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">url =</span> url,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">encode =</span> <span class="st">&quot;json&quot;</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    httr<span class="sc">::</span><span class="fu">authenticate</span>(user, password, <span class="at">type =</span> <span class="st">&quot;basic&quot;</span>),</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">body =</span> payload</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>strip_iot_id <span class="ot">&lt;-</span> <span class="cf">function</span>(list){</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  list<span class="sc">$</span><span class="st">`</span><span class="at">@iot.id</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(list)</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>With these convenience functions, we can now create a function that processes the entire sheet and uploads to STA.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>uploadUtility <span class="ot">&lt;-</span> <span class="cf">function</span>(api, utility, user, password) { </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  id <span class="ot">&lt;-</span> utility<span class="sc">$</span>thing<span class="sc">$</span><span class="st">`</span><span class="at">@iot.id</span><span class="st">`</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  id.l <span class="ot">&lt;-</span> utility<span class="sc">$</span>location<span class="sc">$</span><span class="st">`</span><span class="at">@iot.id</span><span class="st">`</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  status <span class="ot">&lt;-</span> httr<span class="sc">::</span><span class="fu">GET</span>(<span class="fu">paste0</span>(api, <span class="st">&quot;Things(&#39;&quot;</span>, id, <span class="st">&quot;&#39;)&quot;</span>))<span class="sc">$</span>status</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (status <span class="sc">==</span> <span class="dv">200</span>) {</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">staPatch</span>(</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">url =</span> <span class="fu">paste0</span>(api, <span class="st">&quot;Things(&#39;&quot;</span>, id, <span class="st">&quot;&#39;)&quot;</span>),</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">payload =</span> <span class="fu">strip_iot_id</span>(utility<span class="sc">$</span>thing),</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">user =</span> user,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">password =</span> password</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">staPatch</span>(</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">url =</span> <span class="fu">paste0</span>(api, <span class="st">&quot;Locations(&#39;&quot;</span>, id.l, <span class="st">&quot;&#39;)&quot;</span>),</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">payload =</span> <span class="fu">strip_iot_id</span>(utility<span class="sc">$</span>location),</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">user =</span> user,</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">password =</span> password</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">staPost</span>(</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">url =</span> <span class="fu">paste0</span>(api, <span class="st">&quot;Things&quot;</span>),</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">payload =</span> utility<span class="sc">$</span>thing,</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">user =</span> user,</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">password =</span> password</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">staPost</span>(</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>      <span class="at">url =</span> <span class="fu">paste0</span>(api, <span class="st">&quot;Things(&#39;&quot;</span>, id, <span class="st">&quot;&#39;)/Locations&quot;</span>),</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">payload =</span> utility<span class="sc">$</span>location,</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>      <span class="at">user =</span> user,</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">password =</span> password</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a><span class="fu">uploadUtility</span>(endpoint, meta, user, pw)</span></code></pre></div>
 </div>
 </div>
 
