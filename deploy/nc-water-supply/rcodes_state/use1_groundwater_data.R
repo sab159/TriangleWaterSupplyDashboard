@@ -169,6 +169,8 @@ summary(stats)
 
 head(stats)
 
+#remove sites that have not had new data in last year
+remove.site <- stats %>% filter(endYr < (current.year-1)) %>% select(site) %>% distinct()
 
 ######################################################################################################################################################################
 #
@@ -176,7 +178,7 @@ head(stats)
 #
 #####################################################################################################################################################################
 #Now attach most recent value to stream stats
-recent.flow <- year.flow %>% group_by(site) %>% filter(date == max(date)) #%>% rename(flow = depth_below_surface_ft)
+recent.flow <- year.flow %>% group_by(site) %>% filter(date == max(date)) %>% filter(site %notin% remove.site$site) #%>% rename(flow = depth_below_surface_ft)
 current.stat <- merge(recent.flow[,c("site", "julian", "depth_ft")], stats, by.x=c("site","julian"), by.y=c("site","julian"), all.x=TRUE) 
 
 #if else for this year and last years flow... I think flip this for gw
@@ -190,7 +192,6 @@ max.julian <- current.stat %>% filter(endYr == current.year) %>% summarize(maxJ 
 current.stat <- current.stat %>% mutate(status = ifelse(endYr < current.year & julian > 30, "unknown", ifelse(endYr < (current.year-1), "unknown", 
                                  ifelse(endYr==current.year & julian < (max.julian$maxJ-60), "unknown", status))))
 table(current.stat$status, useNA="ifany")
-
 
 #merge to sites geojson
 nc.sites2 <- merge(nc.sites, current.stat[,c("site","status","depth_ft","julian","date","flow50")], by.x="site", by.y="site")
@@ -218,14 +219,14 @@ stats2$status <- ifelse(is.na(stats2$status), "unknown", stats2$status)
 table(stats2$status, useNA="ifany")
 stats2 <- stats2 %>% mutate(colorStatus = ifelse(status=="Extremely Dry", "darkred", ifelse(status=="Very Dry", "red", ifelse(status=="Moderately Dry", "orange", ifelse(status=="Moderately Wet", "cornflowerblue",
                             ifelse(status=="Very Wet", "blue", ifelse(status=="Extremely Wet", "navy", "gray")))))))
-stats2 <- stats2 %>% dplyr::select(site, julian, date, depth_ft, status, colorStatus)
+stats2 <- stats2 %>% dplyr::select(site, julian, date, depth_ft, status, colorStatus) %>% filter(site %notin% remove.site$site)
 write.csv(stats2, paste0(swd_html, "gw\\gw_levels_time.csv"), row.names=FALSE)
 
 
 #set up month names and save out stats file
 my.month.name <- Vectorize(function(n) c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct","Nov", "Dec")[n])
 recent.flow <- year.flow %>% group_by(site) %>% filter(date >= max(as.Date(paste0(current.year, "-01-01"), '%Y-%m-%d'))) 
-stats.merge <- stats %>% mutate(date3 = date2, date2 = date) %>% dplyr::select(-date)
+stats.merge <- stats %>% mutate(date3 = date2, date2 = date) %>% dplyr::select(-date) %>% filter(site %notin% remove.site$site)
 current.stat2 <- merge(recent.flow, stats.merge, by.x=c("site","julian"), by.y=c("site","julian"), all.y=TRUE);
 
 current.stat2 <- current.stat2 %>% mutate(month = my.month.name(as.numeric(substr(date,6,7)))) %>% mutate(date = date2, date2 = date3) %>% dplyr::select(-date3);  #okay to have NA for date because want chart to end there
@@ -233,7 +234,8 @@ write.csv(current.stat2, paste0(swd_html, "gw\\gw_stats.csv"), row.names=FALSE)
 
 
 #let's do annual trends
-gw.annual <- year.flow %>% mutate(year = year(date)) %>% group_by(site, year) %>% summarize(medianDepth = median(depth_ft, na.rm=TRUE), nobsv = n(), .groups="drop")
+gw.annual <- year.flow %>% mutate(year = year(date)) %>% group_by(site, year) %>% summarize(medianDepth = median(depth_ft, na.rm=TRUE), nobsv = n(), .groups="drop") %>% 
+  filter(site %notin% remove.site$site)
 write.csv(gw.annual, paste0(swd_html, "gw\\gw_annual_level.csv"), row.names=FALSE)
 
 

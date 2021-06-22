@@ -28,7 +28,7 @@ serv <- "dv"
 #
 #################################################################################################################################
 #What sites are available in NC?
-nc.sites <- read_sf(paste0(swd_html, "streamflow\\stream_gauge_sites.geojson")) %>% select(site, name, huc8, startYr, endYr, nYears, geometry)
+nc.sites <- read_sf(paste0(swd_html, "streamflow\\stream_gauge_sites.geojson")) %>% select(site, name, huc8, startYr, endYr, nYears, geometry) %>% distinct()
 ws.bounds <- read_sf(paste0(swd_html, "water_supply_watersheds.geojson")) %>% select(-nSheds, -drawFile)
 all.data <- read.csv(paste0(swd_html, "streamflow\\all_stream_data.csv"), colClasses=c("site" = "character")) %>% mutate(date = as.Date(date, format="%Y-%m-%d"))
 all.data <- all.data %>% group_by(site) %>% filter(date < max(date))
@@ -38,14 +38,26 @@ all.data <- all.data %>% group_by(site) %>% filter(date < max(date))
 #                 IDENTIFY GAUGES WITH PWSID WATER SUPPLY WATERSHEDS
 #
 #################################################################################################################################
+#make sure in correct crs
+nc.sites <- nc.sites %>% sf::st_transform(crs = 4326)
+ws.bounds <- ws.bounds %>% sf::st_transform(crs = 4326)
 #intersect together gauge location with watershed bounds
-gauges_huc <- st_intersection(nc.sites, ws.bounds);
+gauges_huc <- sf::st_join(nc.sites, ws.bounds);
+table(gauges_huc$STREAM_NAM)
   
+#leaflet() %>%  addProviderTiles("Stamen.TonerLite") %>% 
+#  addPolygons(data = ws.bounds, fillOpacity= 0.6, fillColor = "blue", color="black", weight=0, popup=~STREAM_NAM) %>% 
+#  addCircles(data = gauges_huc, fillOpacity= 1, color="black", radius=20, label=paste0(gauges_huc$site, ": ", gauges_huc$STREAM_NAM))
+
+
 #merge names together
 zt <- gauges_huc %>% as.data.frame() %>% select(site, STREAM_NAM) %>% distinct()
 nc.sites <- merge(nc.sites, zt, by.x="site", by.y="site", all.x=TRUE)
 table(nc.sites$STREAM_NAM, useNA="ifany")
 end.date = paste0(year(today), "-12-31")
+
+  
+
 
 #go through stream sites and calculate statistics
 unique.sites <- unique(nc.sites$site)
@@ -84,6 +96,7 @@ write.csv(all.data, paste0(swd_html, "streamflow\\all_stream_data.csv"), row.nam
 
 #bind all.data and year flow together and calculate 7 day rolling average (function is in global api)
 #Check for missing days, if so, add NA rows: #https://waterdata.usgs.gov/blog/moving-averages/
+current.year <- year(today);
 year.flow  <- as.data.frame(matrix(nrow=0, ncol=4));    colnames(year.flow) <- c("site", "date", "julian", "flow")
 stats <- as.data.frame(matrix(nrow=0,ncol=13));        colnames(stats) <- c("Site", "julian", "min", "flow10", "flow25", "flow50", "flow75", "flow90", "max", "Nobs","startYr","endYr","date"); 
 for (i in 1:length(unique.sites)){
@@ -135,7 +148,7 @@ current.stat <- current.stat %>% mutate(status = ifelse(endYr < current.year & j
 table(current.stat$status)
 
 #merge to geojson file with current status for map display
-nc.sites2 <- merge(nc.sites, current.stat[,c("site","status","flow","julian","date","flow50")], by.x="site", by.y="site")
+nc.sites2 <- merge(nc.sites, current.stat[,c("site","status","flow","julian","date","flow50")], by.x="site", by.y="site", all.x=TRUE)
 geojson_write(nc.sites2, file=paste0(swd_html, "streamflow\\stream_gauge_sites.geojson"))
 
 

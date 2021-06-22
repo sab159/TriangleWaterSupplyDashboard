@@ -186,7 +186,6 @@ year.flow  <- as.data.frame(matrix(nrow=0, ncol=10));   colnames(year.flow) <- c
     
     print(i)
   }
-  bk.up <- stats
   summary(stats)
   summary(year.flow)
   

@@ -30,6 +30,7 @@ package.check <- lapply(
 
 #usgs packages
 install.packages("dataRetrieval", repos=c("http://owi.usgs.gov/R", getOption("repos")))
+install.packages("EGRET", repos=c("http://owi.usgs.gov/R", getOption("repos")))
 library(dataRetrieval);  library(EGRET); #usgs links
 
 ######################################################################################################################################################################
@@ -77,6 +78,7 @@ write.csv(update.date, paste0(swd_html, "update_date.csv"), row.names=FALSE)
 
 #calculate moving average function
 ma <- function(x,n=7){stats::filter(x,rep(1/n,n), sides=1)}
-
+#useful function
+`%notin%` = function(x,y) !(x %in% y); #function to get what is not in the list
 
 
