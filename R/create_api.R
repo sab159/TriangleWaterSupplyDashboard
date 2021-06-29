@@ -63,25 +63,6 @@ registry <- read.csv(url_registry)
   # Supply conditions at a daily timestep, updated weekly (generally available water storage capacity from relevant reservoirs). (template sheet `supply_conditions`)
   # Active conservation status and associated policies, updated as needed. (template sheet `conservation_status`)
 
-# Each Utility shall be a `Thing`, identified viw the U.S. EPA SDWIS PWSID.
-  #Each `Thing` shall be associated with 1 `Location`, which is its Service Area Boundary or a centroid
-    #Each `Thing` shall be associated with 2-3 `Datastream`s
-      #The `Datastreams` are:
-        #Finished water deliveries ("[PWSID]-WaterDistributed")
-          #`Sensor`: Report of delivered water ("DemandReport")
-          #`ObservedProperty`: Water distributed for use by consumers of utility water ("WaterDistributed")
-          #`unitOfMeasurement`: "Million Gallons per Day (MGD)"
-      #Water conservation status ("[PWSID]-ConservationStatus")
-        #`Sensor`: Water Shortage Status form ("StageReport")
-        #`ObservedProperty`: Phase of water shortage severity associated with appropriate responses for each phase ("ConservationStatus")
-        #`unitOfMeasurement`: "Status"
-      #Storage Capacity ("[PWSID]-StorageCapacity")
-        #`Sensor`: Water Shortage Status form ("StorageReport")
-        #`ObservedProperty`: Percent of storage capacity available for distribution ("StorageCapacity")
-        #`unitOfMeasurement`: "Percent"
-        #'featureofInterest: "Location"
-
-
 #For each row in registry download the template and upload any NEW data to the sensor of things endpoing. If the PWSID is not present then add all
 #If we receive HTTP status 200 it already exists. If we receive HTTP status 404 it does not. 
 
@@ -142,7 +123,7 @@ readTemplate <- function(path) {
 
 
 #Here we use the function to read in the XLSX associated with the first row of the utility registry (Apex in this case).
-path <- registry$data_url[1]
+path <- registry$data_url[5]
 data <- readTemplate(path)
 head(data)
 
@@ -237,7 +218,7 @@ if(as.numeric(dateFormat)>1000) {
   }
 
 
-#Now create the list
+#Now create the list ****ONLY DOING 10 OBSERVATIONS UNTIL KNOW IT IS CORRECT ******
 ds.deliver = list(
   id=paste(meta$thing$`@iot.id`,"WaterDistributed", sep="-"),
   name = paste0("Water distributed (MGD) by ", meta$thing$name),
@@ -270,7 +251,7 @@ datastream.deliver <- list(datastream=ds.deliver, observation=deliver.obsv)
 #Observations?value":[{"@iot.id":"NC0332010-WaterDistributed-2000-01-01T00:00:00.000Z",
                       #"phenomenonTime":"2000-01-01T00:00:00.000Z",
                       #"parameters":{"days in observed period":1},"result":25.411,"resultTime":"2000-01-01T00:00:00.000Z}]
-
+#plot(as.Date(datastream.deliver$observation$parameters$resultTime, format="%Y-%m-%d"), datastream.deliver$observation$parameters$result, type="l")
 
 #############################################################################################################################
 #Conservation sheet
@@ -279,7 +260,11 @@ datastream.deliver <- list(datastream=ds.deliver, observation=deliver.obsv)
 #`ObservedProperty`: Phase of water shortage severity associated with appropriate responses for each phase ("ConservationStatus")
 #`unitOfMeasurement`: "Status"
 
-consv = data$conservation_policies %>%  dplyr::select(-Description) %>% gather(key=activity, value=status_response, -conservation_status) %>% rename(status = conservation_status)
+#column names not the same between Apex and Durham... trying to fix...
+consv = data$conservation_policies[,-2] %>% rename(conservation_status = colnames(consv[,1]))
+consv <- consv %>% gather(key=activity, value=status_response, -conservation_status) %>% rename(status = conservation_status)
+#if left the example column - remove
+consv <- consv %>% filter(is.na(status_response)==FALSE)
 
 consv.now = data$conservation_status %>% filter(is.na(conservation_status)==FALSE) %>% mutate(date = today())
 #assume similar date challenges
@@ -293,7 +278,7 @@ if(is.na(dateFormat)==FALSE) {
     dateFormatFinal = "%m/%d/%Y"
     consv.now = consv.now %>% mutate(date = as.Date(as.character(date_activated), format=dateFormatFinal))
   }
-  if(as.numeric(dateFormat)>1000) {
+  if(as.numeric(dateFormat)>1000 & as.numeric(dateFormat)<6000) {
     dateFormatFinal = "Excel"
     consv.now = consv.now %>% mutate(date = excel_numeric_to_date(as.numeric(as.character(date_activated)), date_system = "modern"))
   }
@@ -316,7 +301,121 @@ ds.consv_table = list(
   Sensor = consv.now$conservation_status
   
 )
-ds.consv_table
+str(ds.consv_table)
+
+
+
+#############################################################################################################################
+# Storage Capacity Sheet
+#Storage Capacity ("[PWSID]-StorageCapacity")
+#`Sensor`: Water Shortage Status form ("StorageReport")
+#`ObservedProperty`: Percent of storage capacity available for distribution ("StorageCapacity")
+#`unitOfMeasurement`: "Percent"
+#'featureofInterest: "Location"
+
+store <- data$supply %>% filter(substr(date,1,4) != "YYYY")
+
+#storage locations will be part of the utility shapefile... does not look like attached to monitoring location
+
+#mon.loc <- data$monitoring_locations; #Durham provided storage volume but not a location... should we use centroid of utility then?
+#mon.loc <- mon.loc %>% filter(is.na(as.numeric(latitude)) == FALSE) %>% dplyr::select(monitoring_location_name, parameters, latitude, longitude)
+#if (dim(mon.loc)[1] == 0){
+
+#how many sources present?
+  store.type <- unique(store[,c("source_name", "source_type")])
+#create location dataframe
+  store.loc <- as.data.frame(matrix(nrow=dim(store.type)[1], ncol=4)); colnames(store.loc) <- c("name", "store_type", "latitude", "longitude")
+  for(i in 1:dim(store.type)[1]){
+    store.loc$name[i]  = store.type$source_name[i]; 
+    store.loc$store_type[i] = store.type$source_type[i];
+    store.loc$latitude[i] = round(meta$location$location$coordinates[[1]] + 0.015*i,5); #add some jitter in case several
+    store.loc$longitude[i] = round(meta$location$location$coordinates[[2]] + 0.015*i,5); #add some jitter in case serveral
+  }
+store.loc
+
+featureList<-list() #initialize list 
+for(i in 1:length(store.loc$name)){
+  featureList[[i]] = list(
+    name = store.loc$name[i],
+    type="Point",
+    coordinates = list(store.loc$latitude[i], store.loc$longitude[i])
+  )
+}
+
+
+#now fix store dates
+dateFormat = store$date[1]; dateFormatFinal = "check"
+if(substr(dateFormat,5,5) == "-") {
+  dateFormatFinal = "%Y-%m-%d"
+  store = store %>% mutate(date = as.Date(as.character(date), format=dateFormatFinal))
+}
+if(substr(dateFormat,5,5) == "/") {
+  dateFormatFinal = "%m/%d/%Y"
+  store = store %>% mutate(date = as.Date(as.character(date), format=dateFormatFinal))
+}
+if(as.numeric(dateFormat)>1000) {
+  dateFormatFinal = "Excel"
+  store = store %>% mutate(date = excel_numeric_to_date(as.numeric(as.character(date)), date_system = "modern"))
+}
+
+#Note that part way through the data for Durham the "source_metric" and "source_unit" were no longer filled out.
+#leaving as NA for now... do we want to try to correct errors or have state go back and have data entrants fix errors? I think the latter.
+
+#convert percent_full to value between 0 and 100
+store <- store %>% mutate(value = ifelse(source_type=="reservoir" & value <= 5, value*100, value))
+
+#Now create the list ****ONLY DOING 10 OBSERVATIONS UNTIL KNOW IT IS CORRECT ******
+#Is this just for storage capacity or will any monitoring data go into this field? I think the latter... Or are we screening the source_type?
+ds.store = list(
+  id=paste(meta$thing$`@iot.id`,"StorageCapacity", sep="-"),
+  name = paste0("Monitoring Data provided by ", meta$thing$name),
+  description = paste0("Storage capacity available for distribution (reservoir, stream, groundwater) for ", meta$thing$name),
+  observationType = "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
+  unit = list(definition="http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048",
+              list(
+                name = "Percent Full",
+                symbol = "%"),
+              list(
+                name = "Groundwater Level in Feet",
+                symbol = "FT"),
+              list(
+                name = "Streamflow Level",
+                symbol = "CFS")
+              ),
+  Thing_id = meta$thing$`@iot.id`,
+  Sensor_id = "StorageReport",
+  ObservedProperty_id = "StorageCapacity",
+  Observation = list(
+    `@iot.id` = paste0(ds.store$id,"-",store$date[1:10],"T00:00.000Z"),
+    phenomenonTime = paste0(store$date[1:10],"T00:00.000Z"),
+    parameters = list(
+      name = store$source_name[1:10],
+      type = store$source_type[1:10],
+      unit = store$source_unit[1:10],
+      result = store$value[1:10],
+      resultTime = paste0(store$date[1:10],"T00:00.000Z")
+    ) #end parameters list
+  ), #end observation list
+  FeaturesofInterest = list(
+    description = "Location of Storage Capacity Measurements for Utility",
+    encodingType = "application/vnd.geo+json",
+    feature = featureList
+    )
+  )#end Features of Interest List
+) # end dstore list
+str(ds.store)
+
+
+
+#plot(as.Date(ds.store$observation$parameters$resultTime, format="%Y-%m-%d"), ds.store$observation$parameters$result, type="l")
+
+
+#############################################################################################################################
+# MONITORING DATA
+
+#Are we doing this or leaving blank for now?
+
+
 
 
 
