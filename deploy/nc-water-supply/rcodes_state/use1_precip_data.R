@@ -346,7 +346,7 @@ foo.month <- foo.month %>% mutate(pcp_in = ifelse((month == current.month & year
   foo.month <- foo.month %>% mutate(year = as.numeric(as.character(year))) %>% filter(year >= year(start.date))
 
 #save file --- since only plotting recent years will only save out 2000 onward
-#foo.month <- foo.month %>% filter(year>=1997)
+foo.month <- foo.month %>% filter(year>=2000)
 write.csv(foo.month, paste0(swd_html, "pcp\\pcp_months_total.csv"), row.names=FALSE)
 
 
@@ -357,6 +357,7 @@ write.csv(foo.month, paste0(swd_html, "pcp\\pcp_months_total.csv"), row.names=FA
 #
 ###################################################################################################################################
 pcp.data <- pcp.data %>% filter(date>start.date)
+
 foo.count <- pcp.data %>% group_by(id, year) %>% count() %>% filter(year < current.year & n>340 | year == current.year) %>% mutate(idyr = paste0(id,"-",year)) 
 foo.cum <- pcp.data %>% mutate(idyr = paste0(id,"-",year)) %>% filter(idyr %in% foo.count$idyr) %>% arrange(id, year, month, day) %>% mutate(date= as.Date(date, format="%Y-%m-%d"))
 foo.cum <- foo.cum %>% distinct() %>% filter(year>=2000); #shorten for this file
@@ -382,6 +383,8 @@ foo.cum2 <- foo.cum2 %>% filter(year == current.year | year < current.year & nMi
 foo.cum2$date2 <- as.Date(foo.cum2$julian, origin=paste0(foo.cum2$year,"-01-01"))
 foo.cum2$date <- format(foo.cum2$date2, format="%b-%d")
 foo.cum2 <- foo.cum2 %>% dplyr::select(id, year, julian, pcp_in, date)
+
+foo.cum2 <- foo.cum2 %>% filter(year %in% c(2002,2003,2007,2008) | year >= 2011)
 
 write.csv(foo.cum2, paste0(swd_html, "pcp\\pcp_cum_total.csv"), row.names=FALSE)
 

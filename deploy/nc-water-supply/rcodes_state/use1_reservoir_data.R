@@ -15,7 +15,7 @@
 #Now read in the website data and add the most recent files to the end of it
 old.data <- read.csv(paste0(swd_html, "reservoirs\\usace_dams.csv"))
 max(old.data$date)
-timeAmt = 4
+timeAmt = 2
 timeUnit = "weeks"
 
 ######################################################################################################################################################################
