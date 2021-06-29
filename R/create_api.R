@@ -5,13 +5,29 @@
 # Load Libaries
 #
 ###########################################################################################################################
-library(httr) # for HTTP requests 
-library(jsonlite) # for parsing JSON from the SensorThings endpoint
-library(readxl) # for reading the XLSX templates
-library(tidyverse) # for data manipulation
-library(lubridate) # for datatime manipulation
-library(rstudioapi); #used to set working directory
-library(janitor); #for excel number formats to convert to date time
+#library(httr) # for HTTP requests 
+#library(jsonlite) # for parsing JSON from the SensorThings endpoint
+#library(readxl) # for reading the XLSX templates
+#library(tidyverse) # for data manipulation
+#library(lubridate) # for datatime manipulation
+#library(rstudioapi); #used to set working directory
+#library(janitor); #for excel number formats to convert to date time
+
+## First specify the packages of interest
+packages = c("rstudioapi", "httr", "jsonlite", "readxl",
+             "tidyverse", "lubridate", "janitor")
+
+## Now load or install&load all
+package.check <- lapply(
+  packages,
+  FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  }
+)
+
 
 ###########################################################################################################################
 #
@@ -34,8 +50,6 @@ url_registry <- "https://raw.githubusercontent.com/internetofwater/TriangleWater
 
 registry <- read.csv(url_registry)
 
-PWSIDs_in_database_already <- getThings(endpoint)
-PWSIDs_not_in_database_already <- registry[which(!(pwsid %in% PWSIDs_in_database_already)),]$pwsid
 
 
 ###########################################################################################################################
@@ -242,7 +256,7 @@ ds.deliver = list(
 )
 
 deliver.obsv = list(
-  `@iot.id` = paste0(id,"-",deliv$date[1:10],"T00:00.000Z"),
+  `@iot.id` = paste0(ds.deliver$id,"-",deliv$date[1:10],"T00:00.000Z"),
   phenomenonTime = paste0(deliv$date[1:10],"T00:00.000Z"),
   parameters = list(
     `days in observed period` = deliv$days[1:10],
@@ -257,6 +271,52 @@ datastream.deliver <- list(datastream=ds.deliver, observation=deliver.obsv)
                       #"phenomenonTime":"2000-01-01T00:00:00.000Z",
                       #"parameters":{"days in observed period":1},"result":25.411,"resultTime":"2000-01-01T00:00:00.000Z}]
 
+
+#############################################################################################################################
+#Conservation sheet
+#Water conservation status ("[PWSID]-ConservationStatus")
+#`Sensor`: Water Shortage Status form ("StageReport")
+#`ObservedProperty`: Phase of water shortage severity associated with appropriate responses for each phase ("ConservationStatus")
+#`unitOfMeasurement`: "Status"
+
+consv = data$conservation_policies %>%  dplyr::select(-Description) %>% gather(key=activity, value=status_response, -conservation_status) %>% rename(status = conservation_status)
+
+consv.now = data$conservation_status %>% filter(is.na(conservation_status)==FALSE) %>% mutate(date = today())
+#assume similar date challenges
+dateFormat = consv.now$date_activated[1]; dateFormatFinal = "check"
+if(is.na(dateFormat)==FALSE) {
+  if(substr(dateFormat,5,5) == "-") {
+    dateFormatFinal = "%Y-%m-%d"
+    consv.now = consv.now %>% mutate(date = as.Date(as.character(date_activated), format=dateFormatFinal))
+  }
+  if(substr(dateFormat,5,5) == "/") {
+    dateFormatFinal = "%m/%d/%Y"
+    consv.now = consv.now %>% mutate(date = as.Date(as.character(date_activated), format=dateFormatFinal))
+  }
+  if(as.numeric(dateFormat)>1000) {
+    dateFormatFinal = "Excel"
+    consv.now = consv.now %>% mutate(date = excel_numeric_to_date(as.numeric(as.character(date_activated)), date_system = "modern"))
+  }
+}
+#if no date - set to present date. Did this at the beginning to avoid date errors with "ifelse"
+consv.now <- consv.now %>% mutate(date = if_else(is.na(date_activated), today(), date)) 
+consv.now = consv.now %>% filter(date == max(date))
+
+ds.consv_table = list(
+  id=paste(meta$thing$`@iot.id`,"ConservationStatus", sep="-"),
+  name = paste0("Conservation Status and Activities by ", meta$thing$name),
+  description = paste0("Activities allowed based on conservation status for ", meta$thing$name),
+  unitOfMeasurement = "status",
+  Thing_id = meta$thing$`@iot.id`,
+  Sensor_id = "StageReport",
+  ObservedProperty_id = "ConservationStatus",
+  ObservedProperty = list(name = consv$status,
+                          definition = consv$activity,
+                          description = consv$status_response),
+  Sensor = consv.now$conservation_status
+  
+)
+ds.consv_table
 
 
 
