@@ -816,7 +816,7 @@ $('button').on('click', function(){
             map.setLayoutProperty('drought', 'visibility', 'visible');
 
             //put user onto tab
-            $('[href="#pcpDrought').tab('show');
+            //$('[href="#pcpDrought').tab('show');
 
             //add legend to map
             droughtLegend = document.getElementById('drought-legend');

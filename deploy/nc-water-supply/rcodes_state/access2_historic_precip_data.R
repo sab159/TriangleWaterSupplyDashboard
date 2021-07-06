@@ -145,3 +145,49 @@ mapview::mapview(sites)
 
 
 
+###################################################################################################################################
+#
+#          DROUGHT DATABASE
+#          
+####################################################################################################################################
+#download tables for HUCS of interest 
+huc8 <- read_sf(paste0(swd_html, "huc8.geojson"))
+huc.list <- huc8$huc8
+
+end.date <- paste0("12/31/", year(today))
+
+#create dataframe and pull new data
+drought.time <- as.data.frame(matrix(nrow=0, ncol=9)); colnames(drought.time) <- c("huc8","name","date","none","d0","d1","d2","d3","d4")
+for (m in 1:length(huc.list)){
+  full_url <-paste0("https://usdmdataservices.unl.edu/api/HUCStatistics/GetDroughtSeverityStatisticsByAreaPercent?aoi=",huc.list[m],"&startdate=01/01/2000&enddate=", end.date, "&statisticsType=1")
+  api.data <- GET(full_url, timeout(15000)) #use httr libirary to avoid timeout
+  df <- content(api.data, "parse")
+  
+  for (i in 1:length(df)){
+    zt.name <- as.character(subset(huc8, huc8==huc.list[m])$name) 
+    zt = tibble(
+      huc8 = as.character(huc.list[m]),
+      name = zt.name,
+      date = df[[i]]$ValidStart,
+      none = df[[i]]$None,
+      d0 = df[[i]]$D0,
+      d1 = df[[i]]$D1,
+      d2 = df[[i]]$D2,
+      d3 = df[[i]]$D3,
+      d4 = df[[i]]$D4
+    )
+    drought.time <- rbind(drought.time, zt)
+  }
+  print(zt.name)
+}
+table(drought.time$huc8)
+
+#TAKES 25 SECONDS TO RUN FOR FULL YEAR... IN FUTURE WILL NEED TO SHORTEN
+drought2 <- drought.time %>% mutate(date = as.Date(date, "%Y-%m-%d"), none = as.numeric(none), d0 = as.numeric(d0), d1 = as.numeric(d1), d2 = as.numeric(d2), d3=as.numeric(d3), d4=as.numeric(d4)) %>% arrange(huc8, date)
+#it seems that drought is cumulative
+drought2 <- drought2 %>% mutate(d4x = d4, d3x = d3 - d4, d2x = d2-d3, d1x = d1-d2, d0x = d0-d1)
+#slim and save file
+drought2 <- drought2 %>% select(huc8, name, date, none, d0x, d1x, d2x, d3x, d4x)
+drought2 <- drought2 %>% arrange(huc8, date) %>% distinct()
+write.csv(drought2, paste0(swd_html, "drought\\percentAreaHUC.csv"), row.names=FALSE)
+
