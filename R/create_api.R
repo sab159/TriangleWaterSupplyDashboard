@@ -18,7 +18,7 @@ packages = c("rstudioapi", "httr", "jsonlite", "readxl",
              "tidyverse", "lubridate", "janitor")
 
 ## Now load or install&load all
-package.check <- lapply(
+package.check <- function(packages){lapply(
   packages,
   FUN = function(x) {
     if (!require(x, character.only = TRUE)) {
@@ -27,6 +27,99 @@ package.check <- lapply(
     }
   }
 )
+}
+
+package.check(packages)
+
+### Create functions to interact with STA
+
+staPost <- function(url, payload, user, password) {
+  httr::POST(
+    url = url,
+    encode = "json",
+    httr::authenticate(user, password, type = "basic"),
+    body = payload
+  )
+}
+
+staPatch <- function(url, payload, user, password) {
+  httr::PATCH(
+    url = url,
+    encode = "json",
+    httr::authenticate(user, password, type = "basic"),
+    body = payload
+  )
+}
+
+strip_iot_id <- function(list){
+  list$`@iot.id` <- NULL
+  return(list)
+}
+
+PostObservedProperty <- function(api,user,password,id,name,definition,description){
+  payload = list("@iot.id"=id,
+                 "name"=name,
+                 "definition"=definition,
+                 "description"=description)
+  staPost(paste0(api,"ObservedProperties"),
+          payload,
+          user,
+          password)
+}
+
+
+PostSensor <- function(api,user,password,id,name,description,encodingType,metadata){
+  payload = list("@iot.id"=id,
+                 "name"=name,
+                 "description"=description,
+                 "encodingType"=encodingType,
+                 "metadata"=metadata)
+  staPost(paste0(api,"Sensors"),
+          payload,
+          user,
+          password)
+}
+
+# Define Observed Properties
+op <- PostObservedProperty(api=endpoint, user, pw,
+                           id = "WaterDistributed",
+                           name = "Water Distributed",
+                           definition = "http://vocabulary.odm2.org/api/v1/variablename/waterUsePublicSupply/",
+                           description = "Water distributed for use by consumers of utility water")
+
+op <- PostObservedProperty(api=endpoint, user, pw,
+                           id = "StorageCapacity",
+                           name = "Storage Capacity (% full)",
+                           definition = "http://vocabulary.odm2.org/api/v1/variablename/reservoirStorage/",
+                           description = "Percentage of water storage capacity available for distribution")
+
+op <- PostObservedProperty(api=endpoint, user, pw,
+                           id = "WaterShortageStage",
+                           name = "Water Shortage Stage",
+                           definition = "https://www.ncwater.org/WUDC/app/LWSP/learn.php",
+                           description = "Phases of water shortage severity associated with appropriate responses for each phase")
+
+# Define Sensors
+s <- PostSensor(api=endpoint, user, pw,
+                id = "ShortageStageReport",
+                name = "Water Shortage Status",
+                description = "Water Shortage Status form submitted to ncwater.org",
+                encodingType = "application/pdf",
+                metadata = "https://www.ncwater.org/WUDC/")
+
+s <- PostSensor(api=endpoint, user, pw,
+                id = "StorageReport",
+                name = "Report of available water storage",
+                description = "Report of available water storage",
+                encodingType = "application/pdf",
+                metadata = "https://www.ncwater.org/WUDC/")
+
+s <- PostSensor(api=endpoint, user, pw,
+                id = "DemandReport",
+                name = "Report of delivered water",
+                description = "Report of delivered water",
+                encodingType = "application/pdf",
+                metadata = "https://www.ncwater.org")
 
 
 ###########################################################################################################################
@@ -41,7 +134,7 @@ setwd(dirname(source_path))
 
 # endpoint <- "http://web:8080/FROST-Server/v1.1/" 
 # This is the production endpoint for portability to a different environment, assuming a docker container named "web"
-endpoint <- "https://twsd.internetofwater.dev/api/v1.1/" ; #This is the current pilot endpoint 
+endpoint <- "https://twsd.internetofwater.dev/api/v1.1/"  #This is the current pilot endpoint 
 
 user <- "iow" # We will be changing these in production
 pw <- "nieps" # We will be changing these in production
@@ -220,31 +313,41 @@ if(as.numeric(dateFormat)>1000) {
 
 #Now create the list ****ONLY DOING 10 OBSERVATIONS UNTIL KNOW IT IS CORRECT ******
 ds.deliver = list(
-  id=paste(meta$thing$`@iot.id`,"WaterDistributed", sep="-"),
+  `@iot.id`=paste(meta$thing$`@iot.id`,"WaterDistributed", sep="-"),
   name = paste0("Water distributed (MGD) by ", meta$thing$name),
   description = paste0("Average Water distributed (MGD) in the preceding period by ", meta$thing$name),
   observationType = "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
-  unit = list(definition="http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048",
+  unitOfMeasurement = list(definition="http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048",
               name = "Million Gallons per Day",
               symbol = "MGD"),
-  Thing_id = meta$thing$`@iot.id`,
-  Sensor_id = "DemandReport",
-  ObservedProperty_id = "WaterDistributed",
-  phenomenonTime = list(
-    paste0(deliv$date[1:10],"T00:00.000Z")
-  #`@iot.id` = paste0(id,"-",phenomenonTime)
-  )
+  Thing = list(`@iot.id`=meta$thing$`@iot.id`),
+  Sensor = list(`@iot.id`="DemandReport"),
+  ObservedProperty = list(`@iot.id`="WaterDistributed")
+  
 )
 
+staPost(paste0(endpoint,"Datastreams"), ds.deliver, user, pw )
+staPost
+
+deliv$`@iot.id` <- paste0(ds.deliver$`@iot.id`,"-",deliv$date,"T00:00.000Z")
+deliv$phenomenonTime <- paste0(deliv$date,"T00:00.000Z")
+deliv$result <- deliv$delivery_million_gallons
+
+d <- select(deliv,`@iot.id`, phenomenonTime,result,days)
+d2 <- as.list(as.data.frame(t(d)))
+d2 <- setNames(split(d2, seq(nrow(d2))), rownames(d2))
+
 deliver.obsv = list(
-  `@iot.id` = paste0(ds.deliver$id,"-",deliv$date[1:10],"T00:00.000Z"),
+  `@iot.id` = paste0(ds.deliver$`@iot.id`,"-",deliv$date[1:10],"T00:00.000Z"),
   phenomenonTime = paste0(deliv$date[1:10],"T00:00.000Z"),
-  parameters = list(
-    `days in observed period` = deliv$days[1:10],
+  parameters = I(list(
+    `days in observed period` = deliv$days[1:10])),
     result = deliv$delivery_million_gallons[1:10],
     resultTime = paste0(deliv$date[1:10],"T00:00:00.000Z")
   )
-)
+
+d2 <- as.list(as.data.frame(t(deliver.obsv)))
+d2 <- setNames(split(d2, seq(nrow(d2))), rownames(d2))
 
 datastream.deliver <- list(datastream=ds.deliver, observation=deliver.obsv)    
 #https://twsd.internetofwater.dev/api/v1.1/Datastreams('NC0332010-WaterDistributed')/Observations?$count=true

@@ -1,16 +1,16 @@
 version: "3.7"
 
 services:
-  r:
-    image: internetofwater/r-sta-post:latest
-    restart: always
-    volumes:
-     - type: bind
-       source: ./src
-       target: /src
-     - type: bind
-       source: ./run_use.R
-       target: /src/run.R
+  # r:
+  #   image: internetofwater/r-sta-post:latest
+  #   restart: always
+  #   volumes:
+  #    - type: bind
+  #      source: ./src
+  #      target: /src
+  #    - type: bind
+  #      source: ./run_use.R
+  #      target: /src/run.R
 
   web:
     image: fraunhoferiosb/frost-server:latest
@@ -24,6 +24,8 @@ services:
       - persistence_db_username=sensorthings
       - persistence_db_password=ChangeMe
       - persistence_autoUpdateDatabase=true
+      - persistence_persistenceManagerImplementationClass=de.fraunhofer.iosb.ilt.sta.persistence.pgjooq.imp.PostgresPersistenceManagerString
+      - persistence_idGenerationMode=ServerAndClientGenerated
     ports:
       - 8080:8080
       - 1883:1883
@@ -41,6 +43,6 @@ services:
       - postgis_volume:/var/lib/postgresql/data
 volumes:
     postgis_volume:
-    caddy_data:
-    caddy_config:
+#    caddy_data:
+#    caddy_config:
 
