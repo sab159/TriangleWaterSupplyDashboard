@@ -225,12 +225,13 @@ head(data)
 #that can be POSTed as JSON to the SensorThings API
 
 meta <- data$metadata[1,]
+id <- paste0("NC", gsub("-", "", meta$pwsid))
+service_area <- sf::read_sf(paste0("https://geoconnex.us/ref/pws/",id)) %>% sf::st_centroid()
 
 #function
 metaToUtilityThing <- function(meta) {
   id <- paste0("NC", gsub("-", "", meta$pwsid))
-  service_area <- sf::read_sf(paste0("https://geoconnex.us/ref/pws/",id)) %>% sf::st_centroid()
-  
+
   #convert to centroid to save space since calling in elsewhere
   #service_sfc <- sf::st_as_sfc(service_area);  #lp: this did not work for me
   thing <-
@@ -258,8 +259,9 @@ metaToUtilityThing <- function(meta) {
     )
   
   loc <- list(
-    `@iot.id` = paste0(id," - Service Area"),
-    name = paste0(id, " Service area"),
+    #`@iot.id` = paste0(id," - Service Area"),
+    `@iot.id` = id,
+    name = paste0(id, " Center of Service area"),
     description = paste0("Service area of ",thing$name),
     encodingType = "application/vnd.geo+json",
     location = list(
@@ -275,11 +277,27 @@ metaToUtilityThing <- function(meta) {
   return(utility)
 }
 
-meta <- metaToUtilityThing(meta)
-str(meta)
+utility <- metaToUtilityThing(meta)
+str(utility)
 
 #why does location fit in there even though it should go to it's own spot?
-staPost(paste0(endpoint,"Things"), meta, user, pw )
+#staPatch(paste0(endpoint,"Things"), meta, user, pw )
+
+api = endpoint
+status <- httr::GET(paste0(endpoint, "Things('", id, "')"))$status; status
+  staPatch(
+    url = paste0(api, "Things('", id, "')"),
+    payload = strip_iot_id(utility$thing),
+    user = user,
+    password = pw
+  )
+  
+  staPatch(
+    url = paste0(api, "Locations('", utility$location$`@iot.id`, "')"),
+    payload = strip_iot_id(utility$location),
+    user = user,
+    password = pw
+  )
 
 
 
@@ -314,29 +332,27 @@ if(as.numeric(dateFormat)>1000) {
                            days = as.numeric(date-lag(date)))
   }
 
-
 #Now create the list ****ONLY DOING 10 OBSERVATIONS UNTIL KNOW IT IS CORRECT ******
 ds.deliver = list(
-  `@iot.id`=paste(meta$thing$`@iot.id`,"WaterDistributed", sep="-"),
-  name = paste0("Water distributed (MGD) by ", meta$thing$name),
+  `@iot.id`= paste(utility$thing$`@iot.id`,"WaterDistributed", sep="-"),
+  name = paste0("Water distributed (MGD) by ", utility$thing$name),
   description = paste0("Average Water distributed (MGD) in the preceding period by ", meta$thing$name),
   observationType = "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
   unitOfMeasurement = list(definition="http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048",
               name = "Million Gallons per Day",
               symbol = "MGD"),
-  thing_id = list(`@iot.id`=meta$thing$`@iot.id`), #this line breaks it
+  #thing_id = list(`@iot.id`= utility$thing$`@iot.id`), #this line breaks it
   Sensor = list(`@iot.id`="DemandReport"),
   ObservedProperty = list(`@iot.id`="WaterDistributed")
   
 )
 jsonlite::toJSON(ds.deliver, auto_unbox=TRUE)
 #check to see if works... it does
-staPost(paste0(endpoint,"Datastreams"), ds.deliver, user, pw )
+#staPost(paste0(endpoint,"Datastreams"), ds.deliver, user, pw )
 
 deliv$`@iot.id` <- paste0(ds.deliver$`@iot.id`,"-",deliv$date,"T00:00.000Z")
 deliv$phenomenonTime <- paste0(deliv$date,"T00:00.000Z")
 deliv$result <- deliv$delivery_million_gallons
-
 
 deliv.obsv = list(
   `@iot.id` = deliv$`@iot.id`[1],
@@ -345,18 +361,44 @@ deliv.obsv = list(
   resultTime = deliv$phenomenonTime[1]
 )
 #for (i in 2:length(deliv$result)){
-for (i in 2:10){
+for (i in 2:5){
   zt <- list(
     `@iot.id` = deliv$`@iot.id`[i],
     phenomenonTime = deliv$phenomenonTime[i],
     result = deliv$result[i],
     resultTime = deliv$phenomenonTime[i]
   )
-  deliv.obsv = list(deliv.obsv, zt)
+  deliv.obsv = append(deliv.obsv, zt)
 }
+jsonlite::toJSON(deliv.obsv, auto_unbox=TRUE); #check lists
+
+#creates the list structure right but adds a number so result, result.1, result.2...
+
+
 ds = list(datastream = ds.deliver, observation=deliv.obsv)    
 jsonlite::toJSON(ds, auto_unbox=TRUE); #check lists
-staPost(paste0(endpoint,"Datastreams"), ds, user, pw )
+
+
+#post to datastream
+url_distribute = paste0(endpoint, "Datastreams('", ds$datastream$`@iot.id`,"')")
+status <- httr::GET(url_distribute)$status; status
+staPatch(
+  url = url_distribute,
+  payload = strip_iot_id(ds$datastream),
+  user = user,
+  password = pw
+)
+
+url_distribute_obsv = paste0(endpoint, "Datastreams('", ds$datastream$`@iot.id`,"')/Observations")
+status <- httr::GET(url_distribute_obsv)$status; status
+staPatch(
+  url = url_distribute_obsv,
+  payload = strip_iot_id(ds$obsv),
+  user = user,
+  password = pw
+)
+
+
 
 
 #https://twsd.internetofwater.dev/api/v1.1/Datastreams('NC0332010-WaterDistributed')/Observations?$count=true
@@ -401,11 +443,11 @@ consv.now <- consv.now %>% mutate(date = if_else(is.na(date_activated), today(),
 consv.now = consv.now %>% filter(date == max(date))
 
 ds.consv_table = list(
-  id=paste(meta$thing$`@iot.id`,"ConservationStatus", sep="-"),
+  id=paste(utility$thing$`@iot.id`,"ConservationStatus", sep="-"),
   name = paste0("Conservation Status and Activities by ", meta$thing$name),
   description = paste0("Activities allowed based on conservation status for ", meta$thing$name),
   unitOfMeasurement = "status",
-  thing_id = meta$thing$`@iot.id`,
+  thing_id = utility$thing$`@iot.id`,
   Sensor_id = "StageReport",
   ObservedProperty_id = "ConservationStatus",
   ObservedProperty = list(name = consv$status,
@@ -487,9 +529,9 @@ if(as.numeric(dateFormat)>1000) {
 store <- store %>% mutate(value = ifelse(source_type=="reservoir" & value <= 5, value*100, value))
 
 ds.store = list(
-  id=paste(meta$thing$`@iot.id`,"StorageCapacity", sep="-"),
-  name = paste0("Monitoring Data provided by ", meta$thing$name),
-  description = paste0("Storage capacity available for distribution (reservoir, stream, groundwater) for ", meta$thing$name),
+  id=paste(utility$thing$`@iot.id`,"StorageCapacity", sep="-"),
+  name = paste0("Monitoring Data provided by ", utility$thing$name),
+  description = paste0("Storage capacity available for distribution (reservoir, stream, groundwater) for ", utility$thing$name),
   observationType = "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
   unit = list(definition="http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048",
               list(
@@ -502,7 +544,7 @@ ds.store = list(
                 name = "Streamflow Level",
                 symbol = "CFS")
               ),
-  thing_id = meta$thing$`@iot.id`,
+  thing_id = utility$thing$`@iot.id`,
   Sensor_id = "StorageReport",
   ObservedProperty_id = "StorageCapacity"
 ) # end dstore list
@@ -560,13 +602,10 @@ for (i in 2:10){
 store.obsv = list(store.obsv, zt)
 }
 datastream.store = list(datastream = ds.store, observation=store.obsv)    
+jsonlite::toJSON(datastream.store, auto_unbox=TRUE); #check lists
 staPost(paste0(endpoint,"Datastreams"), ds.store, user, pw )
 
 #plot(as.Date(ds.store$observation$parameters$resultTime, format="%Y-%m-%d"), ds.store$observation$parameters$result, type="l")
-
-
-
-
 
 
 #Now we have to HTTP POST this object to STA. First we create HTTP POST, PATCH, and some convenience functions to enable this.
