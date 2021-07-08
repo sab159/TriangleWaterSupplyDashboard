@@ -366,7 +366,7 @@ foo.cum <- foo.cum %>% distinct() %>% filter(year>=2000); #shorten for this file
 foo.cum <- foo.cum %>% mutate(julian = as.POSIXlt(date, format = "%Y-%m-%d")$yday) %>% arrange(id, year, julian) %>% dplyr::select(id, year, date, julian, pcp_in) %>% distinct() %>% 
   group_by(id, year) %>% mutate(pcp_in2 = ifelse(is.na(pcp_in), 0, pcp_in)) %>%  mutate(cum_pcp = cumsum(pcp_in2)) %>% dplyr::select(-pcp_in, -pcp_in2) %>% rename(pcp_in = cum_pcp) %>% distinct()
 
-table(foo.cum$id, foo.cum$year)
+head(table(foo.cum$id, foo.cum$year))
 #in case duplicate days - take average
 foo.cum <- foo.cum %>% group_by(id, year, date, julian) %>% summarize(pcp_in = round(mean(pcp_in, na.rm=TRUE),2), .groups="drop") %>% distinct()
 foo.cum <- foo.cum %>% pivot_wider(id_cols = c("id", "julian"), names_from = year, names_prefix = "yr_", values_from = pcp_in, values_fn = mean) %>% arrange(id, julian) %>% distinct()
