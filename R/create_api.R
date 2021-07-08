@@ -324,7 +324,7 @@ ds.deliver = list(
   unitOfMeasurement = list(definition="http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048",
               name = "Million Gallons per Day",
               symbol = "MGD"),
-  #Thing = list(`@iot.id`=meta$thing$`@iot.id`), //this line breaks it
+  thing_id = list(`@iot.id`=meta$thing$`@iot.id`), #this line breaks it
   Sensor = list(`@iot.id`="DemandReport"),
   ObservedProperty = list(`@iot.id`="WaterDistributed")
   
@@ -332,7 +332,6 @@ ds.deliver = list(
 jsonlite::toJSON(ds.deliver, auto_unbox=TRUE)
 #check to see if works... it does
 staPost(paste0(endpoint,"Datastreams"), ds.deliver, user, pw )
-staPost
 
 deliv$`@iot.id` <- paste0(ds.deliver$`@iot.id`,"-",deliv$date,"T00:00.000Z")
 deliv$phenomenonTime <- paste0(deliv$date,"T00:00.000Z")
@@ -432,7 +431,6 @@ staPost(paste0(endpoint,"Datastreams"), ds.consv, user, pw )
 store <- data$supply %>% filter(substr(date,1,4) != "YYYY")
 
 #storage locations will be part of the utility shapefile... does not look like attached to monitoring location
-
 #mon.loc <- data$monitoring_locations; #Durham provided storage volume but not a location... should we use centroid of utility then?
 #mon.loc <- mon.loc %>% filter(is.na(as.numeric(latitude)) == FALSE) %>% dplyr::select(monitoring_location_name, parameters, latitude, longitude)
 #if (dim(mon.loc)[1] == 0){
@@ -449,17 +447,26 @@ store <- data$supply %>% filter(substr(date,1,4) != "YYYY")
   }
 store.loc
 
-featureList<-list() #initialize list 
-for(i in 1:length(store.loc$name)){
-  featureList[[i]] = list(
+#initialize list
+featureList = list(
+  name = store.loc$name[1],
+  type="Point",
+  coordinates = list(store.loc$latitude[1], store.loc$longitude[1])
+)
+
+for(i in 2:length(store.loc$name)){
+  zt = list(
     name = store.loc$name[i],
     type="Point",
     coordinates = list(store.loc$latitude[i], store.loc$longitude[i])
   )
+  featureList = list(featureList, zt)
 }
+jsonlite::toJSON(featureList)
 
 
-#now fix store dates
+
+#now fix store dates-------------------------
 dateFormat = store$date[1]; dateFormatFinal = "check"
 if(substr(dateFormat,5,5) == "-") {
   dateFormatFinal = "%Y-%m-%d"
@@ -476,12 +483,9 @@ if(as.numeric(dateFormat)>1000) {
 
 #Note that part way through the data for Durham the "source_metric" and "source_unit" were no longer filled out.
 #leaving as NA for now... do we want to try to correct errors or have state go back and have data entrants fix errors? I think the latter.
-
 #convert percent_full to value between 0 and 100
 store <- store %>% mutate(value = ifelse(source_type=="reservoir" & value <= 5, value*100, value))
 
-#Now create the list ****ONLY DOING 10 OBSERVATIONS UNTIL KNOW IT IS CORRECT ******
-#Is this just for storage capacity or will any monitoring data go into this field? I think the latter... Or are we screening the source_type?
 ds.store = list(
   id=paste(meta$thing$`@iot.id`,"StorageCapacity", sep="-"),
   name = paste0("Monitoring Data provided by ", meta$thing$name),
@@ -498,39 +502,67 @@ ds.store = list(
                 name = "Streamflow Level",
                 symbol = "CFS")
               ),
-  Thing_id = meta$thing$`@iot.id`,
+  thing_id = meta$thing$`@iot.id`,
   Sensor_id = "StorageReport",
-  ObservedProperty_id = "StorageCapacity",
-  Observation = list(
-    `@iot.id` = paste0(ds.store$id,"-",store$date[1:10],"T00:00.000Z"),
-    phenomenonTime = paste0(store$date[1:10],"T00:00.000Z"),
-    parameters = list(
-      name = store$source_name[1:10],
-      type = store$source_type[1:10],
-      unit = store$source_unit[1:10],
-      result = store$value[1:10],
-      resultTime = paste0(store$date[1:10],"T00:00.000Z")
-    ) #end parameters list
-  ), #end observation list
+  ObservedProperty_id = "StorageCapacity"
+) # end dstore list
+staPost(paste0(endpoint,"Datastreams"), ds.store, user, pw )
+
+
+#Now create the list ****ONLY DOING 10 OBSERVATIONS UNTIL KNOW IT IS CORRECT ******
+zt.store <- store.loc %>% filter(name==store$source_name[1])
+store.obsv = list(
+  `@iot.id` = paste0(ds.store$id,"-",store$date[1],"T00:00.000Z"),
+  phenomenonTime = paste0(store$date[1],"T00:00.000Z"),
+  result = store$value[1],
+  resultTime = paste0(store$date[1],"T00:00.000Z"),
+  parameters = list(
+    name = store$source_name[1],
+    type = store$source_type[1],
+    unit = store$source_unit[1]
+  ), #end parameters list
   FeaturesofInterest = list(
     description = "Location of Storage Capacity Measurements for Utility",
     encodingType = "application/vnd.geo+json",
-    feature = featureList
+    feature = list(
+      name = zt.store$name[1],
+      type="Point",
+      coordinates = list(zt.store$latitude[1], zt.store$longitude[1])
     )
-  )#end Features of Interest List
-) # end dstore list
-str(ds.store)
+  )
+)
+datastream.store = list(datastream = ds.store, observation=store.obsv)    
+staPost(paste0(endpoint,"Datastreams"), ds.store, user, pw )
 
-
+#for (i in 2:length(deliv$result)){
+for (i in 2:10){
+ zt.store <- store.loc %>% filter(name==store$source_name[i])
+  zt = list(
+    `@iot.id` = paste0(ds.store$id,"-",store$date[i],"T00:00.000Z"),
+    phenomenonTime = paste0(store$date[i],"T00:00.000Z"),
+    result = store$value[i],
+    resultTime = paste0(store$date[i],"T00:00.000Z"),
+    parameters = list(
+      name = store$source_name[i],
+      type = store$source_type[i],
+      unit = store$source_unit[i]
+    ), #end parameters list
+    FeaturesofInterest = list(
+      description = "Location of Storage Capacity Measurements for Utility",
+      encodingType = "application/vnd.geo+json",
+      feature = list(
+        name = zt.store$name[i],
+        type="Point",
+        coordinates = list(zt.store$latitude[1], zt.store$longitude[1])
+      )
+    )
+  ) #end observation list
+store.obsv = list(store.obsv, zt)
+}
+datastream.store = list(datastream = ds.store, observation=store.obsv)    
+staPost(paste0(endpoint,"Datastreams"), ds.store, user, pw )
 
 #plot(as.Date(ds.store$observation$parameters$resultTime, format="%Y-%m-%d"), ds.store$observation$parameters$result, type="l")
-
-
-#############################################################################################################################
-# MONITORING DATA
-
-#Are we doing this or leaving blank for now?
-
 
 
 
