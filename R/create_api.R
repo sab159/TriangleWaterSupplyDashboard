@@ -341,7 +341,7 @@ ds.deliver = list(
   unitOfMeasurement = list(definition="http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048",
               name = "Million Gallons per Day",
               symbol = "MGD"),
-  #thing_id = list(`@iot.id`= utility$thing$`@iot.id`), #this line breaks it
+  Thing = list(`@iot.id`= utility$thing$`@iot.id`), #this line breaks it
   Sensor = list(`@iot.id`="DemandReport"),
   ObservedProperty = list(`@iot.id`="WaterDistributed")
   
@@ -349,6 +349,18 @@ ds.deliver = list(
 jsonlite::toJSON(ds.deliver, auto_unbox=TRUE)
 #check to see if works... it does
 #staPost(paste0(endpoint,"Datastreams"), ds.deliver, user, pw )
+
+#post to datastream
+url_distribute = paste0(endpoint, "Datastreams('", ds$datastream$`@iot.id`,"')")
+status <- httr::GET(url_distribute)$status; status
+staPatch(
+  url = url_distribute,
+  payload = strip_iot_id(ds$datastream),
+  user = user,
+  password = pw
+)
+##---------------------------------------------------------------------------------------------------
+
 
 deliv$`@iot.id` <- paste0(ds.deliver$`@iot.id`,"-",deliv$date,"T00:00.000Z")
 deliv$phenomenonTime <- paste0(deliv$date,"T00:00.000Z")
@@ -360,40 +372,32 @@ deliv.obsv = list(
   result = deliv$result[1],
   resultTime = deliv$phenomenonTime[1]
 )
-#for (i in 2:length(deliv$result)){
-for (i in 2:5){
+deliv.obsv <- list(deliv.obsv)
+
+for (i in 2:length(deliv$result)){
+#for (i in 2:5){
   zt <- list(
     `@iot.id` = deliv$`@iot.id`[i],
     phenomenonTime = deliv$phenomenonTime[i],
     result = deliv$result[i],
     resultTime = deliv$phenomenonTime[i]
   )
-  deliv.obsv = append(deliv.obsv, zt)
+  deliv.obsv = c(deliv.obsv, list(zt))
 }
+
 jsonlite::toJSON(deliv.obsv, auto_unbox=TRUE); #check lists
-
-#creates the list structure right but adds a number so result, result.1, result.2...
-
-
+#jsonlite::toJSON(deliv.obsv, auto_unbox=FALSE); #check lists
 ds = list(datastream = ds.deliver, observation=deliv.obsv)    
 jsonlite::toJSON(ds, auto_unbox=TRUE); #check lists
 
+#instead of solving list problem, will loop through and post observations one at a time
+#I think the list is right but not sure how to post... I get a 500 error
 
-#post to datastream
-url_distribute = paste0(endpoint, "Datastreams('", ds$datastream$`@iot.id`,"')")
-status <- httr::GET(url_distribute)$status; status
-staPatch(
-  url = url_distribute,
-  payload = strip_iot_id(ds$datastream),
-  user = user,
-  password = pw
-)
-
-url_distribute_obsv = paste0(endpoint, "Datastreams('", ds$datastream$`@iot.id`,"')/Observations")
+url_distribute_obsv = paste0(url_distribute,"/Observations")
 status <- httr::GET(url_distribute_obsv)$status; status
 staPatch(
   url = url_distribute_obsv,
-  payload = strip_iot_id(ds$obsv),
+  payload = strip_iot_id(ds$obsvervation),
   user = user,
   password = pw
 )
