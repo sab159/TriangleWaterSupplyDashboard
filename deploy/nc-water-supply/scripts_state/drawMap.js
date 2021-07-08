@@ -88,7 +88,7 @@ function drawMap(){
 //#########################################################################################
 //         ADD Water Supply Source Here
 //#########################################################################################
-  //WATERSOURCE DATA
+  //WATER SOURCE DATA
   //console.log(myUtilityID);
     map.addSource('water_supply', {
       type: 'geojson',
@@ -151,7 +151,7 @@ function drawMap(){
              }
     });
 
- //add pcp 7 day obxervation to map------------------------------------------------
+ //add pcp 7 day observation to map------------------------------------------------
     map.addSource('pcp7obsv',{
       type: 'geojson',
       data: 'data_state/pcp/pcp_7day_obsv.geojson'
@@ -186,7 +186,7 @@ function drawMap(){
              }
     });
   
-  //add pcp 7 day obxervation to map------------------------------------------------
+  //add pcp 7 day observation to map------------------------------------------------
     map.addSource('pcp7norm',{
       type: 'geojson',
       data: 'data_state/pcp/pcp_7day_percent_normal.geojson'
@@ -222,7 +222,7 @@ function drawMap(){
     });
 
 
-      //add pcp 7 day obxervation to map------------------------------------------------
+      //add pcp 7 day observation to map------------------------------------------------
     map.addSource('forecastPCP',{
       type: 'geojson',
       data: 'data_state/pcp/pcp610forecast.geojson'
@@ -245,7 +245,7 @@ function drawMap(){
                   "#e1d9d2","#e1d9d2", //33-39% below normal
                   "#b9a797","#b9a797", //40-49% below normal
                   "#b19d8c","#b19d8c", //50-59% below normal
-                  "#776250","#776250",//60-69% below normla
+                  "#776250","#776250",//60-69% below normal
                   "#5f4f40","#5f4f40",//70-79%below normal
                   "#312821","#312821",//80% below normal
                   '#ccc'
@@ -254,7 +254,7 @@ function drawMap(){
              }
     });
 
-          //add pcp 7 day obxervation to map------------------------------------------------
+          //add pcp 7 day observation to map------------------------------------------------
     map.addSource('forecastTEMP',{
       type: 'geojson',
       data: 'data_state/pcp/temp610forecast.geojson'
@@ -277,7 +277,7 @@ function drawMap(){
                   "#d8d8ff","#d8d8ff", //33-39% below normal
                   "#9d9dff","#9d9dff", //40-49% below normal
                   "#4e4eff","#4e4eff", //50-59% below normal
-                  "#1414ff","#1414ff",//60-69% below normla
+                  "#1414ff","#1414ff",//60-69% below normal
                   "#0000d8","#0000d8",//70-79%below normal
                   "#00009d","#00009d",//80% below normal
                   '#ccc'
