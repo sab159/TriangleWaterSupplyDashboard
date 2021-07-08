@@ -32,7 +32,6 @@ package.check <- function(packages){lapply(
 package.check(packages)
 
 ### Create functions to interact with STA
-
 staPost <- function(url, payload, user, password) {
   httr::POST(
     url = url,
@@ -279,6 +278,11 @@ metaToUtilityThing <- function(meta) {
 meta <- metaToUtilityThing(meta)
 str(meta)
 
+#why does location fit in there even though it should go to it's own spot?
+staPost(paste0(endpoint,"Things"), meta, user, pw )
+
+
+
 #############################################################################################################################
 #Finished water deliveries ("[PWSID]-WaterDistributed")
 #`Sensor`: Report of delivered water ("DemandReport")
@@ -320,12 +324,13 @@ ds.deliver = list(
   unitOfMeasurement = list(definition="http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048",
               name = "Million Gallons per Day",
               symbol = "MGD"),
-  Thing = list(`@iot.id`=meta$thing$`@iot.id`),
+  #Thing = list(`@iot.id`=meta$thing$`@iot.id`), //this line breaks it
   Sensor = list(`@iot.id`="DemandReport"),
   ObservedProperty = list(`@iot.id`="WaterDistributed")
   
 )
-
+jsonlite::toJSON(ds.deliver, auto_unbox=TRUE)
+#check to see if works... it does
 staPost(paste0(endpoint,"Datastreams"), ds.deliver, user, pw )
 staPost
 
@@ -333,23 +338,28 @@ deliv$`@iot.id` <- paste0(ds.deliver$`@iot.id`,"-",deliv$date,"T00:00.000Z")
 deliv$phenomenonTime <- paste0(deliv$date,"T00:00.000Z")
 deliv$result <- deliv$delivery_million_gallons
 
-d <- select(deliv,`@iot.id`, phenomenonTime,result,days)
-d2 <- as.list(as.data.frame(t(d)))
-d2 <- setNames(split(d2, seq(nrow(d2))), rownames(d2))
 
-deliver.obsv = list(
-  `@iot.id` = paste0(ds.deliver$`@iot.id`,"-",deliv$date[1:10],"T00:00.000Z"),
-  phenomenonTime = paste0(deliv$date[1:10],"T00:00.000Z"),
-  parameters = I(list(
-    `days in observed period` = deliv$days[1:10])),
-    result = deliv$delivery_million_gallons[1:10],
-    resultTime = paste0(deliv$date[1:10],"T00:00:00.000Z")
+deliv.obsv = list(
+  `@iot.id` = deliv$`@iot.id`[1],
+  phenomenonTime = deliv$phenomenonTime[1],
+  result = deliv$result[1],
+  resultTime = deliv$phenomenonTime[1]
+)
+#for (i in 2:length(deliv$result)){
+for (i in 2:10){
+  zt <- list(
+    `@iot.id` = deliv$`@iot.id`[i],
+    phenomenonTime = deliv$phenomenonTime[i],
+    result = deliv$result[i],
+    resultTime = deliv$phenomenonTime[i]
   )
+  deliv.obsv = list(deliv.obsv, zt)
+}
+ds = list(datastream = ds.deliver, observation=deliv.obsv)    
+jsonlite::toJSON(ds, auto_unbox=TRUE); #check lists
+staPost(paste0(endpoint,"Datastreams"), ds, user, pw )
 
-d2 <- as.list(as.data.frame(t(deliver.obsv)))
-d2 <- setNames(split(d2, seq(nrow(d2))), rownames(d2))
 
-datastream.deliver <- list(datastream=ds.deliver, observation=deliver.obsv)    
 #https://twsd.internetofwater.dev/api/v1.1/Datastreams('NC0332010-WaterDistributed')/Observations?$count=true
 #Observations?value":[{"@iot.id":"NC0332010-WaterDistributed-2000-01-01T00:00:00.000Z",
                       #"phenomenonTime":"2000-01-01T00:00:00.000Z",
@@ -364,8 +374,9 @@ datastream.deliver <- list(datastream=ds.deliver, observation=deliver.obsv)
 #`unitOfMeasurement`: "Status"
 
 #column names not the same between Apex and Durham... trying to fix...
-consv = data$conservation_policies[,-2] %>% rename(conservation_status = colnames(consv[,1]))
-consv <- consv %>% gather(key=activity, value=status_response, -conservation_status) %>% rename(status = conservation_status)
+consv = data$conservation_policies[,-2]
+consv <- consv %>% rename(conservation_status = colnames(consv[,1])) %>% 
+  gather(key=activity, value=status_response, -conservation_status) %>% rename(status = conservation_status)
 #if left the example column - remove
 consv <- consv %>% filter(is.na(status_response)==FALSE)
 
@@ -395,16 +406,18 @@ ds.consv_table = list(
   name = paste0("Conservation Status and Activities by ", meta$thing$name),
   description = paste0("Activities allowed based on conservation status for ", meta$thing$name),
   unitOfMeasurement = "status",
-  Thing_id = meta$thing$`@iot.id`,
+  thing_id = meta$thing$`@iot.id`,
   Sensor_id = "StageReport",
   ObservedProperty_id = "ConservationStatus",
   ObservedProperty = list(name = consv$status,
                           definition = consv$activity,
                           description = consv$status_response),
   Sensor = consv.now$conservation_status
-  
 )
 str(ds.consv_table)
+ds.consv = list(DataStream = ds.consv_table)    
+jsonlite::toJSON(ds.consv, auto_unbox=TRUE); #check lists
+staPost(paste0(endpoint,"Datastreams"), ds.consv, user, pw )
 
 
 
