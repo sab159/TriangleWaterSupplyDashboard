@@ -104,6 +104,7 @@ if(nchar(day.url)==1) { day.url = paste0("0", day.url) }
 url.used <- paste0("https://water.weather.gov/precip/downloads/",year.url,"/",month.url,"/",day.url,"/nws_precip_last7days_",year.url,month.url,day.url,"_conus.tif")
 #call data in as a raster
 zt <- raster(url.used)
+
 #the data are povided as 4 bands in one raster. We are interested in Band 1 and Band 4
   #Band 1 - Observation - Last 24 hours of QPE spanning 12Z to 12Z in inches
   #Band 2 - PRISM normals - PRISM normals in inches (see "Normal Precipitation" section on the About page)
