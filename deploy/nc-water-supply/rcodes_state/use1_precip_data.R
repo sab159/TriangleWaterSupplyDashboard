@@ -97,7 +97,7 @@ crs.hrap <- CRS('+proj=stere +lat_0=90 +lat_ts=60 +lon_0=-105 +x_0=0 +y_0=0 +R=6
 
 #create the url to obtain the last 7 days of observed precipitation and percent of normal precipitation
 #Sometimes the day needs to be one or two earlier for the file to exist
-year.url <- year(Sys.Date()); month.url <- month(Sys.Date()); day.url <- day(Sys.Date())
+year.url <- year(Sys.Date()); month.url <- month(Sys.Date()); day.url <- day(Sys.Date())-1; #send a day earlier because often NA otherwise
 if(nchar(month.url)==1) { month.url = paste0("0", month.url) }
 if(nchar(day.url)==1) { day.url = paste0("0", day.url) }
 
