@@ -80,7 +80,7 @@ PostSensor <- function(api,user,password,id,name,description,encodingType,metada
 }
 
 # Define Observed Properties
-op <- PostObservedProperty(api=endpoint, user, pw,
+op <- PostObservedProperty(api = endpoint, user, pw,
                            id = "WaterDistributed",
                            name = "Water Distributed",
                            definition = "http://vocabulary.odm2.org/api/v1/variablename/waterUsePublicSupply/",
@@ -133,7 +133,7 @@ setwd(dirname(source_path))
 
 # endpoint <- "http://web:8080/FROST-Server/v1.1/" 
 # This is the production endpoint for portability to a different environment, assuming a docker container named "web"
-endpoint <- "https://twsd.internetofwater.dev/api/v1.1/"  #This is the current pilot endpoint 
+api <- endpoint <- "https://twsd.internetofwater.dev/api/v1.1/"  #This is the current pilot endpoint 
 
 user <- "iow" # We will be changing these in production
 pw <- "nieps" # We will be changing these in production
@@ -283,7 +283,6 @@ str(utility)
 #why does location fit in there even though it should go to it's own spot?
 #staPatch(paste0(endpoint,"Things"), meta, user, pw )
 
-api = endpoint
 status <- httr::GET(paste0(endpoint, "Things('", id, "')"))$status; status
   staPatch(
     url = paste0(api, "Things('", id, "')"),
@@ -341,16 +340,15 @@ ds.deliver = list(
   unitOfMeasurement = list(definition="http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048",
               name = "Million Gallons per Day",
               symbol = "MGD"),
-  Thing = list(`@iot.id`= utility$thing$`@iot.id`), #this line breaks it
+  Thing = list(`@iot.id`= utility$thing$`@iot.id`), 
   Sensor = list(`@iot.id`="DemandReport"),
   ObservedProperty = list(`@iot.id`="WaterDistributed")
-  
 )
 jsonlite::toJSON(ds.deliver, auto_unbox=TRUE)
 #check to see if works... it does
 #staPost(paste0(endpoint,"Datastreams"), ds.deliver, user, pw )
 
-#post to datastream
+#post to datastream --> WORKS
 url_distribute = paste0(endpoint, "Datastreams('", ds$datastream$`@iot.id`,"')")
 status <- httr::GET(url_distribute)$status; status
 staPatch(
@@ -362,6 +360,7 @@ staPatch(
 ##---------------------------------------------------------------------------------------------------
 
 
+#Creates the array of results matching Example 37: https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#82
 deliv$`@iot.id` <- paste0(ds.deliver$`@iot.id`,"-",deliv$date,"T00:00.000Z")
 deliv$phenomenonTime <- paste0(deliv$date,"T00:00.000Z")
 deliv$result <- deliv$delivery_million_gallons
@@ -387,17 +386,16 @@ for (i in 2:length(deliv$result)){
 
 jsonlite::toJSON(deliv.obsv, auto_unbox=TRUE); #check lists
 #jsonlite::toJSON(deliv.obsv, auto_unbox=FALSE); #check lists
-ds = list(datastream = ds.deliver, observation=deliv.obsv)    
+ds = list(datastream = ds.deliver, observations=deliv.obsv)    
 jsonlite::toJSON(ds, auto_unbox=TRUE); #check lists
 
 #instead of solving list problem, will loop through and post observations one at a time
 #I think the list is right but not sure how to post... I get a 500 error
-
 url_distribute_obsv = paste0(url_distribute,"/Observations")
 status <- httr::GET(url_distribute_obsv)$status; status
 staPatch(
   url = url_distribute_obsv,
-  payload = strip_iot_id(ds$obsvervation),
+  payload = strip_iot_id(ds$obsvervations),
   user = user,
   password = pw
 )
@@ -447,22 +445,77 @@ consv.now <- consv.now %>% mutate(date = if_else(is.na(date_activated), today(),
 consv.now = consv.now %>% filter(date == max(date))
 
 ds.consv_table = list(
-  id=paste(utility$thing$`@iot.id`,"ConservationStatus", sep="-"),
-  name = paste0("Conservation Status and Activities by ", meta$thing$name),
-  description = paste0("Activities allowed based on conservation status for ", meta$thing$name),
-  unitOfMeasurement = "status",
-  thing_id = utility$thing$`@iot.id`,
-  Sensor_id = "StageReport",
-  ObservedProperty_id = "ConservationStatus",
-  ObservedProperty = list(name = consv$status,
-                          definition = consv$activity,
-                          description = consv$status_response),
-  Sensor = consv.now$conservation_status
+  `@iot.id`=paste(utility$thing$`@iot.id`,"ConservationStatus", sep="-"),
+  name = paste0("Conservation Status and Activities by ", utility$thing$name),
+  description = paste0("Activities allowed based on conservation status for ", utility$thing$name),
+  #observationType = "Descriptive",
+  unitOfMeasurement = list(definition = "current conservation status of utility",
+                           name= "status"),
+  Thing = list(`@iot.id`= utility$thing$`@iot.id`),
+  Sensor = list(`@iot.id`="StageReport"),
+  ObservedProperty = list(`@iot.id`="ConservationStatus")
+  #ObservedProperty_id = "ConservationStatus"
+  #Tried taking this out and reformatting below
+  #ObservedProperty = list(`@iot.id` = "ConservationStatus",
+  #                        name = consv$status,
+  #                        definition = consv$activity,
+  #                        description = consv$status_response
+  #)
+  #Sensor = consv.now$conservation_status# can this go here?
 )
-str(ds.consv_table)
-ds.consv = list(DataStream = ds.consv_table)    
-jsonlite::toJSON(ds.consv, auto_unbox=TRUE); #check lists
-staPost(paste0(endpoint,"Datastreams"), ds.consv, user, pw )
+
+#str(ds.consv_table)
+jsonlite::toJSON(ds.consv_table, auto_unbox=TRUE); #check lists
+ds.consv = list(datastream = ds.consv_table)    
+
+url_distribute_conserve =paste0(endpoint, "Datastreams('", ds.consv_table$`@iot.id`,"')")
+status <- httr::GET(url_distribute_conserve)$status; status
+
+#Error 400 right now...
+staPost(
+  url = paste0(endpoint,"Datastreams"), 
+  payload = strip_iot_id(ds.consv$datastream), 
+  user = user, 
+  password = pw)
+
+
+ObservedProperty = list(`@iot.id` = "ConservationStatus",
+                        name = consv$status[1],
+                        definition = consv$activity[1],
+                        description = consv$status_response[1]
+                        )
+ObservedProperty <- list(ObservedProperty)
+
+for (i in 2:length(consv$status)){
+  zt <- list(
+    `@iot.id` = ds.consv_table$`@iot.id`[1],
+    name = consv$status[1],
+    definition = consv$activity[1],
+    description = consv$status_response[1]
+  )
+  ObservedProperty = c(ObservedProperty, list(zt))
+}
+jsonlite::toJSON(ObservedProperty, auto_unbox=TRUE); #check lists
+
+
+#STOPPED HERE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -488,8 +541,8 @@ store <- data$supply %>% filter(substr(date,1,4) != "YYYY")
   for(i in 1:dim(store.type)[1]){
     store.loc$name[i]  = store.type$source_name[i]; 
     store.loc$store_type[i] = store.type$source_type[i];
-    store.loc$latitude[i] = round(meta$location$location$coordinates[[1]] + 0.015*i,5); #add some jitter in case several
-    store.loc$longitude[i] = round(meta$location$location$coordinates[[2]] + 0.015*i,5); #add some jitter in case serveral
+    store.loc$latitude[i] = round(utility$location$location$coordinates[[1]] + 0.015*i,5); #add some jitter in case several
+    store.loc$longitude[i] = round(utility$location$location$coordinates[[2]] + 0.015*i,5); #add some jitter in case serveral
   }
 store.loc
 
@@ -533,26 +586,44 @@ if(as.numeric(dateFormat)>1000) {
 store <- store %>% mutate(value = ifelse(source_type=="reservoir" & value <= 5, value*100, value))
 
 ds.store = list(
-  id=paste(utility$thing$`@iot.id`,"StorageCapacity", sep="-"),
+  `@iot.id`=paste(utility$thing$`@iot.id`,"StorageCapacity", sep="-"),
   name = paste0("Monitoring Data provided by ", utility$thing$name),
   description = paste0("Storage capacity available for distribution (reservoir, stream, groundwater) for ", utility$thing$name),
   observationType = "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
-  unit = list(definition="http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048",
+  unit = list(
               list(
+                definition="http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048",
                 name = "Percent Full",
                 symbol = "%"),
               list(
+                definition="http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048",
                 name = "Groundwater Level in Feet",
                 symbol = "FT"),
               list(
+                definition="http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048",
                 name = "Streamflow Level",
                 symbol = "CFS")
               ),
-  thing_id = utility$thing$`@iot.id`,
-  Sensor_id = "StorageReport",
-  ObservedProperty_id = "StorageCapacity"
+  Thing = list(`@iot.id`= utility$thing$`@iot.id`), 
+  Sensor_id = list(`@iot.id`="StorageReport"),
+  ObservedProperty_id = list(`@iot.id`="StorageCapacity")
 ) # end dstore list
-staPost(paste0(endpoint,"Datastreams"), ds.store, user, pw )
+
+jsonlite::toJSON(ds.store, auto_unbox=TRUE)
+#check to see if works... it does
+#staPost(paste0(endpoint,"Datastreams"), ds.deliver, user, pw )
+
+#post to datastream --> WORKS
+url_store = paste0(endpoint, "Datastreams('", ds.store$`@iot.id`,"')")
+status <- httr::GET(url_distribute)$status; status
+staPost(
+  url = url_store,
+  payload = strip_iot_id(ds.store),
+  user = user,
+  password = pw
+)
+
+
 
 
 #Now create the list ****ONLY DOING 10 OBSERVATIONS UNTIL KNOW IT IS CORRECT ******
@@ -577,8 +648,8 @@ store.obsv = list(
     )
   )
 )
-datastream.store = list(datastream = ds.store, observation=store.obsv)    
-staPost(paste0(endpoint,"Datastreams"), ds.store, user, pw )
+#datastream.store = list(datastream = ds.store, observation=store.obsv)    
+
 
 #for (i in 2:length(deliv$result)){
 for (i in 2:10){
