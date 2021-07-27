@@ -29,8 +29,8 @@ package.check <- lapply(
 )
 
 #usgs packages
-install.packages("dataRetrieval", repos=c("http://owi.usgs.gov/R", getOption("repos")))
-install.packages("EGRET", repos=c("http://owi.usgs.gov/R", getOption("repos")))
+#install.packages("dataRetrieval", repos=c("http://owi.usgs.gov/R", getOption("repos")))
+#install.packages("EGRET", repos=c("http://owi.usgs.gov/R", getOption("repos")))
 library(dataRetrieval);  library(EGRET); #usgs links
 
 ######################################################################################################################################################################

@@ -347,7 +347,7 @@ foo.month <- foo.month %>% mutate(pcp_in = ifelse((month == current.month & year
   foo.month <- foo.month %>% mutate(year = as.numeric(as.character(year))) %>% filter(year >= year(start.date))
 
 #save file --- since only plotting recent years will only save out 2000 onward
-foo.month <- foo.month %>% filter(year>=2000)
+foo.month <- foo.month %>% filter(year %in% c(2002,2003,2007,2008) | year >= 2011)
 write.csv(foo.month, paste0(swd_html, "pcp\\pcp_months_total.csv"), row.names=FALSE)
 
 
