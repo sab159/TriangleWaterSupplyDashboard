@@ -16,17 +16,25 @@
 ################################################################################################################################################
 #download spatial data
 #if(http_status(GET("https://droughtmonitor.unl.edu/data/kmz/usdm_current.kmz"))$category=="success"){
+#for some reason this package no longer works
+sf::sf_use_s2(FALSE)
   drought <- file_to_geojson(input="https://droughtmonitor.unl.edu/data/kmz/usdm_current.kmz", method='web', output=paste0(swd_html, 'drought\\current_drought'))
-#} else {
-  #if not found is returned
-#  d <- today()
-#  prev.days <- seq(d-7,d,by='day')
-#  d <- prev.days[weekdays(prev.days)=='Tuesday'][1] %>% str_remove_all("[-]")
+
+  download.file("https://droughtmonitor.unl.edu/data/shapefiles_m/USDM_current_M.zip", destfile="..\\temp\\temp.zip")
+  # Unzip this file. You can do it with R (as below), or clicking on the object you downloaded.
+  unzip("..\\temp\\temp.zip", files=NULL, exdir="..\\temp")
+  #get day
+  d <- today(); prev.days <- seq(d-7,d,by='day');  d <- prev.days[weekdays(prev.days)=='Tuesday'][1] %>% str_remove_all("[-]");
+  drought <- readOGR(paste0("..\\temp"), paste0("USDM_",d)) %>% st_as_sf() %>% st_transform(crs = 4326) %>% rename(Name = DM) %>% select(Name, geometry) %>% mutate(Name = as.character(Name))
+  geojson_write(drought, file = paste0(swd_html,"drought\\current_drought.geojson"))
+ 
+  #delete temp files
+  fold = ("..\\temp")
+  # get all files in the directories, recursively
+  f <- list.files(fold, include.dirs = F, full.names = T, recursive = T)
+  # remove the files
+  file.remove(f)
   
-#  drought <- file_to_geojson(input=paste0("https://droughtmonitor.unl.edu/data/kmz/usdm_",d,".kmz"), method="web", output=paste0(swd_html,'drought\\current_drought'))  
-#  print("backup used")
-#}
-drought <- read_sf(paste0(swd_html, 'drought\\current_drought.geojson')) %>%  st_transform(drought, crs = 4326) %>% select(Name, geometry); #already in correct projection
 
 #download tables for HUCS of interest 
 huc8 <- read_sf(paste0(swd_html, "huc8.geojson"))
@@ -248,8 +256,7 @@ rm(pcp, pcp2)
 nc.loc <- read.csv(paste0(swd_html, "pcp\\pcp_locations.csv"))
 old.pcp <- read.csv(paste0(swd_html, "pcp\\pcp_data.csv")) %>% mutate(date = as.Date(date, "%Y-%m-%d"))
 pcp.list <- unique(old.pcp$id)
-#julian <- read.csv(paste0(swd_html, "julian-daymonth.csv"))
-  
+
 
 ###################################################################################################################################
 #          PULL TO BUILD DATABASE
@@ -277,7 +284,12 @@ for (i in 1:length(pcp.list)){
     yt.obsv <- as.numeric(str_split(zt[11],": ", simplify=TRUE)[1,2])
     
     #call value data
-    yt.df <- read_csv(zt, comment="##")
+    #yt.df <- read_csv(zt, comment="##")
+    yt.df <- zt %>% as.data.frame() %>% filter(substr(.,1,2) != "##")
+    
+    yt.header <- yt.df[1,] %>% str_split(",", simplify=TRUE)
+    yt.df <- yt.df[-1,] %>% str_split(",", simplify=TRUE)
+    colnames(yt.df) <- yt.header
     
     #total obs
     total.obsv = total.obsv + yt.obsv;

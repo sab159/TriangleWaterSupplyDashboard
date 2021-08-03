@@ -42,6 +42,7 @@ all.data <- all.data %>% group_by(site) %>% filter(date < max(date))
 nc.sites <- nc.sites %>% sf::st_transform(crs = 4326)
 ws.bounds <- ws.bounds %>% sf::st_transform(crs = 4326)
 #intersect together gauge location with watershed bounds
+sf::sf_use_s2(FALSE)
 gauges_huc <- sf::st_join(nc.sites, ws.bounds);
 table(gauges_huc$STREAM_NAM)
   

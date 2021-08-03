@@ -12,6 +12,9 @@
 #
 ######################################################################################################################################################################
 ## First specify the packages of interest
+#require(devtools)
+#install_version("sf", version = "0.9.8", repos = "http://cran.us.r-project.org")
+
 packages = c("rstudioapi", "readxl", 
              "sf", "rgdal", "spData", "raster", "leaflet", "rmapshaper","geojsonio",
              "tidycensus", "jsonlite", "rvest", "purrr", "httr",
@@ -27,6 +30,7 @@ package.check <- lapply(
     }
   }
 )
+
 
 #usgs packages
 #install.packages("dataRetrieval", repos=c("http://owi.usgs.gov/R", getOption("repos")))

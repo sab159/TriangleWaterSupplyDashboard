@@ -195,7 +195,7 @@ current.stat <- current.stat %>% mutate(status = ifelse(endYr < current.year & j
 table(current.stat$status, useNA="ifany")
 
 #merge to sites geojson
-nc.sites2 <- merge(nc.sites, current.stat[,c("site","status","depth_ft","julian","date","flow50")], by.x="site", by.y="site")
+nc.sites2 <- merge(nc.sites, current.stat[,c("site","status","depth_ft","julian","date","flow50")], by.x="site", by.y="site") %>% distinct()
 #convert to sf
 nc.sites2 <- st_as_sf(nc.sites2, coords = c("DecLongVa", "DecLatVa"), crs = 4326);
 nc.sites2 <- merge(nc.sites2 %>% dplyr::select(-date), recent.flow[,c("site","date")], by.x="site", by.y="site", all.x=TRUE)
@@ -257,4 +257,4 @@ write.csv(t.annual, "..\\data\\gw\\gw_annual_level.csv", row.names=FALSE)
 
 
 #remove files
-rm(zt, gw.annual, recent.flow, current.stat, current.stat2, nc.sites2, nc.sites, usgs.sites, stats, year.flow, usgs.sites, dwr.sites, stats2, test, url.sites, year.flow2, zt.stats)
+rm(zt, gw.annual, recent.flow, current.stat, current.stat2, nc.sites2, nc.sites, usgs.sites, stats, year.flow, unique.usgs.sites, unique.dwr.sites, stats2, test, url.sites, year.flow2, zt.stats, bk.up, all.data, bk.up.flow)
