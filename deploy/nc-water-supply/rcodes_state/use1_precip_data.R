@@ -442,4 +442,4 @@ write.csv(t.cum2, paste0("..\\data\\pcp\\pcp_cum_total.csv"), row.names=FALSE)
 t.cum2 <- foo.month %>% filter(id %in% t.sites$locID)
 write.csv(t.cum2, paste0("..\\data\\pcp\\pcp_months_total.csv"), row.names=FALSE)
 
-rm(foo.cum, foo.cum2, foo.month, foo.count, pcp.data, sites, ytd2, ytd.now, ytd.now.cum, yt, check.last.date, nc.data, bk.data)
+rm(foo.cum, foo.cum2, foo.month, foo.count, pcp.data, sites, ytd2, ytd.now, ytd.now.cum, yt, check.last.date, nc.data, bk.data, t.sites2, t.stats2)

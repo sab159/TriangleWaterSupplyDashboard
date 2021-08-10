@@ -138,7 +138,7 @@ summary(year.flow)
 year.flow <- year.flow %>% group_by(site, date, julian) %>% summarize(depth_ft = median(depth_ft, na.rm=TRUE), .groups="drop")
 
 #merge new data with old data
-year.flow <- rbind(all.data, year.flow) %>% arrange(site, date)
+year.flow <- rbind(all.data, year.flow) %>% arrange(site, date) %>% distinct()
 write.csv(year.flow, paste0(swd_html, "gw\\all_gw_levels.csv"), row.names=FALSE)
 
 
