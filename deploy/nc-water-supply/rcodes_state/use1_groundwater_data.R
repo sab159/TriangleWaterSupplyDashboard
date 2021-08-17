@@ -139,6 +139,8 @@ year.flow <- year.flow %>% group_by(site, date, julian) %>% summarize(depth_ft =
 
 #merge new data with old data
 year.flow <- rbind(all.data, year.flow) %>% arrange(site, date) %>% distinct()
+#flows of -222.22 are NA
+year.flow <- year.flow %>% mutate(depth_ft = ifelse(depth_ft == -222.22, NA, depth_ft))
 write.csv(year.flow, paste0(swd_html, "gw\\all_gw_levels.csv"), row.names=FALSE)
 
 
@@ -178,7 +180,7 @@ remove.site <- stats %>% filter(endYr < (current.year-1))  %>% select(site) %>% 
 #
 #####################################################################################################################################################################
 #Now attach most recent value to stream stats
-recent.flow <- year.flow %>% group_by(site) %>% filter(date == max(date)) %>% filter(site %notin% remove.site$site) #%>% rename(flow = depth_below_surface_ft)
+recent.flow <- year.flow %>% group_by(site) %>% filter(is.na(depth_ft) == FALSE) %>% filter(date == max(date)) %>% filter(site %notin% remove.site$site) #%>% rename(flow = depth_below_surface_ft)
 recent.flow <- recent.flow %>% filter(julian <= as.POSIXlt(today(), format = "%Y-%m-%d")$yday) 
 current.stat <- merge(recent.flow[,c("site", "julian", "depth_ft")], stats, by.x=c("site","julian"), by.y=c("site","julian"), all.x=TRUE) 
 

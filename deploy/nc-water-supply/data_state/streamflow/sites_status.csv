@@ -1,219 +1,219 @@
 "site","julian","date","status","month","huc8","ws_watershed"
-"02053200",221,"Aug-09","Very Wet","Aug","03010204",NA
-"02053500",221,"Aug-09","Very Wet","Aug","03010203",NA
-"02068500",221,"Aug-09","Very Dry","Aug","03010103",NA
-"02069000",221,"Aug-09","Moderately Dry","Aug","03010103","Dan River (Madison)"
-"02070500",221,"Aug-09","Moderately Wet","Aug","03010103",NA
-"02071000",221,"Aug-09","Moderately Dry","Aug","03010103","Dan River (Eden)"
-"02074000",221,"Aug-09","Moderately Dry","Aug","03010103","Smith River"
-"02077200",221,"Aug-09","Moderately Wet","Aug","03010104",NA
-"02077303",221,"Aug-09","Very Dry","Aug","03010104",NA
-"02077670",221,"Aug-09","Moderately Wet","Aug","03010104",NA
-"02080500",221,"Aug-09","Extremely Dry","Aug","03010107",NA
-"0208111310",221,"Aug-09","Very Wet","Aug","03010107",NA
-"02081500",221,"Aug-09","Moderately Wet","Aug","03020101",NA
-"02081747",221,"Aug-09","Very Wet","Aug","03020101",NA
-"02081942",221,"Aug-09","Moderately Wet","Aug","03020101",NA
-"0208250410",221,"Aug-09","Moderately Wet","Aug","03020101","Tar River (Rocky Mount)"
-"02082585",221,"Aug-09","Moderately Wet","Aug","03020101",NA
-"02082770",221,"Aug-09","Very Wet","Aug","03020101",NA
-"02082950",221,"Aug-09","Extremely Wet","Aug","03020102",NA
-"02083000",221,"Aug-09","Very Wet","Aug","03020102",NA
-"02083500",221,"Aug-09","Moderately Wet","Aug","03020103",NA
-"02084000",221,"Aug-09","Very Wet","Aug","03020103",NA
-"02084160",221,"Aug-09","Very Wet","Aug","03020103",NA
-"02084557",221,"Aug-09","Extremely Wet","Aug","03020104",NA
-"02085000",221,"Aug-09","Moderately Wet","Aug","03020201",NA
-"02085070",221,"Aug-09","Moderately Wet","Aug","03020201","Eno River (Lower)"
-"0208521324",221,"Aug-09","Moderately Wet","Aug","03020201","Little River (Little River Reservoir)"
-"0208524090",221,"Aug-09","Moderately Dry","Aug","03020201","Little River (Little River Reservoir)"
-"0208524975",221,"Aug-09","Moderately Wet","Aug","03020201","Falls Lake"
-"02085500",221,"Aug-09","Moderately Wet","Aug","03020201","Flat River (Lake Michie)"
-"02086500",221,"Aug-09","Very Wet","Aug","03020201","Falls Lake"
-"02086624",221,"Aug-09","Moderately Dry","Aug","03020201","Falls Lake"
-"0208675010",221,"Aug-09","Very Dry","Aug","03020201","Falls Lake"
-"02086849",221,"Aug-09","Moderately Wet","Aug","03020201","Falls Lake"
-"02087183",221,"Aug-09","Extremely Dry","Aug","03020201","Neuse River (Wake Forest)"
-"0208726005",221,"Aug-09","Moderately Dry","Aug","03020201",NA
-"02087275",221,"Aug-09","Very Dry","Aug","03020201",NA
-"02087324",221,"Aug-09","Moderately Dry","Aug","03020201",NA
-"0208732534",221,"Aug-09","Very Dry","Aug","03020201",NA
-"0208732885",221,"Aug-09","Moderately Wet","Aug","03020201",NA
-"0208735012",221,"Aug-09","Very Dry","Aug","03020201",NA
-"02087359",221,"Aug-09","Moderately Dry","Aug","03020201",NA
-"02087500",221,"Aug-09","Moderately Dry","Aug","03020201","Neuse River (Johnston County)"
-"02087580",221,"Aug-09","Moderately Dry","Aug","03020201","Swift Creek (Lake Benson)"
-"0208758850",221,"Aug-09","Moderately Dry","Aug","03020201","Swift Creek (Lake Benson)"
-"0208773375",221,"Aug-09","Very Dry","Aug","03020201",NA
-"02088000",221,"Aug-09","Moderately Dry","Aug","03020201",NA
-"02088383",221,"Aug-09","Moderately Wet","Aug","03020201",NA
-"02088500",221,"Aug-09","Very Wet","Aug","03020201",NA
-"02089000",221,"Aug-09","Very Wet","Aug","03020202",NA
-"02089500",221,"Aug-09","Extremely Wet","Aug","03020202",NA
-"02090380",221,"Aug-09","Moderately Wet","Aug","03020203",NA
-"02091000",221,"Aug-09","Extremely Wet","Aug","03020203",NA
-"02091500",221,"Aug-09","Extremely Wet","Aug","03020203",NA
-"02091814",221,"Aug-09","Extremely Wet","Aug","03020202",NA
-"02092500",221,"Aug-09","Extremely Wet","Aug","03020204",NA
-"02093000",221,"Aug-09","Extremely Wet","Aug","03020302",NA
-"02093800",221,"Aug-09","Moderately Wet","Aug","03030002","Reedy Fork"
-"02093877",221,"Aug-09","Moderately Dry","Aug","03030002","Reedy Fork"
-"0209399200",221,"Aug-09","Moderately Wet","Aug","03030002","Reedy Fork"
-"02094500",221,"Aug-09","Moderately Wet","Aug","03030002",NA
-"02094659",221,"Aug-09","Moderately Dry","Aug","03030002",NA
-"02094770",221,"Aug-09","Moderately Dry","Aug","03030002",NA
-"02094775",221,"Aug-09","Moderately Dry","Aug","03030002",NA
-"02095000",221,"Aug-09","Moderately Dry","Aug","03030002",NA
-"02095181",221,"Aug-09","Moderately Dry","Aug","03030002",NA
-"02095271",221,"Aug-09","Moderately Dry","Aug","03030002",NA
-"02095500",221,"Aug-09","Extremely Dry","Aug","03030002",NA
-"0209553650",221,"Aug-09","Moderately Wet","Aug","03030002",NA
-"02096500",221,"Aug-09","Moderately Wet","Aug","03030002",NA
-"02096846",221,"Aug-09","Moderately Wet","Aug","03030002","Cane Creek"
-"02096960",221,"Aug-09","Moderately Wet","Aug","03030002","Haw River (Jordan Lake)"
-"0209722970",221,"Aug-09","Extremely Dry","Aug","03030002",NA
-"02097280",221,"Aug-09","Moderately Wet","Aug","03030002","Haw River (Jordan Lake)"
-"02097314",221,"Aug-09","Moderately Wet","Aug","03030002","Haw River (Jordan Lake)"
-"0209734440",221,"Aug-09","Very Dry","Aug","03030002",NA
-"0209741955",221,"Aug-09","Moderately Wet","Aug","03030002","Haw River (Jordan Lake)"
-"02097464",221,"Aug-09","Very Wet","Aug","03030002","Morgan Creek"
-"02097517",221,"Aug-09","Moderately Dry","Aug","03030002","Haw River (Jordan Lake)"
-"0209782609",221,"Aug-09","Moderately Dry","Aug","03030002","Haw River (Jordan Lake)"
-"02098206",221,"Aug-09","Extremely Dry","Aug","03030002","Cape Fear River (Sanford)"
-"02099000",221,"Aug-09","Moderately Wet","Aug","03030003","East Fork Deep River (High Point Lake)"
-"02100500",221,"Aug-09","Moderately Wet","Aug","03030003",NA
-"0210166029",221,"Aug-09","Extremely Wet","Aug","03030003","Rocky River"
-"02101726",221,"Aug-09","Very Wet","Aug","03030003",NA
-"02101800",221,"Aug-09","Moderately Wet","Aug","03030003",NA
-"02102000",221,"Aug-09","Moderately Wet","Aug","03030003","Cape Fear River (Sanford)"
-"02102192",221,"Aug-09","Very Wet","Aug","03030004",NA
-"02102500",221,"Aug-09","Moderately Dry","Aug","03030004","Cape Fear River (Dunn)"
-"02102908",221,"Aug-09","Very Wet","Aug","03030004","Little River (Intake no. 2)"
-"02103000",221,"Aug-09","Moderately Wet","Aug","03030004",NA
-"02104220",221,"Aug-09","Moderately Wet","Aug","03030004",NA
-"02105500",221,"Aug-09","Moderately Dry","Aug","03030005","Cape Fear River (Smithfield Packing Co)"
-"02105769",221,"Aug-09","Moderately Wet","Aug","03030005","Cape Fear River (Wilmington)"
-"02106500",221,"Aug-09","Extremely Wet","Aug","03030006",NA
-"02108000",221,"Aug-09","Extremely Wet","Aug","03030007",NA
-"02109500",221,"Aug-09","Very Wet","Aug","03040206",NA
-"02111000",221,"Aug-09","Moderately Dry","Aug","03040101",NA
-"02111180",221,"Aug-09","Moderately Dry","Aug","03040101",NA
-"0211139110",221,"Aug-09","Moderately Dry","Aug","03040101","Yadkin River (Wilkesboro)"
-"02111500",221,"Aug-09","Moderately Dry","Aug","03040101","Reddies River"
-"02112000",221,"Aug-09","Moderately Dry","Aug","03040101",NA
-"02112250",221,"Aug-09","Moderately Dry","Aug","03040101",NA
-"02113850",221,"Aug-09","Moderately Wet","Aug","03040101",NA
-"02114450",221,"Aug-09","Moderately Dry","Aug","03040101","Yadkin River - King"
-"02115360",221,"Aug-09","Moderately Dry","Aug","03040101","Yadkin River - Davie Co."
-"02116500",221,"Aug-09","Moderately Wet","Aug","03040101","Yadkin River (Davidson Co.)"
-"02118000",221,"Aug-09","Moderately Wet","Aug","03040102","South Yadkin River - Cooleemee"
-"02118500",221,"Aug-09","Moderately Wet","Aug","03040102","Hunting Creek"
-"02120780",221,"Aug-09","Moderately Wet","Aug","03040102",NA
-"02121500",221,"Aug-09","Very Wet","Aug","03040103",NA
-"0212378405",221,"Aug-09","Moderately Dry","Aug","03040104",NA
-"0212393300",221,"Aug-09","Moderately Dry","Aug","03040105",NA
-"02124080",221,"Aug-09","Moderately Wet","Aug","03040105",NA
-"0212414900",221,"Aug-09","Very Dry","Aug","03040105",NA
-"0212419274",221,"Aug-09","Moderately Wet","Aug","03040105","Coddle Creek"
-"02124269",221,"Aug-09","Very Dry","Aug","03040105",NA
-"0212427947",221,"Aug-09","Very Dry","Aug","03040105",NA
-"0212430293",221,"Aug-09","Moderately Dry","Aug","03040105",NA
-"0212430653",221,"Aug-09","Moderately Dry","Aug","03040105",NA
-"0212433550",221,"Aug-09","Moderately Dry","Aug","03040105",NA
-"0212466000",221,"Aug-09","Moderately Dry","Aug","03040105",NA
-"0212467451",221,"Aug-09","Extremely Dry","Aug","03040105",NA
-"0212467595",221,"Aug-09","Moderately Dry","Aug","03040105",NA
-"02126000",221,"Aug-09","Moderately Dry","Aug","03040105",NA
-"02128000",221,"Aug-09","Moderately Wet","Aug","03040104",NA
-"02129000",221,"Aug-09","Very Dry","Aug","03040201",NA
-"02132320",221,"Aug-09","Moderately Wet","Aug","03040204",NA
-"02133500",221,"Aug-09","Moderately Dry","Aug","03040203",NA
-"02133624",221,"Aug-09","Moderately Wet","Aug","03040203",NA
-"02134170",221,"Aug-09","Moderately Wet","Aug","03040203",NA
-"02134480",221,"Aug-09","Moderately Wet","Aug","03040203",NA
-"02134500",221,"Aug-09","Moderately Wet","Aug","03040203",NA
-"02137727",221,"Aug-09","Moderately Dry","Aug","03050101",NA
-"02138500",221,"Aug-09","Moderately Dry","Aug","03050101",NA
-"02138520",221,"Aug-09","Very Dry","Aug","03050101",NA
-"02140991",221,"Aug-09","Moderately Dry","Aug","03050101","Lake Rhodhiss"
-"0214183365",221,"Aug-09","Extremely Dry","Aug","03050101","Lake Hickory"
-"0214192500",221,"Aug-09","Extremely Dry","Aug","03050101",NA
-"02142000",221,"Aug-09","Moderately Wet","Aug","03050101",NA
-"0214244102",221,"Aug-09","Extremely Dry","Aug","03050101","Lookout Shoals Lake"
-"02142654",221,"Aug-09","Very Dry","Aug","03050101","Mountain Island Lake"
-"0214265808",221,"Aug-09","Moderately Wet","Aug","03050101","Mountain Island Lake"
-"0214265828",221,"Aug-09","Moderately Wet","Aug","03050101","Mountain Island Lake"
-"0214266000",221,"Aug-09","Moderately Dry","Aug","03050101","Mountain Island Lake"
-"0214266080",221,"Aug-09","Moderately Dry","Aug","03050101","Mountain Island Lake"
-"0214269560",221,"Aug-09","Moderately Wet","Aug","03050101",NA
-"02142900",221,"Aug-09","Very Dry","Aug","03050101","Lake Wylie"
-"02142914",221,"Aug-09","Very Dry","Aug","03050101","Lake Wylie"
-"0214291555",221,"Aug-09","Moderately Dry","Aug","03050101","Lake Wylie"
-"0214295600",221,"Aug-09","Very Dry","Aug","03050101",NA
-"0214297160",221,"Aug-09","Very Wet","Aug","03050101",NA
-"02143000",221,"Aug-09","Moderately Wet","Aug","03050102",NA
-"02143040",221,"Aug-09","Moderately Wet","Aug","03050102","Jacob Fork"
-"02143500",221,"Aug-09","Moderately Dry","Aug","03050102","South Fork Catawba River (High Shoals)"
-"02144000",221,"Aug-09","Moderately Wet","Aug","03050102",NA
-"02145000",221,"Aug-09","Moderately Wet","Aug","03050102",NA
-"02146211",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"0214627970",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"02146285",221,"Aug-09","Moderately Wet","Aug","03050103",NA
-"02146300",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"02146315",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"02146348",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"02146381",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"02146409",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"0214642825",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"0214643820",221,"Aug-09","Very Dry","Aug","03050103",NA
-"0214645022",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"02146470",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"02146507",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"02146530",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"0214655255",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"02146562",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"0214657975",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"02146600",221,"Aug-09","Very Dry","Aug","03050103",NA
-"02146670",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"02146700",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"02146750",221,"Aug-09","Very Dry","Aug","03050103",NA
-"0214678175",221,"Aug-09","Moderately Dry","Aug","03050103",NA
-"0214685800",221,"Aug-09","Very Dry","Aug","03050103",NA
-"02149000",221,"Aug-09","Moderately Wet","Aug","03050105",NA
-"02150495",221,"Aug-09","Moderately Wet","Aug","03050105","Second Broad River - Forest City"
-"02151500",221,"Aug-09","Moderately Wet","Aug","03050105","Broad River (Shelby)"
-"02152100",221,"Aug-09","Very Wet","Aug","03050105",NA
-"02152474",221,"Aug-09","Very Wet","Aug","03050105","First Broad River"
-"03161000",221,"Aug-09","Very Dry","Aug","05050001","South Fork New River (Jefferson,W.Jefferson)"
-"03439000",221,"Aug-09","Moderately Dry","Aug","06010105",NA
-"03441000",221,"Aug-09","Moderately Dry","Aug","06010105",NA
-"03443000",221,"Aug-09","Moderately Dry","Aug","06010105",NA
-"03446000",221,"Aug-09","Moderately Dry","Aug","06010105","Mills River"
-"03447687",221,"Aug-09","Moderately Dry","Aug","06010105",NA
-"0344894205",221,"Aug-09","Moderately Dry","Aug","06010105","North Fork Swannanoa River"
-"03450000",221,"Aug-09","Moderately Dry","Aug","06010105","Beetree Creek (Beetree Res.)"
-"03451000",221,"Aug-09","Moderately Wet","Aug","06010105",NA
-"03451500",221,"Aug-09","Moderately Dry","Aug","06010105",NA
-"03453000",221,"Aug-09","Moderately Dry","Aug","06010105",NA
-"03453500",221,"Aug-09","Moderately Dry","Aug","06010105",NA
-"03454500",221,"Aug-09","Very Dry","Aug","06010105",NA
-"03455500",221,"Aug-09","Moderately Dry","Aug","06010106","Pigeon River"
-"0345577330",221,"Aug-09","Moderately Dry","Aug","06010106","Pigeon River"
-"03456100",221,"Aug-09","Moderately Dry","Aug","06010106","Pigeon River"
-"03456500",221,"Aug-09","Moderately Dry","Aug","06010106","Pigeon River"
-"03456991",221,"Aug-09","Moderately Dry","Aug","06010106","Pigeon River"
-"03459500",221,"Aug-09","Moderately Dry","Aug","06010106",NA
-"03460000",221,"Aug-09","Moderately Dry","Aug","06010106",NA
-"03460795",221,"Aug-09","Extremely Dry","Aug","06010106",NA
-"03463300",221,"Aug-09","Moderately Dry","Aug","06010108",NA
-"03479000",221,"Aug-09","Moderately Dry","Aug","06010103",NA
-"03500000",221,"Aug-09","Moderately Dry","Aug","06010202",NA
-"03503000",221,"Aug-09","Moderately Wet","Aug","06010202",NA
-"03504000",221,"Aug-09","Moderately Dry","Aug","06010202",NA
-"03505550",221,"Aug-09","Extremely Dry","Aug","06010202",NA
-"03508050",221,"Aug-09","Moderately Wet","Aug","06010203","Tuckasegee River"
-"03510577",221,"Aug-09","Moderately Wet","Aug","06010203",NA
-"03512000",221,"Aug-09","Moderately Wet","Aug","06010203",NA
-"03513000",221,"Aug-09","Moderately Dry","Aug","06010203",NA
-"0351706800",221,"Aug-09","Extremely Wet","Aug","06010204",NA
-"03550000",221,"Aug-09","Moderately Dry","Aug","06020002",NA
+"02053200",228,"Aug-16","Moderately Wet","Aug","03010204",NA
+"02053500",228,"Aug-16","Very Wet","Aug","03010203",NA
+"02068500",228,"Aug-16","Very Wet","Aug","03010103",NA
+"02069000",228,"Aug-16","Moderately Wet","Aug","03010103","Dan River (Madison)"
+"02070500",228,"Aug-16","Moderately Wet","Aug","03010103",NA
+"02071000",228,"Aug-16","Moderately Wet","Aug","03010103","Dan River (Eden)"
+"02074000",228,"Aug-16","Moderately Wet","Aug","03010103","Smith River"
+"02077200",228,"Aug-16","Moderately Wet","Aug","03010104",NA
+"02077303",228,"Aug-16","Very Dry","Aug","03010104",NA
+"02077670",228,"Aug-16","Moderately Wet","Aug","03010104",NA
+"02080500",228,"Aug-16","Extremely Dry","Aug","03010107",NA
+"0208111310",228,"Aug-16","Moderately Wet","Aug","03010107",NA
+"02081500",228,"Aug-16","Moderately Wet","Aug","03020101",NA
+"02081747",228,"Aug-16","Moderately Wet","Aug","03020101",NA
+"02081942",228,"Aug-16","Moderately Dry","Aug","03020101",NA
+"0208250410",228,"Aug-16","Very Dry","Aug","03020101","Tar River (Rocky Mount)"
+"02082585",228,"Aug-16","Moderately Wet","Aug","03020101",NA
+"02082770",228,"Aug-16","Moderately Wet","Aug","03020101",NA
+"02082950",228,"Aug-16","Moderately Wet","Aug","03020102",NA
+"02083000",228,"Aug-16","Moderately Wet","Aug","03020102",NA
+"02083500",228,"Aug-16","Moderately Wet","Aug","03020103",NA
+"02084000",228,"Aug-16","Moderately Wet","Aug","03020103",NA
+"02084160",228,"Aug-16","Moderately Wet","Aug","03020103",NA
+"02084557",228,"Aug-16","Very Wet","Aug","03020104",NA
+"02085000",228,"Aug-16","Moderately Dry","Aug","03020201",NA
+"02085070",228,"Aug-16","Moderately Dry","Aug","03020201","Eno River (Lower)"
+"0208521324",228,"Aug-16","Moderately Dry","Aug","03020201","Little River (Little River Reservoir)"
+"0208524090",228,"Aug-16","Very Dry","Aug","03020201","Little River (Little River Reservoir)"
+"0208524975",228,"Aug-16","Moderately Wet","Aug","03020201","Falls Lake"
+"02085500",228,"Aug-16","Moderately Dry","Aug","03020201","Flat River (Lake Michie)"
+"02086500",228,"Aug-16","Moderately Wet","Aug","03020201","Falls Lake"
+"02086624",228,"Aug-16","Moderately Dry","Aug","03020201","Falls Lake"
+"0208675010",228,"Aug-16","Moderately Dry","Aug","03020201","Falls Lake"
+"02086849",228,"Aug-16","Moderately Wet","Aug","03020201","Falls Lake"
+"02087183",228,"Aug-16","Extremely Dry","Aug","03020201","Neuse River (Wake Forest)"
+"0208726005",228,"Aug-16","Moderately Dry","Aug","03020201",NA
+"02087275",228,"Aug-16","Moderately Dry","Aug","03020201",NA
+"02087324",228,"Aug-16","Moderately Dry","Aug","03020201",NA
+"0208732534",228,"Aug-16","Very Dry","Aug","03020201",NA
+"0208732885",228,"Aug-16","Moderately Dry","Aug","03020201",NA
+"0208735012",228,"Aug-16","Moderately Dry","Aug","03020201",NA
+"02087359",228,"Aug-16","Very Wet","Aug","03020201",NA
+"02087500",228,"Aug-16","Moderately Wet","Aug","03020201","Neuse River (Johnston County)"
+"02087580",228,"Aug-16","Very Dry","Aug","03020201","Swift Creek (Lake Benson)"
+"0208758850",228,"Aug-16","Moderately Wet","Aug","03020201","Swift Creek (Lake Benson)"
+"0208773375",228,"Aug-16","Moderately Wet","Aug","03020201",NA
+"02088000",228,"Aug-16","Moderately Wet","Aug","03020201",NA
+"02088383",228,"Aug-16","Moderately Wet","Aug","03020201",NA
+"02088500",228,"Aug-16","Moderately Wet","Aug","03020201",NA
+"02089000",228,"Aug-16","Moderately Wet","Aug","03020202",NA
+"02089500",228,"Aug-16","Moderately Wet","Aug","03020202",NA
+"02090380",228,"Aug-16","Moderately Dry","Aug","03020203",NA
+"02091000",228,"Aug-16","Moderately Wet","Aug","03020203",NA
+"02091500",228,"Aug-16","Very Wet","Aug","03020203",NA
+"02091814",228,"Aug-16","Very Wet","Aug","03020202",NA
+"02092500",228,"Aug-16","Very Wet","Aug","03020204",NA
+"02093000",228,"Aug-16","Moderately Wet","Aug","03020302",NA
+"02093800",228,"Aug-16","Moderately Wet","Aug","03030002","Reedy Fork"
+"02093877",228,"Aug-16","Very Wet","Aug","03030002","Reedy Fork"
+"0209399200",228,"Aug-16","Moderately Wet","Aug","03030002","Reedy Fork"
+"02094500",228,"Aug-16","Very Wet","Aug","03030002",NA
+"02094659",228,"Aug-16","Moderately Dry","Aug","03030002",NA
+"02094770",228,"Aug-16","Moderately Dry","Aug","03030002",NA
+"02094775",228,"Aug-16","Moderately Wet","Aug","03030002",NA
+"02095000",228,"Aug-16","Moderately Wet","Aug","03030002",NA
+"02095181",228,"Aug-16","Moderately Dry","Aug","03030002",NA
+"02095271",228,"Aug-16","Moderately Dry","Aug","03030002",NA
+"02095500",228,"Aug-16","Very Wet","Aug","03030002",NA
+"0209553650",228,"Aug-16","Very Wet","Aug","03030002",NA
+"02096500",228,"Aug-16","Very Wet","Aug","03030002",NA
+"02096846",228,"Aug-16","Very Wet","Aug","03030002","Cane Creek"
+"02096960",228,"Aug-16","Very Wet","Aug","03030002","Haw River (Jordan Lake)"
+"0209722970",228,"Aug-16","Very Dry","Aug","03030002",NA
+"02097280",228,"Aug-16","Moderately Wet","Aug","03030002","Haw River (Jordan Lake)"
+"02097314",228,"Aug-16","Moderately Wet","Aug","03030002","Haw River (Jordan Lake)"
+"0209734440",228,"Aug-16","Moderately Dry","Aug","03030002",NA
+"0209741955",228,"Aug-16","Moderately Wet","Aug","03030002","Haw River (Jordan Lake)"
+"02097464",228,"Aug-16","Very Wet","Aug","03030002","Morgan Creek"
+"02097517",228,"Aug-16","Moderately Dry","Aug","03030002","Haw River (Jordan Lake)"
+"0209782609",228,"Aug-16","Moderately Dry","Aug","03030002","Haw River (Jordan Lake)"
+"02098206",228,"Aug-16","Extremely Dry","Aug","03030002","Cape Fear River (Sanford)"
+"02099000",228,"Aug-16","Very Wet","Aug","03030003","East Fork Deep River (High Point Lake)"
+"02100500",228,"Aug-16","Moderately Wet","Aug","03030003",NA
+"0210166029",228,"Aug-16","Extremely Wet","Aug","03030003","Rocky River"
+"02101726",228,"Aug-16","Moderately Wet","Aug","03030003",NA
+"02101800",228,"Aug-16","Moderately Wet","Aug","03030003",NA
+"02102000",228,"Aug-16","Moderately Dry","Aug","03030003","Cape Fear River (Sanford)"
+"02102192",228,"Aug-16","Very Wet","Aug","03030004",NA
+"02102500",228,"Aug-16","Moderately Dry","Aug","03030004","Cape Fear River (Dunn)"
+"02102908",228,"Aug-16","Moderately Wet","Aug","03030004","Little River (Intake no. 2)"
+"02103000",228,"Aug-16","Moderately Dry","Aug","03030004",NA
+"02104220",228,"Aug-16","Moderately Dry","Aug","03030004",NA
+"02105500",228,"Aug-16","Moderately Dry","Aug","03030005","Cape Fear River (Smithfield Packing Co)"
+"02105769",220,"Aug-08","Moderately Wet","Aug","03030005","Cape Fear River (Wilmington)"
+"02106500",228,"Aug-16","Extremely Wet","Aug","03030006",NA
+"02108000",228,"Aug-16","Extremely Wet","Aug","03030007",NA
+"02109500",228,"Aug-16","Very Wet","Aug","03040206",NA
+"02111000",228,"Aug-16","Moderately Wet","Aug","03040101",NA
+"02111180",228,"Aug-16","Moderately Wet","Aug","03040101",NA
+"0211139110",228,"Aug-16","Moderately Dry","Aug","03040101","Yadkin River (Wilkesboro)"
+"02111500",228,"Aug-16","Moderately Wet","Aug","03040101","Reddies River"
+"02112000",228,"Aug-16","Moderately Wet","Aug","03040101",NA
+"02112250",228,"Aug-16","Moderately Wet","Aug","03040101",NA
+"02113850",228,"Aug-16","Moderately Wet","Aug","03040101",NA
+"02114450",228,"Aug-16","Moderately Wet","Aug","03040101","Yadkin River - King"
+"02115360",228,"Aug-16","Moderately Wet","Aug","03040101","Yadkin River - Davie Co."
+"02116500",228,"Aug-16","Moderately Wet","Aug","03040101","Yadkin River (Davidson Co.)"
+"02118000",228,"Aug-16","Moderately Wet","Aug","03040102","South Yadkin River - Cooleemee"
+"02118500",228,"Aug-16","Moderately Wet","Aug","03040102","Hunting Creek"
+"02120780",228,"Aug-16","Very Wet","Aug","03040102",NA
+"02121500",228,"Aug-16","Moderately Wet","Aug","03040103",NA
+"0212378405",228,"Aug-16","Moderately Dry","Aug","03040104",NA
+"0212393300",228,"Aug-16","Moderately Wet","Aug","03040105",NA
+"02124080",228,"Aug-16","Moderately Wet","Aug","03040105",NA
+"0212414900",228,"Aug-16","Very Wet","Aug","03040105",NA
+"0212419274",228,"Aug-16","Very Wet","Aug","03040105","Coddle Creek"
+"02124269",228,"Aug-16","Moderately Wet","Aug","03040105",NA
+"0212427947",228,"Aug-16","Moderately Dry","Aug","03040105",NA
+"0212430293",228,"Aug-16","Extremely Wet","Aug","03040105",NA
+"0212430653",228,"Aug-16","Very Wet","Aug","03040105",NA
+"0212433550",228,"Aug-16","Extremely Wet","Aug","03040105",NA
+"0212466000",228,"Aug-16","Moderately Wet","Aug","03040105",NA
+"0212467451",228,"Aug-16","Moderately Dry","Aug","03040105",NA
+"0212467595",228,"Aug-16","Moderately Dry","Aug","03040105",NA
+"02126000",228,"Aug-16","Moderately Wet","Aug","03040105",NA
+"02128000",228,"Aug-16","Moderately Wet","Aug","03040104",NA
+"02129000",228,"Aug-16","Moderately Wet","Aug","03040201",NA
+"02132320",228,"Aug-16","Moderately Dry","Aug","03040204",NA
+"02133500",228,"Aug-16","Moderately Dry","Aug","03040203",NA
+"02133624",228,"Aug-16","Moderately Dry","Aug","03040203",NA
+"02134170",228,"Aug-16","Moderately Dry","Aug","03040203",NA
+"02134480",228,"Aug-16","Moderately Wet","Aug","03040203",NA
+"02134500",228,"Aug-16","Moderately Wet","Aug","03040203",NA
+"02137727",228,"Aug-16","Moderately Wet","Aug","03050101",NA
+"02138500",228,"Aug-16","Moderately Wet","Aug","03050101",NA
+"02138520",228,"Aug-16","Very Wet","Aug","03050101",NA
+"02140991",228,"Aug-16","Moderately Wet","Aug","03050101","Lake Rhodhiss"
+"0214183365",228,"Aug-16","Moderately Dry","Aug","03050101","Lake Hickory"
+"0214192500",228,"Aug-16","Moderately Dry","Aug","03050101",NA
+"02142000",228,"Aug-16","Moderately Wet","Aug","03050101",NA
+"0214244102",228,"Aug-16","Moderately Wet","Aug","03050101","Lookout Shoals Lake"
+"02142654",228,"Aug-16","Moderately Wet","Aug","03050101","Mountain Island Lake"
+"0214265808",228,"Aug-16","Moderately Wet","Aug","03050101","Mountain Island Lake"
+"0214265828",228,"Aug-16","Very Wet","Aug","03050101","Mountain Island Lake"
+"0214266000",228,"Aug-16","Moderately Wet","Aug","03050101","Mountain Island Lake"
+"0214266080",228,"Aug-16","Moderately Dry","Aug","03050101","Mountain Island Lake"
+"0214269560",228,"Aug-16","Moderately Wet","Aug","03050101",NA
+"02142900",228,"Aug-16","Moderately Dry","Aug","03050101","Lake Wylie"
+"02142914",228,"Aug-16","Moderately Dry","Aug","03050101","Lake Wylie"
+"0214291555",228,"Aug-16","Moderately Dry","Aug","03050101","Lake Wylie"
+"0214295600",228,"Aug-16","Moderately Dry","Aug","03050101",NA
+"0214297160",228,"Aug-16","Moderately Wet","Aug","03050101",NA
+"02143000",228,"Aug-16","Moderately Wet","Aug","03050102",NA
+"02143040",228,"Aug-16","Moderately Wet","Aug","03050102","Jacob Fork"
+"02143500",228,"Aug-16","Moderately Wet","Aug","03050102","South Fork Catawba River (High Shoals)"
+"02144000",228,"Aug-16","Moderately Wet","Aug","03050102",NA
+"02145000",228,"Aug-16","Moderately Wet","Aug","03050102",NA
+"02146211",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"0214627970",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"02146285",228,"Aug-16","Extremely Wet","Aug","03050103",NA
+"02146300",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"02146315",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"02146348",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"02146381",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"02146409",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"0214642825",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"0214643820",228,"Aug-16","Very Dry","Aug","03050103",NA
+"0214645022",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"02146470",228,"Aug-16","Moderately Dry","Aug","03050103",NA
+"02146507",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"02146530",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"0214655255",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"02146562",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"0214657975",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"02146600",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"02146670",228,"Aug-16","Moderately Dry","Aug","03050103",NA
+"02146700",228,"Aug-16","Moderately Dry","Aug","03050103",NA
+"02146750",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"0214678175",228,"Aug-16","Moderately Wet","Aug","03050103",NA
+"0214685800",228,"Aug-16","Moderately Dry","Aug","03050103",NA
+"02149000",228,"Aug-16","Very Wet","Aug","03050105",NA
+"02150495",228,"Aug-16","Very Wet","Aug","03050105","Second Broad River - Forest City"
+"02151500",228,"Aug-16","Moderately Wet","Aug","03050105","Broad River (Shelby)"
+"02152100",228,"Aug-16","Very Wet","Aug","03050105",NA
+"02152474",228,"Aug-16","Very Wet","Aug","03050105","First Broad River"
+"03161000",228,"Aug-16","Moderately Dry","Aug","05050001","South Fork New River (Jefferson,W.Jefferson)"
+"03439000",228,"Aug-16","Extremely Wet","Aug","06010105",NA
+"03441000",228,"Aug-16","Extremely Wet","Aug","06010105",NA
+"03443000",228,"Aug-16","Moderately Wet","Aug","06010105",NA
+"03446000",228,"Aug-16","Very Wet","Aug","06010105","Mills River"
+"03447687",228,"Aug-16","Moderately Wet","Aug","06010105",NA
+"0344894205",228,"Aug-16","Moderately Wet","Aug","06010105","North Fork Swannanoa River"
+"03450000",228,"Aug-16","Very Wet","Aug","06010105","Beetree Creek (Beetree Res.)"
+"03451000",228,"Aug-16","Very Wet","Aug","06010105",NA
+"03451500",228,"Aug-16","Very Wet","Aug","06010105",NA
+"03453000",228,"Aug-16","Moderately Wet","Aug","06010105",NA
+"03453500",228,"Aug-16","Moderately Wet","Aug","06010105",NA
+"03454500",228,"Aug-16","Moderately Wet","Aug","06010105",NA
+"03455500",228,"Aug-16","Extremely Wet","Aug","06010106","Pigeon River"
+"0345577330",228,"Aug-16","Extremely Wet","Aug","06010106","Pigeon River"
+"03456100",228,"Aug-16","Extremely Wet","Aug","06010106","Pigeon River"
+"03456500",228,"Aug-16","Extremely Wet","Aug","06010106","Pigeon River"
+"03456991",228,"Aug-16","Extremely Wet","Aug","06010106","Pigeon River"
+"03459500",228,"Aug-16","Very Wet","Aug","06010106",NA
+"03460000",228,"Aug-16","Moderately Dry","Aug","06010106",NA
+"03460795",228,"Aug-16","Moderately Wet","Aug","06010106",NA
+"03463300",228,"Aug-16","Moderately Wet","Aug","06010108",NA
+"03479000",228,"Aug-16","Moderately Wet","Aug","06010103",NA
+"03500000",228,"Aug-16","Moderately Wet","Aug","06010202",NA
+"03503000",228,"Aug-16","Moderately Wet","Aug","06010202",NA
+"03504000",228,"Aug-16","Moderately Wet","Aug","06010202",NA
+"03505550",228,"Aug-16","Moderately Wet","Aug","06010202",NA
+"03508050",228,"Aug-16","Extremely Wet","Aug","06010203","Tuckasegee River"
+"03510577",228,"Aug-16","Extremely Wet","Aug","06010203",NA
+"03512000",228,"Aug-16","Moderately Wet","Aug","06010203",NA
+"03513000",228,"Aug-16","Extremely Wet","Aug","06010203",NA
+"0351706800",228,"Aug-16","Moderately Wet","Aug","06010204",NA
+"03550000",228,"Aug-16","Moderately Wet","Aug","06020002",NA

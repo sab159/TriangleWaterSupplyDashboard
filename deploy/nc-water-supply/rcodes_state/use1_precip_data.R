@@ -178,10 +178,31 @@ rm(zt, zt1, zt4, pol, pol2, zt1.proj, zt4.proj)
 day.url <- day(Sys.Date())-1
 if(nchar(day.url)==1) { day.url = paste0("0", day.url) }
 
-#read in pcp data
+#read in pcp data... for some reason this stopped working... won't read kmz of anything
 file_to_geojson(input=paste0("ftp://ftp.cpc.ncep.noaa.gov/GIS/us_tempprcpfcst/610prcp_",year.url,month.url,day.url,".kmz"), method='web', output=paste0(swd_html, 'pcp\\pcp610forecast'))
 pcp <- read_sf(paste0(swd_html, 'pcp\\pcp610forecast.geojson')) %>% dplyr::select(Name, geometry) %>% st_transform(crs = 4326)
+#zt <- readOGR("https://ftp.cpc.ncep.noaa.gov/GIS/us_tempprcpfcst/610prcp_20210816.kmz")
+
 pcp <- pcp %>% mutate(percentage = as.numeric(trimws(substr(Name,0,3))), direction = trimws(substr(Name, (nchar(Name)-12), (nchar(Name)-7)),"both"))
+pcp <- pcp %>% mutate(colorVal = ifelse(percentage < 33, "white", "black")) %>% mutate(colorVal = ifelse(direction == "Above" & percentage >= 33 & percentage < 40, "#d4f8d4", colorVal)) %>% 
+  mutate(colorVal = ifelse(direction == "Above" & percentage >= 40 & percentage < 50, "#90ee90", ifelse(direction == "Above" & percentage >= 50 & percentage < 60, "#4ce44c", 
+                                                                                                        ifelse(direction == "Above" & percentage >= 60 & percentage < 70, "#1ec31e", ifelse(direction == "Above" & percentage >= 70 & percentage < 80, "#169016", 
+                                                                                                                                                                                            ifelse(direction == "Above" & percentage >= 80 & percentage <= 100, "#0c4c0c", colorVal))))))
+
+pcp <- pcp %>% mutate(colorVal = ifelse(direction == "Below" & percentage >= 33 & percentage < 40, "#e1d9d2", ifelse(direction == "Below" & percentage >= 40 & percentage < 50, "#b9a797", 
+                                                                                                                     ifelse(direction == "Below" & percentage >= 50 & percentage < 60, "#b19d8c", ifelse(direction == "Below" & percentage >= 60 & percentage < 70, "#776250", 
+                                                                                                                                                                                                         ifelse(direction == "Below" & percentage >= 70 & percentage < 80, "#5f4f40", ifelse(direction == "Below" & percentage >= 80 & percentage <= 100, "#312821", colorVal)))))))
+pcp <- pcp %>% mutate(colorVal = ifelse(direction == "Normal", "white", colorVal))
+pcp <- st_zm(pcp)
+table(pcp$colorVal)
+
+
+#if above stopped working then....---------------------------------------------------------------------------------------------------------------------------------
+download.file(paste0("ftp://ftp.cpc.ncep.noaa.gov/GIS/us_tempprcpfcst/610prcp_",year.url,month.url,day.url,".zip"), destfile="..\\temp\\temp.zip")
+# Unzip this file. You can do it with R (as below), or clicking on the object you downloaded.
+unzip("..\\temp\\temp.zip", files=NULL, exdir="..\\temp")
+#get data
+pcp <- readOGR(paste0("..\\temp"), paste0("610prcp_",year.url,month.url,day.url)) %>% st_as_sf() %>% st_transform(crs = 4326) %>% select(Prob, Cat, geometry) %>% rename(percentage = Prob, direction = Cat)
 pcp <- pcp %>% mutate(colorVal = ifelse(percentage < 33, "white", "black")) %>% mutate(colorVal = ifelse(direction == "Above" & percentage >= 33 & percentage < 40, "#d4f8d4", colorVal)) %>% 
   mutate(colorVal = ifelse(direction == "Above" & percentage >= 40 & percentage < 50, "#90ee90", ifelse(direction == "Above" & percentage >= 50 & percentage < 60, "#4ce44c", 
                     ifelse(direction == "Above" & percentage >= 60 & percentage < 70, "#1ec31e", ifelse(direction == "Above" & percentage >= 70 & percentage < 80, "#169016", 
@@ -193,8 +214,22 @@ pcp <- pcp %>% mutate(colorVal = ifelse(direction == "Below" & percentage >= 33 
 pcp <- pcp %>% mutate(colorVal = ifelse(direction == "Normal", "white", colorVal))
 pcp <- st_zm(pcp)
 table(pcp$colorVal)
+pcp <- pcp %>% mutate(Name = ifelse(direction != "Normal", paste0(percentage, "% change of precipitation being ", direction, " Normal"), paste0(percentage, "% change of precipitation being ", direction)))
+
+                      
+####----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 leaflet() %>%  addProviderTiles("Stamen.TonerLite") %>% addPolygons(data = pcp, fillOpacity= 0.75, fillColor = pcp$colorVal, color="black", weight=0)
 geojson_write(pcp, file =  paste0(swd_html, "pcp\\pcp610forecast.geojson"))
+
+#delete temp files
+fold = ("..\\temp")
+# get all files in the directories, recursively
+f <- list.files(fold, include.dirs = F, full.names = T, recursive = T)
+# remove the files
+file.remove(f)
+
+
 
 #repeat for temperature------------------------
 file_to_geojson(input=paste0("ftp://ftp.cpc.ncep.noaa.gov/GIS/us_tempprcpfcst/610temp_",year.url,month.url,day.url,".kmz"), method='web', output=paste0(swd_html, 'pcp\\temp610forecast'))
@@ -211,8 +246,39 @@ pcp <- pcp %>% mutate(colorVal = ifelse(direction == "Below" & percentage >= 33 
 pcp <- pcp %>% mutate(colorVal = ifelse(direction == "Normal", "white", colorVal))
 pcp <- st_zm(pcp)
 table(pcp$colorVal)
+
+
+#if above stopped working then....---------------------------------------------------------------------------------------------------------------------------------
+download.file(paste0("ftp://ftp.cpc.ncep.noaa.gov/GIS/us_tempprcpfcst/610temp_",year.url,month.url,day.url,".zip"), destfile="..\\temp\\temp.zip")
+# Unzip this file. You can do it with R (as below), or clicking on the object you downloaded.
+unzip("..\\temp\\temp.zip", files=NULL, exdir="..\\temp")
+#get data
+pcp <- readOGR(paste0("..\\temp"), paste0("610temp_",year.url,month.url,day.url)) %>% st_as_sf() %>% st_transform(crs = 4326) %>% select(Prob, Cat, geometry) %>% rename(percentage = Prob, direction = Cat)
+pcp <- pcp %>% mutate(colorVal = ifelse(percentage < 33, "white", "black")) %>% mutate(colorVal = ifelse(direction == "Above" & percentage >= 33 & percentage < 40, "#ffc4c4", colorVal)) %>% 
+  mutate(colorVal = ifelse(direction == "Above" & percentage >= 40 & percentage < 50, "#ff7676", ifelse(direction == "Above" & percentage >= 50 & percentage < 60, "#ff2727", 
+                    ifelse(direction == "Above" & percentage >= 60 & percentage < 70, "#eb0000", ifelse(direction == "Above" & percentage >= 70 & percentage < 80, "#b10000", 
+                    ifelse(direction == "Above" & percentage >= 80 & percentage <= 100, "#760000", colorVal))))))
+
+pcp <- pcp %>% mutate(colorVal = ifelse(direction == "Below" & percentage >= 33 & percentage < 40, "#d8d8ff", ifelse(direction == "Below" & percentage >= 40 & percentage < 50, "#9d9dff", 
+                                ifelse(direction == "Below" & percentage >= 50 & percentage < 60, "#4e4eff", ifelse(direction == "Below" & percentage >= 60 & percentage < 70, "#1414ff", 
+                                ifelse(direction == "Below" & percentage >= 70 & percentage < 80, "#0000d8", ifelse(direction == "Below" & percentage >= 80 & percentage <= 100, "#00009d", colorVal)))))))
+pcp <- pcp %>% mutate(colorVal = ifelse(direction == "Normal", "white", colorVal))
+pcp <- st_zm(pcp)
+table(pcp$colorVal)
+pcp <- pcp %>% mutate(Name = ifelse(direction != "Normal", paste0(percentage, "% change of temperature being ", direction, " Normal"), paste0(percentage, "% change of temperature being ", direction)))
+####----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 leaflet() %>%  addProviderTiles("Stamen.TonerLite") %>% addPolygons(data = pcp, fillOpacity= 0.6, fillColor = pcp$colorVal, color="black", weight=0)
 geojson_write(pcp, file =  paste0(swd_html, "pcp\\temp610forecast.geojson"))
+
+#delete temp files
+fold = ("..\\temp")
+# get all files in the directories, recursively
+f <- list.files(fold, include.dirs = F, full.names = T, recursive = T)
+# remove the files
+file.remove(f)
+
+
 
 rm(pcp)
 
