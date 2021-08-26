@@ -257,6 +257,5 @@ t.annual <- gw.annual %>% filter(site %in% t.sites$site)
 write.csv(t.annual, "..\\data\\gw\\gw_annual_level.csv", row.names=FALSE)
 
 
-
 #remove files
 rm(zt, gw.annual, recent.flow, current.stat, current.stat2, nc.sites2, nc.sites, usgs.sites, stats, year.flow, unique.usgs.sites, unique.dwr.sites, stats2, test, url.sites, year.flow2, zt.stats, bk.up, all.data, bk.up.flow)

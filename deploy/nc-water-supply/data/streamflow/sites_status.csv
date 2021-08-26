@@ -1,68 +1,68 @@
 "site","julian","date","status","month","huc8","ws_watershed"
-"02085000",228,"Aug-16","Moderately Dry","Aug","03020201",NA
-"02085070",228,"Aug-16","Moderately Dry","Aug","03020201","Eno River (Lower)"
-"0208521324",228,"Aug-16","Moderately Dry","Aug","03020201","Little River (Little River Reservoir)"
-"0208524090",228,"Aug-16","Very Dry","Aug","03020201","Little River (Little River Reservoir)"
-"0208524975",228,"Aug-16","Moderately Wet","Aug","03020201","Falls Lake"
-"02085500",228,"Aug-16","Moderately Dry","Aug","03020201","Flat River (Lake Michie)"
-"02086500",228,"Aug-16","Moderately Wet","Aug","03020201","Falls Lake"
-"02086624",228,"Aug-16","Moderately Dry","Aug","03020201","Falls Lake"
-"0208675010",228,"Aug-16","Moderately Dry","Aug","03020201","Falls Lake"
-"02086849",228,"Aug-16","Moderately Wet","Aug","03020201","Falls Lake"
-"02087183",228,"Aug-16","Extremely Dry","Aug","03020201","Neuse River (Wake Forest)"
-"0208726005",228,"Aug-16","Moderately Dry","Aug","03020201",NA
-"02087275",228,"Aug-16","Moderately Dry","Aug","03020201",NA
-"02087324",228,"Aug-16","Moderately Dry","Aug","03020201",NA
-"0208732534",228,"Aug-16","Very Dry","Aug","03020201",NA
-"0208732885",228,"Aug-16","Moderately Dry","Aug","03020201",NA
-"0208735012",228,"Aug-16","Moderately Dry","Aug","03020201",NA
-"02087359",228,"Aug-16","Very Wet","Aug","03020201",NA
-"02087500",228,"Aug-16","Moderately Wet","Aug","03020201","Neuse River (Johnston County)"
-"02087580",228,"Aug-16","Very Dry","Aug","03020201","Swift Creek (Lake Benson)"
-"0208758850",228,"Aug-16","Moderately Wet","Aug","03020201","Swift Creek (Lake Benson)"
-"0208773375",228,"Aug-16","Moderately Wet","Aug","03020201",NA
-"02088000",228,"Aug-16","Moderately Wet","Aug","03020201",NA
-"02088383",228,"Aug-16","Moderately Wet","Aug","03020201",NA
-"02088500",228,"Aug-16","Moderately Wet","Aug","03020201",NA
-"02089000",228,"Aug-16","Moderately Wet","Aug","03020202",NA
-"02089500",228,"Aug-16","Moderately Wet","Aug","03020202",NA
-"02090380",228,"Aug-16","Moderately Dry","Aug","03020203",NA
-"02091000",228,"Aug-16","Moderately Wet","Aug","03020203",NA
-"02091500",228,"Aug-16","Very Wet","Aug","03020203",NA
-"02091814",228,"Aug-16","Very Wet","Aug","03020202",NA
-"02092500",228,"Aug-16","Very Wet","Aug","03020204",NA
-"02093800",228,"Aug-16","Moderately Wet","Aug","03030002","Reedy Fork"
-"02093877",228,"Aug-16","Very Wet","Aug","03030002","Reedy Fork"
-"0209399200",228,"Aug-16","Moderately Wet","Aug","03030002","Reedy Fork"
-"02094500",228,"Aug-16","Very Wet","Aug","03030002",NA
-"02094659",228,"Aug-16","Moderately Dry","Aug","03030002",NA
-"02094770",228,"Aug-16","Moderately Dry","Aug","03030002",NA
-"02094775",228,"Aug-16","Moderately Wet","Aug","03030002",NA
-"02095000",228,"Aug-16","Moderately Wet","Aug","03030002",NA
-"02095181",228,"Aug-16","Moderately Dry","Aug","03030002",NA
-"02095271",228,"Aug-16","Moderately Dry","Aug","03030002",NA
-"02095500",228,"Aug-16","Very Wet","Aug","03030002",NA
-"0209553650",228,"Aug-16","Very Wet","Aug","03030002",NA
-"02096500",228,"Aug-16","Very Wet","Aug","03030002",NA
-"02096846",228,"Aug-16","Very Wet","Aug","03030002","Cane Creek"
-"02096960",228,"Aug-16","Very Wet","Aug","03030002","Haw River (Jordan Lake)"
-"0209722970",228,"Aug-16","Very Dry","Aug","03030002",NA
-"02097280",228,"Aug-16","Moderately Wet","Aug","03030002","Haw River (Jordan Lake)"
-"02097314",228,"Aug-16","Moderately Wet","Aug","03030002","Haw River (Jordan Lake)"
-"0209734440",228,"Aug-16","Moderately Dry","Aug","03030002",NA
-"0209741955",228,"Aug-16","Moderately Wet","Aug","03030002","Haw River (Jordan Lake)"
-"02097464",228,"Aug-16","Very Wet","Aug","03030002","Morgan Creek"
-"02097517",228,"Aug-16","Moderately Dry","Aug","03030002","Haw River (Jordan Lake)"
-"0209782609",228,"Aug-16","Moderately Dry","Aug","03030002","Haw River (Jordan Lake)"
-"02098206",228,"Aug-16","Extremely Dry","Aug","03030002","Cape Fear River (Sanford)"
-"02099000",228,"Aug-16","Very Wet","Aug","03030003","East Fork Deep River (High Point Lake)"
-"02100500",228,"Aug-16","Moderately Wet","Aug","03030003",NA
-"0210166029",228,"Aug-16","Extremely Wet","Aug","03030003","Rocky River"
-"02101726",228,"Aug-16","Moderately Wet","Aug","03030003",NA
-"02101800",228,"Aug-16","Moderately Wet","Aug","03030003",NA
-"02102000",228,"Aug-16","Moderately Dry","Aug","03030003","Cape Fear River (Sanford)"
-"02102192",228,"Aug-16","Very Wet","Aug","03030004",NA
-"02102500",228,"Aug-16","Moderately Dry","Aug","03030004","Cape Fear River (Dunn)"
-"02102908",228,"Aug-16","Moderately Wet","Aug","03030004","Little River (Intake no. 2)"
-"02103000",228,"Aug-16","Moderately Dry","Aug","03030004",NA
-"02104220",228,"Aug-16","Moderately Dry","Aug","03030004",NA
+"02085000",237,"Aug-25","Moderately Wet","Aug","03020201",NA
+"02085070",237,"Aug-25","Moderately Wet","Aug","03020201","Eno River (Lower)"
+"0208521324",237,"Aug-25","Moderately Dry","Aug","03020201","Little River (Little River Reservoir)"
+"0208524090",237,"Aug-25","Very Dry","Aug","03020201","Little River (Little River Reservoir)"
+"0208524975",237,"Aug-25","Moderately Wet","Aug","03020201","Falls Lake"
+"02085500",237,"Aug-25","Moderately Dry","Aug","03020201","Flat River (Lake Michie)"
+"02086500",237,"Aug-25","Moderately Wet","Aug","03020201","Falls Lake"
+"02086624",237,"Aug-25","Moderately Dry","Aug","03020201","Falls Lake"
+"0208675010",237,"Aug-25","Moderately Dry","Aug","03020201","Falls Lake"
+"02086849",237,"Aug-25","Moderately Dry","Aug","03020201","Falls Lake"
+"02087183",237,"Aug-25","Extremely Dry","Aug","03020201","Neuse River (Wake Forest)"
+"0208726005",237,"Aug-25","Extremely Wet","Aug","03020201",NA
+"02087275",237,"Aug-25","Extremely Wet","Aug","03020201",NA
+"02087324",237,"Aug-25","Extremely Wet","Aug","03020201",NA
+"0208732534",237,"Aug-25","Moderately Dry","Aug","03020201",NA
+"0208732885",237,"Aug-25","Very Dry","Aug","03020201",NA
+"0208735012",237,"Aug-25","Moderately Dry","Aug","03020201",NA
+"02087359",237,"Aug-25","Very Wet","Aug","03020201",NA
+"02087500",237,"Aug-25","Very Wet","Aug","03020201","Neuse River (Johnston County)"
+"02087580",237,"Aug-25","Moderately Wet","Aug","03020201","Swift Creek (Lake Benson)"
+"0208758850",237,"Aug-25","Very Wet","Aug","03020201","Swift Creek (Lake Benson)"
+"0208773375",237,"Aug-25","Moderately Wet","Aug","03020201",NA
+"02088000",237,"Aug-25","Very Wet","Aug","03020201",NA
+"02088383",237,"Aug-25","Very Dry","Aug","03020201",NA
+"02088500",237,"Aug-25","Moderately Wet","Aug","03020201",NA
+"02089000",237,"Aug-25","Moderately Wet","Aug","03020202",NA
+"02089500",237,"Aug-25","Moderately Wet","Aug","03020202",NA
+"02090380",237,"Aug-25","Moderately Dry","Aug","03020203",NA
+"02091000",237,"Aug-25","Extremely Wet","Aug","03020203",NA
+"02091500",237,"Aug-25","Moderately Wet","Aug","03020203",NA
+"02091814",237,"Aug-25","Very Wet","Aug","03020202",NA
+"02092500",237,"Aug-25","Moderately Wet","Aug","03020204",NA
+"02093800",237,"Aug-25","Very Wet","Aug","03030002","Reedy Fork"
+"02093877",237,"Aug-25","Moderately Wet","Aug","03030002","Reedy Fork"
+"0209399200",237,"Aug-25","Moderately Wet","Aug","03030002","Reedy Fork"
+"02094500",237,"Aug-25","Moderately Wet","Aug","03030002",NA
+"02094659",237,"Aug-25","Moderately Dry","Aug","03030002",NA
+"02094770",237,"Aug-25","Moderately Dry","Aug","03030002",NA
+"02094775",237,"Aug-25","Moderately Dry","Aug","03030002",NA
+"02095000",237,"Aug-25","Moderately Dry","Aug","03030002",NA
+"02095181",237,"Aug-25","Moderately Wet","Aug","03030002",NA
+"02095271",237,"Aug-25","Moderately Dry","Aug","03030002",NA
+"02095500",237,"Aug-25","Very Dry","Aug","03030002",NA
+"0209553650",237,"Aug-25","Moderately Dry","Aug","03030002",NA
+"02096500",237,"Aug-25","Moderately Wet","Aug","03030002",NA
+"02096846",237,"Aug-25","Extremely Wet","Aug","03030002","Cane Creek"
+"02096960",237,"Aug-25","Very Wet","Aug","03030002","Haw River (Jordan Lake)"
+"0209722970",237,"Aug-25","Very Dry","Aug","03030002",NA
+"02097280",237,"Aug-25","Moderately Dry","Aug","03030002","Haw River (Jordan Lake)"
+"02097314",237,"Aug-25","Extremely Wet","Aug","03030002","Haw River (Jordan Lake)"
+"0209734440",237,"Aug-25","Very Wet","Aug","03030002",NA
+"0209741955",237,"Aug-25","Extremely Wet","Aug","03030002","Haw River (Jordan Lake)"
+"02097464",237,"Aug-25","Very Wet","Aug","03030002","Morgan Creek"
+"02097517",237,"Aug-25","Moderately Dry","Aug","03030002","Haw River (Jordan Lake)"
+"0209782609",237,"Aug-25","Very Wet","Aug","03030002","Haw River (Jordan Lake)"
+"02098206",237,"Aug-25","Moderately Wet","Aug","03030002","Cape Fear River (Sanford)"
+"02099000",237,"Aug-25","Very Wet","Aug","03030003","East Fork Deep River (High Point Lake)"
+"02100500",237,"Aug-25","Very Wet","Aug","03030003",NA
+"0210166029",237,"Aug-25","Moderately Wet","Aug","03030003","Rocky River"
+"02101726",237,"Aug-25","Moderately Wet","Aug","03030003",NA
+"02101800",237,"Aug-25","Moderately Wet","Aug","03030003",NA
+"02102000",237,"Aug-25","Very Wet","Aug","03030003","Cape Fear River (Sanford)"
+"02102192",237,"Aug-25","Very Wet","Aug","03030004",NA
+"02102500",237,"Aug-25","Very Wet","Aug","03030004","Cape Fear River (Dunn)"
+"02102908",237,"Aug-25","Extremely Wet","Aug","03030004","Little River (Intake no. 2)"
+"02103000",237,"Aug-25","Moderately Wet","Aug","03030004",NA
+"02104220",237,"Aug-25","Moderately Wet","Aug","03030004",NA
