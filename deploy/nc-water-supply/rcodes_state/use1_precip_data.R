@@ -160,7 +160,7 @@ pol2 <- pol %>% mutate(bands = ifelse(percent_norm == 0, 0, ifelse(percent_norm 
                                ifelse(percent_norm > 400 & percent_norm <=600, 600, ifelse(percent_norm > 600, 800, NA)))))))))))))))))
 table(pol2$bands, useNA="ifany")
 pol2 <- pol2 %>% group_by(bands) %>% summarize(nbands = n(), .groups="drop")
-pol2 <- pol2 %>% mutate(colorVal = ifelse(bands==0, "white", ifelse(bands==5, "#4e0000", ifelse(bands==10, "#9a0000", ifelse(bands==25, "red", ifelse(bands==50, "orange", ifelse(bands==75, "#f7e08b", 
+pol2 <- pol2 %>% mutate(colorVal = ifelse(bands==0, "#4e0000", ifelse(bands==5, "#4e0000", ifelse(bands==10, "#9a0000", ifelse(bands==25, "red", ifelse(bands==50, "orange", ifelse(bands==75, "#f7e08b", 
                  ifelse(bands==90, "yellow", ifelse(bands==100, "#316400", ifelse(bands==110, "#00fc02", ifelse(bands==125, "#56b000", ifelse(bands==150, "#316400", ifelse(bands==200, "#3fc1bf",
                  ifelse(bands==300, "#000080", ifelse(bands==400, "#8e2eff", ifelse(bands>400,"#e00079", "black"))))))))))))))))
 
@@ -277,7 +277,6 @@ fold = ("..\\temp")
 f <- list.files(fold, include.dirs = F, full.names = T, recursive = T)
 # remove the files
 file.remove(f)
-
 
 
 rm(pcp)

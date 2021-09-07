@@ -199,7 +199,7 @@ function drawMap(){
     'paint': {'fill-color': {
                 property: 'bands', 
                 stops: [
-                  [0, 'white'],
+                  [0, '#4e0000'],
                   [1, '#4e0000'],
                   [5, '#9a0000'],
                   [10, 'red'],
