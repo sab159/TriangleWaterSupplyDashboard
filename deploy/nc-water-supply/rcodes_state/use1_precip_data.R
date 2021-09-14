@@ -45,6 +45,17 @@ old.drought <- read.csv(paste0(swd_html, "drought\\percentAreaHUC.csv"), colClas
 last.date <- max(old.drought$date)
 #reformat for the url (1/1/2020)
 last.day <- day(last.date)+1; last.month = month(last.date); last.year = year(last.date)
+if(last.day == 32){
+  last.month = last.month + 1;
+  last.day = 1;
+  if(last.month == 12){
+    last.month = 1; last.year = last.year+1
+  }
+}
+
+if(last.day == 31 & last.month %in% c(4,6,9,11)){   last.month = last.month+1;   last.day = 1;  }
+if(last.day >= 28 & last.month ==2){ last.month = last.month + 1; last.day = 1; }
+
 last.date <- paste0(last.month,"/",last.day,"/",last.year)
 end.date <- paste0("12/31/", year(today))
 

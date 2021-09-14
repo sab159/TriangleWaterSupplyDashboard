@@ -92,6 +92,9 @@ for (i in 1:length(unique.sites)){
 summary(year.flow)
 
 all.data <- rbind(all.data, year.flow) %>% arrange(site, date)
+#lets start keeping this to the last 30 years.
+last30 <- year(today)-30;
+all.data <- all.data %>% filter(year(date) >= last30)
 write.csv(all.data, paste0(swd_html, "streamflow\\all_stream_data.csv"), row.names=FALSE)
 #do rolling average etc next
 
